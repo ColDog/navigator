@@ -12,6 +12,7 @@ class BuildAutoReleaseJob < ApplicationJob
 
     if stage[:auto]
       # Run the release.
+      Releases::CreateCommand.new({ build_id: params[:id] }).execute
     end
   rescue ActiveRecord::RecordNotFound
     nil

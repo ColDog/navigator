@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class BuildCreationJobTest < ActiveJob::TestCase
+class ReleaseTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
