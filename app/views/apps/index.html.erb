@@ -1,0 +1,30 @@
+<%= render 'partials/flash' %>
+
+<div class="container-fluid" style="padding-top: 30px; max-width: 1200px;">
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+      <div class="card-header">
+        Applications
+      </div>
+      <ul class="list-group list-group-flush">
+        <% @apps.each do |app| %>
+          <li class="list-group-item">
+            <%= link_to app.name, app_path(app) %>
+          </li>
+        <% end %>
+        <% if @apps.length == 0 %>
+          <div class="alert alert-success">You have no apps!</div>
+        <% end %>
+      </ul>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="card">
+        <div class="card-body">
+          Deploys (10)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

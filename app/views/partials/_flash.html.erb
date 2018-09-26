@@ -1,0 +1,13 @@
+<% flash.each do |key, value| %>
+  <div class="alert alert-<%= key == 'error' ? 'danger' : key %>">
+    <ul>
+      <% if value.is_a?(String) %>
+        <li><%= value %></li>
+      <% else %>
+        <% value.each do |field, errors| %>
+          <li><%= field %>: <%= errors.is_a?(Array) ? errors.join(',') : errors.to_s %></li>
+        <% end %>
+      <% end %>
+    </ul>
+  </div>
+<% end %>

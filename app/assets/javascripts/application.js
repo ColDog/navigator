@@ -11,4 +11,16 @@
 // about supported directives.
 //
 //= require rails-ujs
+//= require jquery.js
+//= require bootstrap.js
+//= require codemirror.js
+//= require codemirror-yaml.js
 //= require_tree .
+
+$(document).ready(function() {
+  var els = document.querySelectorAll('.codemirror');
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i]
+    CodeMirror.fromTextArea(el);
+  }
+})

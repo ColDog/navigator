@@ -1,0 +1,18 @@
+<%= render 'partials/flash' %>
+
+<div class="container-fluid">
+  <div class="row">
+    <%= render 'nav', active: 'edit' %>
+  </div>
+
+  <div class="row">
+    <div class="container-fluid" style="padding-top: 20px; max-width: 800px;">
+    <%= render 'form',
+      method: :post,
+      url: apps_path,
+      stages: to_yaml(@app.stages || {}),
+      name: @app.name
+    %>
+    </div>
+  </div>
+</div>
