@@ -4,7 +4,6 @@ module Apps
     # id: <uuid>
     # stages:
     #   - name: review
-    #     environment: staging
     #     review: true
     #     auto: true
     #   - name: staging
@@ -12,7 +11,11 @@ module Apps
     #     auto: true
     #     promotion: true
     #   - name: production
-    #     environment: production
+    #     clusters:
+    #       - name: production-west
+    #         values: {}
+    #       - name: production-east
+    #         values: {}
     SCHEMA = Dry::Validation.Schema do
       required(:id).filled(:str?)
       required(:stages).each do
