@@ -1,0 +1,11 @@
+<div class="card <%= undeployed ? 'bg-light text-muted' : '' %>">
+  <div class="card-body">
+    <h5 class="card-title">Build <code><%= build.version %></code></h5>
+    <p class="card-text">
+      <%= local_assigns[:cluster] %>
+    </p>
+    <% actions.each do |action| %>
+      <%= link_to action[:name], action[:url], class: "card-link btn #{action[:class]}", method: action[:method] || :post %>
+    <% end %>
+  </div>
+</div>

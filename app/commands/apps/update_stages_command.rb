@@ -3,28 +3,32 @@ module Apps
     # Example input:
     # id: <uuid>
     # stages:
-    #   - name: review
-    #     review: true
-    #     auto: true
-    #   - name: staging
-    #     environment: staging
-    #     auto: true
-    #     promotion: true
-    #   - name: production
-    #     clusters:
-    #       - name: production-west
-    #         values: {}
-    #       - name: production-east
-    #         values: {}
+    # - name: review
+    #   review: true
+    #   auto: true
+    # - name: staging
+    #   auto: true
+    #   promotion: true
+    # - name: production
+    #   clusters:
+    #   - name: production-west
+    #     values: {}
+    #   - name: production-east
+    #     values: {}
     SCHEMA = Dry::Validation.Schema do
       required(:id).filled(:str?)
       required(:stages).each do
         schema do
           required(:name).filled(:str?)
-          required(:environment).filled(:str?)
           optional(:review).filled(:bool?)
           optional(:auto).filled(:bool?)
           optional(:promotion).filled(:bool?)
+          required(:clusters).each do
+            schema do
+              required(:name).filled(:str?)
+              required(:values).filled(:hash?)
+            end
+          end
         end
       end
     end

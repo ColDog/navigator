@@ -9,15 +9,15 @@ class AppCommandsTest < ActiveSupport::TestCase
   end
 
   test "update an app" do
-    cmd = Apps::UpdateStagesCommand.new(id: apps(:one).id, stages: [{
+    cmd = Apps::UpdateStagesCommand.new(id: apps(:one).uid, stages: [{
       name: 'test',
-      environment: 'test',
+      clusters: []
     }])
     assert cmd.execute
   end
 
   test "delete an app" do
-    cmd = Apps::DeleteCommand.new(id: apps(:one).id)
+    cmd = Apps::DeleteCommand.new(id: apps(:one).uid)
     assert cmd.execute
   end
 

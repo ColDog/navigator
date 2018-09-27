@@ -9,22 +9,22 @@ class AppsController < ApplicationController
   end
 
   def edit
-    @app = App.find(params[:id])
+    @app = App.find_by!(uid: params[:id])
   end
 
   def logs
-    @app = App.find(params[:app_id])
+    @app = App.find_by!(uid: params[:app_id])
   end
 
   def show
-    @app = App.find(params[:id])
+    @app = App.find_by!(uid: params[:id])
   end
 
   def create
     cmd = Apps::CreateCommand.new(app_params)
     if cmd.execute
       flash[:info] = 'Application created'
-      redirect_to :index
+      redirect_to apps_path
     else
       flash[:error] = cmd.errors
       render :new, status: 400
@@ -32,21 +32,22 @@ class AppsController < ApplicationController
   end
 
   def update
-    cmd = Apps::UpdateStagesCommand.new(app_params)
+    @app = App.find_by!(uid: params[:id])
+    cmd = Apps::UpdateStagesCommand.new(app_params.merge(id: @app.uid))
     if cmd.execute
-      flash[:info] = 'Application updated'
+      flash.now[:info] = 'Application updated'
       render :edit
     else
-      flash[:error] = cmd.errors
+      flash.now[:error] = cmd.errors
       render :edit, status: 400
     end
   end
 
   def destroy
-    cmd = Apps::DeleteCommand.new(id: params[:id])
+    cmd = Apps::DeleteCommand.new(uid: params[:id])
     if cmd.execute
       flash[:info] = 'Application removed'
-      redirect_to :index
+      redirect_to app_path(params[:id])
     else
       flash[:error] = cmd.errors
       render :edit, status: 400
@@ -56,7 +57,7 @@ class AppsController < ApplicationController
   private
 
   def parse_params(set)
-    set[:stages] = (YAML.load(set[:stages]) || {}).symbolize_keys if set[:stages]
+    set[:stages] = (JSON.parse(set[:stages]) || {}).map(&:symbolize_keys) if set[:stages]
     set
   end
 

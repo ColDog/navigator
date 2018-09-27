@@ -1,6 +1,6 @@
 class Build < ApplicationRecord
-  self.primary_key = "id"
   belongs_to :app
+  has_many  :releases
   serialize :values
   validates_presence_of :stage, :version
 
@@ -8,7 +8,7 @@ class Build < ApplicationRecord
     params = event.params
 
     Build.create!(
-      id: params[:id],
+      uid: params[:id],
       app: App.find_by!(name: params[:name]),
       stage: params[:stage],
       version: params[:version],

@@ -10,18 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180926135035) do
+ActiveRecord::Schema.define(version: 20180927031312) do
 
-  create_table "apps", id: false, force: :cascade do |t|
-    t.string "id"
+  create_table "apps", force: :cascade do |t|
+    t.string "uid", null: false
     t.string "name", null: false
     t.text "stages"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "builds", id: false, force: :cascade do |t|
-    t.string "id"
+  create_table "builds", force: :cascade do |t|
+    t.string "uid", null: false
     t.integer "app_id"
     t.string "stage"
     t.string "version"
@@ -31,7 +31,18 @@ ActiveRecord::Schema.define(version: 20180926135035) do
     t.index ["app_id"], name: "index_builds_on_app_id"
   end
 
+  create_table "deploys", force: :cascade do |t|
+    t.integer "release_id"
+    t.string "uid", null: false
+    t.string "cluster"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["release_id"], name: "index_deploys_on_release_id"
+  end
+
   create_table "events", force: :cascade do |t|
+    t.string "uid", null: false
     t.string "name"
     t.text "params"
     t.datetime "created_at", null: false
@@ -39,8 +50,8 @@ ActiveRecord::Schema.define(version: 20180926135035) do
     t.index ["name"], name: "index_events_on_name"
   end
 
-  create_table "releases", id: false, force: :cascade do |t|
-    t.string "id"
+  create_table "releases", force: :cascade do |t|
+    t.string "uid", null: false
     t.integer "build_id"
     t.string "status"
     t.datetime "created_at", null: false

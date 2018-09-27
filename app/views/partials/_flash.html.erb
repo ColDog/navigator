@@ -1,5 +1,5 @@
 <% flash.each do |key, value| %>
-  <div class="alert alert-<%= key == 'error' ? 'danger' : key %>">
+  <div class="alert alert-<%= key == 'error' ? 'danger' : key %>" style="position: fixed; width: 200px; bottom: 20; left: 20;">
     <ul>
       <% if value.is_a?(String) %>
         <li><%= value %></li>

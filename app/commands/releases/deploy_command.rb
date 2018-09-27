@@ -1,14 +1,14 @@
 module Releases
-  class StatusCommand < ApplicationCommand
+  class DeployCommand < ApplicationCommand
     SCHEMA = Dry::Validation.Schema do
-      required(:id).filled(:str?)
-      required(:status).filled(:str?)
-      optional(:cluster).filled(:str?)
+      required(:release_id).filled(:str?)
+      required(:stage).filled(:str?)
     end
 
     def execute
       return false unless validate
-      Releases::StatusEvent.play(params)
+      params[:id] = SecureRandom.uuid
+      Releases::DeployEvent.play(params)
       true
     end
 

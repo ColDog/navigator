@@ -10,7 +10,7 @@
       <ul class="list-group list-group-flush">
         <% @apps.each do |app| %>
           <li class="list-group-item">
-            <%= link_to app.name, app_path(app) %>
+            <%= link_to app.name, app_path(app.uid) %>
           </li>
         <% end %>
         <% if @apps.length == 0 %>

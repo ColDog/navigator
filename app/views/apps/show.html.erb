@@ -7,79 +7,75 @@
 
   <div class="row" style="margin-top: 20px;">
 
+    <% @app.stages.each do |stage| %>
     <div class="col-md-4">
-      <h4>Review</h4>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>pr1212</code></h5>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn">Merge</a>
-        </div>
-      </div>
+      <h4><%= stage[:name] %></h4>
 
-      <div class="card" style="margin-top: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>pr1213</code></h5>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn">Merge</a>
-        </div>
-      </div>
+      <% if stage[:review] %>
 
-      <div class="card bg-light text-muted" style="margin-top: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>pr1213</code></h5>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn btn-secondary">Review</a>
-        </div>
-      </div>
+        <%# TODO: Change group on version. %>
+        <% @app.builds.where(stage: stage[:name]).group(:version).each do |build| %>
+          <% if build.releases.any? %>
+            <%# If there are releases for this review branch allow a 'Close' %>
+            <%= render 'card',
+              build: build,
+              undeployed: false,
+              actions: [{
+                name: 'Close',
+                url: app_remove_path(@app.uid, build_id: build.uid)
+              }]
+            %>
 
+          <% else %>
+            <%# If there no releases for this build allow to 'Review' %>
+            <%= render 'card',
+              build: build,
+              undeployed: true,
+              actions: [{
+                name: 'Review',
+                url: app_release_path(@app.uid, build_id: build.uid),
+                class: 'btn-secondary'
+              }]
+            %>
+          <% end %>
+
+        <% end %>
+      <% else %>
+        <% build = @app.builds.where(stage: stage[:name]).last %>
+        <% if build %>
+        <% if build.releases.any? %>
+          <%# Get the latest release and show all deploys per cluster. %>
+          <% release = build.releases.last %>
+          <% release.deploys.each do |deploy| %>
+            <%= render 'card',
+              build: build,
+              undeployed: false,
+              cluster: deploy.cluster,
+              actions: [{
+                name: 'Rollback',
+                url: app_rollback_path(@app.uid, build_id: build.uid),
+                class: 'btn-secondary'
+              }] + stage[:promotion] ? [{
+                name: 'Promote',
+                url: app_promote_path(@app.uid, build_id: build.uid),
+              }] : []
+            %>
+          <% end %>
+        <% else %>
+          <%# Show this latest build as undeployed. %>
+          <%= render 'card',
+            build: build,
+            undeployed: true,
+            actions: [{
+              name: 'Deploy',
+              url: app_release_path(@app.uid, build_id: build.uid),
+              class: 'btn-secondary'
+            }]
+          %>
+        <% end %>
+      <% end %>
+      <% end %>
     </div>
-
-    <div class="col-md-4">
-      <h4>Staging</h4>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>asbasdfa</code></h5>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn-primary btn">Promote</a>
-          <a href="#" class="card-link btn">Rollback</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <h4>Production</h4>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>asbasdfa</code></h5>
-          <h6 class="card-subtitle mb-2 text-muted">EU</h6>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn">Rollback</a>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top: 20px;">
-        <div class="card-body">
-          <h5 class="card-title">Release <code>asbasdfa</code></h5>
-          <h6 class="card-subtitle mb-2 text-muted">US</h6>
-          <p class="card-text">
-            Deploy a small configuration fix.
-          </p>
-          <a href="#" class="card-link btn">Rollback</a>
-        </div>
-      </div>
-
-    </div>
-
+    <% end %>
   </div>
 </div>

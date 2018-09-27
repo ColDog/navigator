@@ -1,11 +1,11 @@
 <ul class="nav nav-tabs bg-light" style="width: 100%; padding: 0 20px;">
   <li class="nav-item">
-    <%= link_to 'Pipeline', app_path(@app), class: "nav-link #{active === 'pipeline' ? 'active' : ''}"  %>
+    <%= link_to 'Pipeline', app_path(@app.uid), class: "nav-link #{active === 'pipeline' ? 'active' : ''}"  %>
   </li>
   <li class="nav-item">
-    <%= link_to 'Logs', app_logs_path(@app), class: "nav-link #{active === 'logs' ? 'active' : ''}"  %>
+    <%= link_to 'Logs', app_logs_path(@app.uid), class: "nav-link #{active === 'logs' ? 'active' : ''}"  %>
   </li>
   <li class="nav-item">
-    <%= link_to 'Edit', edit_app_path(@app), class: "nav-link #{active === 'edit' ? 'active' : ''}"  %>
+    <%= link_to 'Edit', edit_app_path(@app.uid), class: "nav-link #{active === 'edit' ? 'active' : ''}"  %>
   </li>
 </ul>

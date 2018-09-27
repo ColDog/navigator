@@ -4,7 +4,7 @@ class ReleaseCommandsTest < ActiveSupport::TestCase
 
   test "create a release" do
     cmd = Releases::CreateCommand.new(
-      build_id: builds(:one).id,
+      build_id: builds(:one).uid,
     )
 
     assert cmd.execute

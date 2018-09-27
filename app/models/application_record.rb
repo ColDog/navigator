@@ -8,4 +8,11 @@ class ApplicationRecord < ActiveRecord::Base
     SUBSCRIPTIONS[event.name] << block
   end
 
+  after_initialize :generate_uuid
+
+  protected
+
+  def generate_uuid
+    self.uid = SecureRandom.uuid unless self.uid
+  end
 end
