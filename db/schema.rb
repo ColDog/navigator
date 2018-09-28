@@ -15,29 +15,42 @@ ActiveRecord::Schema.define(version: 20180927031312) do
   create_table "apps", force: :cascade do |t|
     t.string "uid", null: false
     t.string "name", null: false
-    t.text "stages"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "builds", force: :cascade do |t|
-    t.string "uid", null: false
     t.integer "app_id"
-    t.string "stage"
-    t.string "version"
+    t.integer "stage_id"
+    t.string "uid", null: false
+    t.string "version", null: false
     t.text "values"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["app_id"], name: "index_builds_on_app_id"
+    t.index ["stage_id"], name: "index_builds_on_stage_id"
+  end
+
+  create_table "clusters", force: :cascade do |t|
+    t.integer "app_id"
+    t.integer "stage_id"
+    t.string "uid", null: false
+    t.string "name", null: false
+    t.text "values"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["app_id"], name: "index_clusters_on_app_id"
+    t.index ["stage_id"], name: "index_clusters_on_stage_id"
   end
 
   create_table "deploys", force: :cascade do |t|
     t.integer "release_id"
+    t.integer "cluster_id"
     t.string "uid", null: false
-    t.string "cluster"
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["cluster_id"], name: "index_deploys_on_cluster_id"
     t.index ["release_id"], name: "index_deploys_on_release_id"
   end
 
@@ -57,6 +70,18 @@ ActiveRecord::Schema.define(version: 20180927031312) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["build_id"], name: "index_releases_on_build_id"
+  end
+
+  create_table "stages", force: :cascade do |t|
+    t.integer "app_id"
+    t.string "uid", null: false
+    t.string "name", null: false
+    t.boolean "review", default: false, null: false
+    t.boolean "auto", default: false, null: false
+    t.boolean "promotion", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["app_id"], name: "index_stages_on_app_id"
   end
 
 end

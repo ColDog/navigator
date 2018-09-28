@@ -1,18 +1,18 @@
 class Build < ApplicationRecord
   belongs_to :app
-  has_many  :releases
-  serialize :values
-  validates_presence_of :stage, :version
+  belongs_to :stage
+  has_many   :releases
+  serialize  :values
+
+  validates_presence_of :version
 
   subscribe(Builds::CreatedEvent) do |event|
-    params = event.params
-
     Build.create!(
-      uid: params[:id],
-      app: App.find_by!(name: params[:name]),
-      stage: params[:stage],
-      version: params[:version],
-      values: params[:values],
+      uid:      event.build_uid,
+      app:      App.find_by_uid!(event.app_uid),
+      stage:    Stage.find_by_uid!(event.stage_uid),
+      version:  event.version,
+      values:   event.values,
     )
   end
 end

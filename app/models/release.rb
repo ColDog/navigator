@@ -3,22 +3,16 @@ class Release < ApplicationRecord
   has_many :deploys
 
   subscribe(Releases::CreatedEvent) do |event|
-    params = event.params
-
     Release.create!(
-      uid: params[:id],
-      build_id: Build.find_by!(uid: params[:build_id]).id,
+      uid:    event.release_uid,
+      build:  Build.find_by_uid!(event.build_uid),
       status: 'INITIAL',
     )
   end
 
-  subscribe(Releases::StatusEvent) do |event|
-    params = event.params
-
-    unless params[:cluster]
-      release = Release.find_by!(uid: params[:id])
-      release.update!(status: params[:status])
-    end
+  subscribe(Releases::ReleaseStatusEvent) do |event|
+    release = Deploy.find_by_uid!(event.release_uid)
+    release.update!(status: event.status)
   end
 
 end

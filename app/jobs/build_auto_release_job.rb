@@ -1,18 +1,15 @@
 class BuildAutoReleaseJob < ApplicationJob
   queue_as :default
 
-  subscribe(Builds::CreatedEvent) { |event| perform_later(event.id) }
+  subscribe(Builds::CreatedEvent) { |event| perform_later(event.event_uid) }
 
-  def perform(event_id)
-    # params = { id, name, version, values, stage }
-    params = Event.find(event_id).params
-
-    app = App.find_by!(name: params[:name])
-    stage = app.stages.find { |s| s[:name] = params[:stage] }
+  def perform(event_uid)
+    event = Builds::CreatedEvent.find_by_uid!(event_uid)
+    app = App.find_by_uid!(event.app_uid)
+    stage = app.stages.find { |s| s[:name] = event.stage }
 
     if stage[:auto]
-      # Run the release.
-      Releases::CreateCommand.new({ build_id: params[:id] }).execute
+      Releases::CreateCommand.new(build_id: event.build_uid).execute
     end
   rescue ActiveRecord::RecordNotFound
     nil

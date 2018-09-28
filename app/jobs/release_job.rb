@@ -1,56 +1,54 @@
 class ReleaseJob < ApplicationJob
+  ERRORED = 'ERRORED'
+  PENDING = 'PENDING'
+  SUCCESS = 'SUCCESS'
+  INITIAL = 'INITIAL'
+
   queue_as :default
 
-  subscribe(Releases::CreatedEvent) { |event| perform_later(event.id) }
+  subscribe(Releases::CreatedEvent) { |event| perform_later(event.event_uid) }
 
-  def perform(event_id)
-    # params = { id, build_id }
-    params = Event.find(event_id).params
-    @id = params[:id]
+  def perform(event_uid)
+    event = Releases::CreatedEvent.find_by_uid!(event_uid)
+    @release_uid = event.release_uid
 
-    set_status('PENDING')
+    @build = Build.find_by_uid!(event.build_uid)
+    @stage = @build.stage
+    @clusters = @stage.clusters
 
-    begin
-      build = Build.find(params[:build_id])
-    rescue ActiveRecord::RecordNotFound => e
-      set_status('ERRORED', nil, e)
-      return
+    run
+  rescue ActiveRecord::RecordNotFound => e
+    set_status(ERRORED, nil, e)
+  end
+
+  def run
+    set_status(PENDING)
+
+    @clusters.each do |cluster|
+      create_deploy(cluster)
     end
 
-    stage = build.app.stages.find { |s| s[:name] == build.stage }
-    if stage.nil?
-      set_status('ERRORED', nil, "Stage not found #{build.stage}")
-      return
+    @clusters.each do |cluster|
+      set_status(SUCCESS, cluster)
     end
 
-    # Set all stages to PENDING.
-    stage[:clusters].each do |cluster|
-      set_status('PENDING', stage[:name])
-      create_deploy(cluster[:name])
-    end
-
-    stage[:clusters].each do |cluster|
-      # TODO: Run the deploy.
-      set_status('SUCCESS', cluster[:name])
-    end
-
-    set_status('SUCCESS')
+    set_status(SUCCESS)
   end
 
   def set_status(status, cluster=nil, error=nil)
-    Releases::StatusCommand.new({
-      id: @id,
+    Releases::StatusCommand.execute(
+      release_uid: @release_uid,
+      cluster_uid: cluster.try(:uid),
       status: status,
-      cluster: cluster,
       error: error,
-    }).execute
+    )
   end
 
   def create_deploy(cluster)
-    Releases::DeployCommand.new({
-      release_id: @id,
-      cluster: cluster,
-    }).execute
+    Releases::DeployCommand.execute(
+      release_uid: @release_uid,
+      cluster_uid: cluster.uid,
+    )
   end
 
 end

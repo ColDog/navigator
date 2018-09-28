@@ -6,20 +6,14 @@ class App < ApplicationRecord
   has_many :releases, through: :builds
 
   subscribe(Apps::CreatedEvent) do |event|
-    params = event.params
-
-    App.create!(name: params[:name], uid: params[:id])
+    create!(name: event.name, uid: event.app_uid)
   end
 
   subscribe(Apps::DeletedEvent) do |event|
-    params = event.params
-
-    App.find_by!(uid: params[:id]).destroy!
+    find_by_uid!(event.app_uid).destroy!
   end
 
   subscribe(Apps::UpdatedEvent) do |event|
-    params = event.params
-
-    App.find_by!(uid: params[:id]).update!(stages: params[:stages])
+    find_by_uid!(params[:app_id]).update!(name: event.name)
   end
 end

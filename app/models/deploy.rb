@@ -1,24 +1,19 @@
 class Deploy < ApplicationRecord
   belongs_to :release
+  belongs_to :cluster
 
   subscribe(Releases::DeployEvent) do |event|
-    params = event.params
-
     Deploy.create!(
-      uid: params[:id],
-      release: Release.find_by!(uid: params[:release_id]),
-      cluster: params[:cluster],
-      status: 'INITIAL',
+      uid:     event.deploy_uid,
+      release: Release.find_by_uid!(event.release_uid),
+      cluster: Cluster.find_by_uid!(event.cluster_uid),
+      status: 'PENDING',
     )
   end
 
-  subscribe(Releases::StatusEvent) do |event|
-    params = event.params
-    if params[:cluster]
-      release = Release.find_by!(uid: params[:id])
-      deploy = Deploy.find_by!(cluster: params[:cluster], release: release)
-      deploy.update!(status: params[:status])
-    end
+  subscribe(Releases::DeployStatusEvent) do |event|
+    deploy = Deploy.find_by_uid!(event.deploy_uid)
+    deploy.update!(status: event.status)
   end
 
 end

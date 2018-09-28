@@ -1,24 +1,9 @@
 module Releases
   class DeployCommand < ApplicationCommand
-    SCHEMA = Dry::Validation.Schema do
-      required(:release_id).filled(:str?)
-      required(:stage).filled(:str?)
-    end
 
     def execute
-      return false unless validate
-      params[:id] = SecureRandom.uuid
+      params[:deploy_uid] = SecureRandom.uuid unless params[:deploy_uid]
       Releases::DeployEvent.play(params)
-      true
-    end
-
-    def validate
-      @errors = SCHEMA.call(params).messages
-      return @errors.length == 0
-    end
-
-    def valid?
-      @errors && @errors.length == 0
     end
 
   end
