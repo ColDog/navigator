@@ -4,6 +4,7 @@ class App < ApplicationRecord
 
   has_many :builds
   has_many :releases, through: :builds
+  has_many :stages
 
   subscribe(Apps::CreatedEvent) do |event|
     create!(name: event.name, uid: event.app_uid)

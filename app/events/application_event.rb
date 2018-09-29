@@ -1,18 +1,16 @@
 class ApplicationEvent
   attr_reader :params, :errors, :event_uid
 
-  class ValidationError < Exception
-    def initialize(errors)
-      @errors = errors
-    end
-
-    def message
-      @errors.map { |key, msg| "#{key}: #{msg.join(', ')}" }.join(',')
+  class BaseSchema < Dry::Validation::Schema
+    configure do |config|
+      config.input_processor = :sanitizer
     end
   end
 
   def self.schema(&block)
-    @schema = Dry::Validation.Schema &block if block_given?
+    if block_given?
+      @schema = Dry::Validation.Schema(BaseSchema, &block)
+    end
     @schema
   end
 
@@ -35,16 +33,18 @@ class ApplicationEvent
   end
 
   def play
-    raise ValidationError.new(errors) unless validate
-    Event.play(name, params)
-  end
-
-  def name
-    self.class.name
+    validate
+    raise ValidationError.new(errors) unless valid?
+    Event.play(self.class.name, params)
   end
 
   def validate
-    @errors = self.class.schema.call(params).messages
+    puts "in #{self.class.name}: #{params}"
+    result = self.class.schema.(params.to_h.symbolize_keys)
+    @errors = result.messages
+    puts "out: #{result.output}"
+    @params = HashWithIndifferentAccess.new(result.output)
+    @errors = @errors.merge(event: self.class.name) unless valid?
     return valid?
   end
 

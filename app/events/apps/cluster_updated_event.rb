@@ -1,9 +1,8 @@
 module Apps
   class ClusterUpdatedEvent < ApplicationEvent
-    fields :stage_uid, :cluster_uid, :name, :values
+    fields :cluster_uid, :name, :values
 
     schema do
-      required(:stage_uid).filled(:str?)
       required(:cluster_uid).filled(:str?)
       required(:name).filled(:str?)
       optional(:values).filled(:hash?)

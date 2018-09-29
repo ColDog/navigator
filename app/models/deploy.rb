@@ -12,8 +12,7 @@ class Deploy < ApplicationRecord
   end
 
   subscribe(Releases::DeployStatusEvent) do |event|
-    deploy = Deploy.find_by_uid!(event.deploy_uid)
-    deploy.update!(status: event.status)
+    Deploy.find_by_uid!(event.deploy_uid).update!(status: event.status)
   end
 
 end

@@ -21,48 +21,37 @@ class AppsController < ApplicationController
   end
 
   def create
-    cmd = Apps::CreateCommand.new(app_params)
-    if cmd.execute
-      flash[:info] = 'Application created'
-      redirect_to apps_path
-    else
-      flash[:error] = cmd.errors
-      render :new, status: 400
-    end
+    Apps::CreateCommand.execute(app_params)
+    flash[:info] = 'Application created'
+    redirect_to apps_path
+  rescue ValidationError => e
+    flash.now[:error] = e.errors
+    render :new, status: 400
   end
 
   def update
     @app = App.find_by!(uid: params[:id])
-    cmd = Apps::UpdateStagesCommand.new(app_params.merge(id: @app.uid))
-    if cmd.execute
-      flash.now[:info] = 'Application updated'
-      render :edit
-    else
-      flash.now[:error] = cmd.errors
-      render :edit, status: 400
-    end
+    Apps::UpdateStagesCommand.execute(app_params.merge(app_id: @app.uid))
+    flash.now[:info] = 'Application updated'
+    render :edit
+  rescue ValidationError => e
+    flash.now[:error] = e.errors
+    render :edit, status: 400
   end
 
   def destroy
-    cmd = Apps::DeleteCommand.new(uid: params[:id])
-    if cmd.execute
-      flash[:info] = 'Application removed'
-      redirect_to app_path(params[:id])
-    else
-      flash[:error] = cmd.errors
-      render :edit, status: 400
-    end
+    Apps::DeleteCommand.execute(app_uid: params[:id])
+    flash[:info] = 'Application removed'
+    redirect_to apps_path
+  rescue ValidationError => e
+    flash[:error] = e.errors
+    redirect_to apps_path, status: 400
   end
 
   private
 
-  def parse_params(set)
-    set[:stages] = (JSON.parse(set[:stages]) || {}).map(&:symbolize_keys) if set[:stages]
-    set
-  end
-
   def app_params
-    @app_params = parse_params(params.require(:app).permit!.to_h)
+    params.require(:app).permit!.to_h
   end
 
 end

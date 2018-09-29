@@ -7,17 +7,16 @@ class Event < ApplicationRecord
   end
 
   def self.play(name, params)
-    event = self.create!(name: name, params: params)
+    transaction do
+      event = self.create!(name: name, params: params)
 
-    (ApplicationRecord::SUBSCRIPTIONS[event.name] || []).each do |subscriber|
-      subscriber.call(event.event)
+      (ApplicationRecord::SUBSCRIPTIONS[event.name] || []).each do |subscriber|
+        subscriber.call(event.event)
+      end
+      (ApplicationJob::SUBSCRIPTIONS[event.name] || []).each do |subscriber|
+        subscriber.call(event.event)
+      end
     end
-    (ApplicationJob::SUBSCRIPTIONS[event.name] || []).each do |subscriber|
-      subscriber.call(event.event)
-    end
-  rescue ActiveRecord::ActiveRecordError => e
-    # puts "error - #{e}"
-    self.create!(name: "#{name}::Cancelled", params: { error: e.message })
   end
 
 end

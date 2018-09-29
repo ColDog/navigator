@@ -1,33 +1,25 @@
 class ReleasesController < ApplicationController
   def release
     app = App.find_by!(uid: params[:app_id])
-    cmd = Releases::CreateCommand.new({ build_id: params[:build_id] })
-    if cmd.execute
-      flash[:info] = 'Release created'
-      redirect_to app_path(app.uid)
-    else
-      flash[:error] = cmd.errors
-      redirect_to app_path(app.uid)
-    end
+    Releases::CreateCommand.execute(build_uid: params[:build_uid])
+    flash[:info] = 'Release created'
+    redirect_to app_path(app.uid)
+  rescue ValidationError => e
+    flash[:error] = e.errors
+    redirect_to app_path(app.uid)
   end
 
   def promote
-    app = App.find_by!(uid: params[:app_id])
-    build = Build.find_by!(uid: params[:build_id])
-    cmd = Builds::CreateCommand.new({
-      name: build.name,
-      version: build.version,
-      values: build.values,
-      stage: release_params[:stage],
-    })
+    Builds::PromoteCommand.execute(
+      source_build_uid: params[:build_uid],
+      target_stage_uid: params[:stage_uid],
+    )
 
-    if cmd.execute
-      flash[:info] = 'Promoted'
-      redirect_to app_path(app.uid)
-    else
-      flash[:error] = cmd.errors
-      redirect_to app_path(app.uid)
-    end
+    flash[:info] = 'Promoted'
+    redirect_to app_path(app.uid)
+  rescue ValidationError => e
+    flash[:error] = e.errors
+    redirect_to app_path(app.uid)
   end
 
   def rollback

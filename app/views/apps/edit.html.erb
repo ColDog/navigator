@@ -8,7 +8,6 @@
       <%= render 'form',
         method: :put,
         url: app_path(@app.uid),
-        stages: JSON.pretty_generate(@app_params ? @app_params[:stages] : @app.stages || []),
         name: @app.name
       %>
     </div>
