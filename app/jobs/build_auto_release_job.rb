@@ -1,7 +1,7 @@
 class BuildAutoReleaseJob < ApplicationJob
   queue_as :default
 
-  subscribe(Builds::CreatedEvent) { |event| perform_later(event.event_uid) }
+  # subscribe(Builds::CreatedEvent) { |event| perform_later(event.event_uid) }
 
   def perform(event_uid)
     event = Builds::CreatedEvent.find_by_uid!(event_uid)

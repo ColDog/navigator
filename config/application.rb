@@ -29,7 +29,7 @@ module Navigator
 
     config.assets.paths << Rails.root.join("vendor")
 
-    config.autoload_paths = %W(#{config.root}/app)
+    config.eager_load = true
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

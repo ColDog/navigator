@@ -1,5 +1,3 @@
-<%= render 'partials/flash' %>
-
 <div class="container-fluid">
   <div class="row">
     <%= render 'nav', active: 'pipeline' %>
@@ -7,75 +5,46 @@
 
   <div class="row" style="margin-top: 20px;">
 
-    <% @app.stages.each do |stage| %>
-    <div class="col-md-4">
-      <h4><%= stage[:name] %></h4>
+    <% stages = @app.stages.to_a %>
+    <% stages.each_with_index do |stage, index| %>
+      <% next_stage = stages[index + 1] %>
+      <div class="col-md-4">
+        <h4><%= stage.name %></h4>
 
-      <% if stage[:review] %>
-
-        <%# TODO: Change group on version. %>
-        <% @app.builds.where(stage: stage[:name]).group(:version).each do |build| %>
-          <% if build.releases.any? %>
-            <%# If there are releases for this review branch allow a 'Close' %>
+        <% if stage.review %>
+          <% stage.builds.each do |build| %>
             <%= render 'card',
               build: build,
               undeployed: false,
-              actions: [{
-                name: 'Close',
-                url: app_remove_path(@app.uid, build_id: build.uid)
-              }]
-            %>
-
-          <% else %>
-            <%# If there no releases for this build allow to 'Review' %>
-            <%= render 'card',
-              build: build,
-              undeployed: true,
-              actions: [{
-                name: 'Review',
-                url: app_release_path(@app.uid, build_id: build.uid),
-                class: 'btn-secondary'
-              }]
-            %>
-          <% end %>
-
-        <% end %>
-      <% else %>
-        <% build = @app.builds.where(stage: stage[:name]).last %>
-        <% if build %>
-        <% if build.releases.any? %>
-          <%# Get the latest release and show all deploys per cluster. %>
-          <% release = build.releases.last %>
-          <% release.deploys.each do |deploy| %>
-            <%= render 'card',
-              build: build,
-              undeployed: false,
-              cluster: deploy.cluster,
-              actions: [{
-                name: 'Rollback',
-                url: app_rollback_path(@app.uid, build_id: build.uid),
-                class: 'btn-secondary'
-              }] + stage[:promotion] ? [{
-                name: 'Promote',
-                url: app_promote_path(@app.uid, build_id: build.uid),
-              }] : []
+              stage: stage,
+              next_stage: next_stage
             %>
           <% end %>
         <% else %>
           <%# Show this latest build as undeployed. %>
-          <%= render 'card',
-            build: build,
-            undeployed: true,
-            actions: [{
-              name: 'Deploy',
-              url: app_release_path(@app.uid, build_id: build.uid),
-              class: 'btn-secondary'
-            }]
-          %>
+          <% if stage.current.try(:id) != stage.released.try(:id) %>
+            <%= render 'card',
+              build: stage.current,
+              undeployed: true,
+              stage: stage,
+              next_stage: next_stage
+            %>
+          <% end %>
+
+          <% if stage.released %>
+            <%# Get the latest release and show all deploys per cluster. %>
+            <% stage.released.release.deploys.each do |deploy| %>
+              <%= render 'card',
+                build: stage.released,
+                undeployed: false,
+                cluster: deploy.cluster.name,
+                stage: stage,
+                next_stage: next_stage
+              %>
+            <% end %>
+          <% end %>
         <% end %>
-      <% end %>
-      <% end %>
-    </div>
+      </div>
     <% end %>
   </div>
 </div>

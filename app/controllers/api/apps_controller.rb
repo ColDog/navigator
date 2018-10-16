@@ -14,7 +14,7 @@ module Api
 
     def create
       create_app_from_manifest(app_params)
-      head :no_content
+      render json: { request_id: request.request_id }
     rescue ValidationError => e
       render json: { errors: e.errors }, status: 400
     end

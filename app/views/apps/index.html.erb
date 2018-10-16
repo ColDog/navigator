@@ -1,11 +1,11 @@
-<%= render 'partials/flash' %>
-
 <div class="container-fluid" style="padding-top: 30px; max-width: 1200px;">
   <div class="row">
     <div class="col-sm-8">
       <div class="card">
       <div class="card-header">
         Applications
+
+        <%= link_to 'New', new_app_path, class: 'float-right' %>
       </div>
       <ul class="list-group list-group-flush">
         <% @apps.each do |app| %>
@@ -14,7 +14,9 @@
           </li>
         <% end %>
         <% if @apps.length == 0 %>
-          <div class="alert alert-success">You have no apps!</div>
+          <li class="list-group-item">
+            Create an application to get started
+          </li>
         <% end %>
       </ul>
       </div>

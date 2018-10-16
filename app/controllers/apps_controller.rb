@@ -1,4 +1,5 @@
 class AppsController < ApplicationController
+  include AppHelper
 
   def index
     @apps = App.all
@@ -6,10 +7,12 @@ class AppsController < ApplicationController
 
   def new
     @app = App.new
+    @manifest = {}
   end
 
   def edit
     @app = App.find_by!(uid: params[:id])
+    @manifest = get_app_manifest(params[:id])
   end
 
   def logs
@@ -21,7 +24,7 @@ class AppsController < ApplicationController
   end
 
   def create
-    Apps::CreateCommand.execute(app_params)
+    create_app_from_manifest(manifest_params)
     flash[:info] = 'Application created'
     redirect_to apps_path
   rescue ValidationError => e
@@ -30,10 +33,11 @@ class AppsController < ApplicationController
   end
 
   def update
+    @manifest = manifest_params
     @app = App.find_by!(uid: params[:id])
-    Apps::UpdateStagesCommand.execute(app_params.merge(app_id: @app.uid))
-    flash.now[:info] = 'Application updated'
-    render :edit
+    create_app_from_manifest(manifest_params)
+    flash[:info] = 'Application updated'
+    redirect_to edit_app_path(@app.uid)
   rescue ValidationError => e
     flash.now[:error] = e.errors
     render :edit, status: 400
@@ -50,8 +54,12 @@ class AppsController < ApplicationController
 
   private
 
+  def manifest_params
+    JSON.parse(params.require(:app).permit(:manifest)[:manifest]).deep_symbolize_keys!
+  end
+
   def app_params
-    params.require(:app).permit!.to_h
+    params.require(:app).permit(:name)
   end
 
 end

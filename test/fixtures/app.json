@@ -12,6 +12,18 @@
           }
         }
       ]
+    },
+    {
+      "name": "staging",
+      "promote": true,
+      "clusters": [
+        {
+          "name": "staging",
+          "values": {
+            "prefix": "staging"
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,6 +1,22 @@
 class Stage < ApplicationRecord
   belongs_to :app
   has_many   :clusters
+  has_many   :builds
+  has_many   :releases, through: :builds
+
+  def current
+    builds.last
+  end
+
+  def previous
+    rel = released
+    return nil unless rel
+    builds.where('id < ?', rel.id).last
+  end
+
+  def released
+    releases.last.try(:build)
+  end
 
   subscribe(Apps::StageCreatedEvent) do |event|
     create!({

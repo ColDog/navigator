@@ -15,6 +15,6 @@ class App < ApplicationRecord
   end
 
   subscribe(Apps::UpdatedEvent) do |event|
-    find_by_uid!(params[:app_id]).update!(name: event.name)
+    find_by_uid!(event.app_uid).update!(name: event.name)
   end
 end

@@ -3,10 +3,23 @@ module AppHelper
   def create_app_from_manifest(config)
     app = get_or_create_app(config)
 
-    (config[:stages] || []).each do |stage|
-      stage_uid = get_or_create_stage(app, stage)
-      (stage[:clusters] || []).each do |cluster|
-        get_or_create_cluster(app, stage_uid, cluster)
+    (config[:stages] || []).each do |stage_config|
+      stage = get_or_create_stage(app, stage_config)
+      (stage_config[:clusters] || []).each do |cluster_config|
+        get_or_create_cluster(app, stage.uid, cluster_config)
+      end
+
+      stage.clusters.each do |cluster|
+        unless (stage_config[:clusters] || []).find { |c| c[:name] == cluster.name }
+          Apps::DeleteClusterCommand.execute({ cluster_uid: cluster.uid })
+        end
+      end
+
+    end
+
+    app.stages.each do |stage|
+      unless (config[:stages] || []).find { |s| s[:name] == stage.name }
+        Apps::DeleteStageCommand.execute({ stage_uid: stage.uid })
       end
     end
   end
@@ -19,8 +32,9 @@ module AppHelper
 
     manifest[:stages] = app.stages.map do |stage|
       stage_map = stage.slice(:name, :review, :auto, :promotion)
+        .merge(id: stage.uid)
       stage_map[:clusters] = stage.clusters.map do |cluster|
-        cluster.slice(:name, :values)
+        cluster.slice(:name, :values).merge(id: cluster.uid)
       end
       stage_map
     end
@@ -44,11 +58,15 @@ module AppHelper
       app_uid:  app.uid
     ))
 
-    Stage.find_by!(app: app, name: stage_config[:name]).uid
+    Stage.find_by!(app: app, name: stage_config[:name])
   end
 
   def get_or_create_cluster(app, stage_uid, cluster_config)
-    cluster_uid = Cluster.find_by_name(cluster_config[:name]).try(:uid)
+    cluster_uid = Cluster.find_by(
+      name: cluster_config[:name],
+      stage: Stage.find_by_uid!(stage_uid),
+    ).try(:uid)
+
     Apps::UpsertClusterCommand.execute(cluster_config.merge(
       cluster_uid: cluster_uid,
       stage_uid:   stage_uid,

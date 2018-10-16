@@ -7,7 +7,7 @@ module Builds
       required(:app_uid).filled(:str?)
       required(:stage_uid).filled(:str?)
       required(:version).filled(:str?)
-      required(:values).filled(:hash?)
+      optional(:values).maybe(:hash?)
     end
 
   end

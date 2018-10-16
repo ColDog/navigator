@@ -1,18 +1,19 @@
-class ReleaseJob < ApplicationJob
+class ReleaseRemoveJob < ApplicationJob
   ERRORED = 'ERRORED'
   PENDING = 'PENDING'
-  SUCCESS = 'SUCCESS'
+  REMOVED = 'REMOVED'
   INITIAL = 'INITIAL'
 
   queue_as :default
 
-  subscribe(Releases::CreatedEvent) { |event| perform_now(event.event_uid) }
+  subscribe(Releases::DeletedEvent) { |event| perform_now(event.event_uid) }
 
   def perform(event_uid)
-    event = Releases::CreatedEvent.find_by_uid!(event_uid).event
-    @release_uid = event.release_uid
+    event = Releases::DeletedEvent.find_by_uid!(event_uid).event
 
-    @build = Build.find_by_uid!(event.build_uid)
+    @target_release = Release.find_by_uid!(event.target_release_uid)
+    @release_uid = event.release_uid
+    @build = @target_release.build
     @stage = @build.stage
     @clusters = @stage.clusters
 
@@ -26,10 +27,10 @@ class ReleaseJob < ApplicationJob
 
     @clusters.each do |cluster|
       create_deploy(cluster)
-      set_status(SUCCESS, cluster)
+      set_status(REMOVED, cluster)
     end
 
-    set_status(SUCCESS)
+    set_status(REMOVED)
   end
 
   def set_status(status, cluster=nil, error=nil)

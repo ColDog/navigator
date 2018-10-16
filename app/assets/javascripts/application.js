@@ -12,15 +12,24 @@
 //
 //= require rails-ujs
 //= require jquery.js
+//= require turbolinks
 //= require bootstrap.js
 //= require codemirror.js
 //= require codemirror-yaml.js
 //= require_tree .
 
-$(document).ready(function() {
-  var els = document.querySelectorAll('.codemirror');
+var REFRESH_INTERVAL = 1000;
+
+$(document).on('turbolinks:load', function() {
+  var els = document.querySelectorAll(".codemirror");
   for (var i = 0; i < els.length; i++) {
-    var el = els[i]
+    var el = els[i];
     CodeMirror.fromTextArea(el);
   }
-})
+});
+
+// $(document).ready(function() {
+//   setInterval(function() {
+//     Turbolinks.visit(location.toString());
+//   }, REFRESH_INTERVAL);
+// });

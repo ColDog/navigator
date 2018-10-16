@@ -1,0 +1,10 @@
+#!/bin/bash
+
+api_url="${API_URL:-http://localhost:3000}"
+file="$1"
+
+curl -sifS -XPOST $api_url/api/v1/apps \
+  -H 'content-type: application/json' \
+  -d $file \
+  | grep 'X-Request-Id:' \
+  | awk '{print $2}'

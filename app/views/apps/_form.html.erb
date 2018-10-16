@@ -2,8 +2,12 @@
   <div class="card">
     <div class="card-body">
       <div class="form-group">
-        <label for="name">Name</label>
-        <%= f.text_field :name, class: 'form-control', id: 'name', placeholder: 'Name', value: name %>
+        <label for="name">Manifest</label>
+        <%= f.text_area :manifest,
+          class: 'form-control codemirror',
+          id: 'manifest',
+          value: JSON.pretty_generate(@manifest)
+        %>
       </div>
     </div>
     <div class="card-footer">

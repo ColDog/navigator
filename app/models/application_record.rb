@@ -4,6 +4,7 @@ class ApplicationRecord < ActiveRecord::Base
   SUBSCRIPTIONS = {}
 
   def self.subscribe(event, &block)
+    puts "Subscribing #{self.name} to #{event.name}"
     SUBSCRIPTIONS[event.name] ||= []
     SUBSCRIPTIONS[event.name] << block
   end

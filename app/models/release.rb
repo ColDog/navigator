@@ -10,9 +10,16 @@ class Release < ApplicationRecord
     )
   end
 
+  subscribe(Releases::DeletedEvent) do |event|
+    Release.create!(
+      uid:    event.release_uid,
+      build:  Release.find_by_uid!(event.target_release_uid).build,
+      status: 'INITIAL',
+    )
+  end
+
   subscribe(Releases::ReleaseStatusEvent) do |event|
-    release = Deploy.find_by_uid!(event.release_uid)
-    release.update!(status: event.status)
+    Release.find_by_uid!(event.release_uid).update!(status: event.status)
   end
 
 end

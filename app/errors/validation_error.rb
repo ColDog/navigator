@@ -6,6 +6,6 @@ class ValidationError < StandardError
   end
 
   def message
-    @errors.map { |key, msg| "#{key}: #{msg.join(', ')}" }.join(',')
+    @errors.map { |key, msg| "#{key}: #{msg}" }.join(',')
   end
 end

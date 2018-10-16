@@ -25,6 +25,8 @@ ActiveRecord::Schema.define(version: 20180927031312) do
     t.string "uid", null: false
     t.string "version", null: false
     t.text "values"
+    t.integer "number", null: false
+    t.boolean "promoted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["app_id"], name: "index_builds_on_app_id"

@@ -15,3 +15,7 @@
  *= require codemirror.css
  *= require_self
  */
+
+.CodeMirror {
+  height: 100%;
+}
