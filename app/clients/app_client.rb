@@ -1,6 +1,11 @@
-module AppHelper
+class AppClient
 
-  def create_app_from_manifest(config)
+  def self.create(config)
+    new.create(config)
+    nil
+  end
+
+  def create(config)
     app = get_or_create_app(config)
 
     (config[:stages] || []).each do |stage_config|
@@ -22,24 +27,6 @@ module AppHelper
         Apps::DeleteStageCommand.execute({ stage_uid: stage.uid })
       end
     end
-  end
-
-  def get_app_manifest(uid)
-    manifest = {}
-    app = App.find_by_uid!(uid)
-    manifest[:name] = app.name
-    manifest[:id] = app.uid
-
-    manifest[:stages] = app.stages.map do |stage|
-      stage_map = stage.slice(:name, :review, :auto, :promotion)
-        .merge(id: stage.uid)
-      stage_map[:clusters] = stage.clusters.map do |cluster|
-        cluster.slice(:name, :values).merge(id: cluster.uid)
-      end
-      stage_map
-    end
-
-    manifest
   end
 
   def get_or_create_app(app_config)

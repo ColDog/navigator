@@ -13,4 +13,4 @@ gem 'uglifier',       '4.1.19'
 gem 'turbolinks',     '5.2.0'
 gem 'dry-validation', github: 'dry-rb/dry-validation'
 gem 'tzinfo-data',    '1.2018.5'
-gem 'web-console'
+gem 'web-console',    group: :development

@@ -6,6 +6,12 @@
       <%= local_assigns[:cluster] %>
     </p>
 
+    <% if build.released? %>
+      <p class="card-text">
+        <%= build.release.status %>
+      </p>
+    <% end %>
+
     <% if stage.review && build.released? %>
       <%= link_to 'Close',
         app_remove_path(@app.uid, release_uid: build.release.uid),

@@ -1,19 +1,14 @@
 Rails.application.routes.draw do
-  root to: 'apps#index'
-
-  resources :apps do
-    get  'logs'
-    post 'promote'  => 'releases#promote'
-    post 'release'  => 'releases#release'
-    post 'rollback' => 'releases#rollback'
-    post 'remove'   => 'releases#remove'
-  end
-  get  'events' => 'events#index'
-
-  namespace :api do
+  scope :api do
     scope :v1 do
-      resources :builds, only: [:create]
-      resources :apps,   only: [:create, :index, :show], param: :app_uid
+      get    'apps'                     => 'apps#index'
+      post   'apps'                     => 'apps#create'
+      get    'apps/:app'                => 'apps#show'
+      delete 'apps/:app'                => 'apps#destroy'
+      post   'apps/:app/:stage/builds'  => 'releases#build'
+      post   'apps/:app/:stage/promote' => 'releases#promote'
+      post   'apps/:app/:stage/release' => 'releases#release'
+      delete 'apps/:app/:stage/release' => 'releases#remove'
     end
   end
 end

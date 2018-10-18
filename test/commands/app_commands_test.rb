@@ -15,7 +15,9 @@ class AppCommandsTest < ActiveSupport::TestCase
   end
 
   test "delete a (non existent) app" do
-    Apps::DeleteCommand.execute(app_uid: 'asdf')
+    assert_raises(ActiveRecord::RecordNotFound) do
+      Apps::DeleteCommand.execute(app_uid: 'asdf')
+    end
   end
 
   test "add a stage" do
@@ -32,6 +34,7 @@ class AppCommandsTest < ActiveSupport::TestCase
 
   test "add a cluster" do
     Apps::UpsertClusterCommand.execute(
+      app_uid: apps(:one).uid,
       stage_uid: stages(:one).uid,
       name: 'test2'
     )
@@ -39,6 +42,7 @@ class AppCommandsTest < ActiveSupport::TestCase
 
   test "update a cluster" do
     Apps::UpsertClusterCommand.execute(
+      app_uid: apps(:one).uid,
       stage_uid: stages(:one).uid,
       name: 'test2'
     )

@@ -6,7 +6,7 @@ class ReleaseJob < ApplicationJob
 
   queue_as :default
 
-  subscribe(Releases::CreatedEvent) { |event| perform_now(event.event_uid) }
+  subscribe(Releases::CreatedEvent) { |event| perform_later(event.event_uid) }
 
   def perform(event_uid)
     event = Releases::CreatedEvent.find_by_uid!(event_uid).event
@@ -26,6 +26,8 @@ class ReleaseJob < ApplicationJob
 
     @clusters.each do |cluster|
       create_deploy(cluster)
+      set_status(PENDING, cluster)
+      sleep 5
       set_status(SUCCESS, cluster)
     end
 

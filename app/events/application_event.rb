@@ -39,10 +39,10 @@ class ApplicationEvent
   end
 
   def validate
-    puts "in #{self.class.name}: #{params}"
+    # puts "in #{self.class.name}: #{params}"
     result = self.class.schema.(params.to_h.symbolize_keys)
     @errors = result.messages
-    puts "out: #{result.output}"
+    # puts "out: #{result.output}"
     @params = HashWithIndifferentAccess.new(result.output)
     @errors = @errors.merge(event: self.class.name) unless valid?
     return valid?

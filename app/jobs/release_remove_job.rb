@@ -6,7 +6,7 @@ class ReleaseRemoveJob < ApplicationJob
 
   queue_as :default
 
-  subscribe(Releases::DeletedEvent) { |event| perform_now(event.event_uid) }
+  subscribe(Releases::DeletedEvent) { |event| perform_later(event.event_uid) }
 
   def perform(event_uid)
     event = Releases::DeletedEvent.find_by_uid!(event_uid).event
