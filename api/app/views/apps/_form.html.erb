@@ -1,0 +1,17 @@
+<%= form_for :app, method: method, url: url do |f| %>
+  <div class="card">
+    <div class="card-body">
+      <div class="form-group">
+        <label for="name">Manifest</label>
+        <%= f.text_area :manifest,
+          class: 'form-control codemirror',
+          id: 'manifest',
+          value: JSON.pretty_generate(@manifest)
+        %>
+      </div>
+    </div>
+    <div class="card-footer">
+      <%= f.submit 'Submit', class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

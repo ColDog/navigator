@@ -1,0 +1,15 @@
+<div class="container-fluid">
+  <div class="row">
+    <%= render 'nav', active: 'edit' %>
+  </div>
+
+  <div class="row">
+    <div class="container-fluid" style="padding-top: 20px; max-width: 800px;">
+      <%= render 'form',
+        method: :put,
+        url: app_path(@app.uid),
+        name: @app.name
+      %>
+    </div>
+  </div>
+</div>

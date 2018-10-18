@@ -8,11 +8,29 @@
 /.bundle
 
 # Ignore the default SQLite database.
-/db/*.sqlite3
-/db/*.sqlite3-journal
+db/*.sqlite3
+db/*.sqlite3-journal
 
 # Ignore all logfiles and tempfiles.
-/log/*
-/tmp/*
+log/*
+tmp/*
 
+# Dependencies
+node_modules
+
+# Testing.
+coverage
+
+# Production.
+build
+
+# Misc.
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .byebug_history
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

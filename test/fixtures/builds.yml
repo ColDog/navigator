@@ -1,8 +1,0 @@
-one:
-  id: 1
-  uid: ba5155ed-2e21-4733-9ba0-87051cf4d232
-  app_id: 1
-  stage_id: 1
-  number: 1
-  version: v1
-  values: "--- {}"

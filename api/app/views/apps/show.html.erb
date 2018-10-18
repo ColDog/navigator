@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+    <%= render 'nav', active: 'pipeline' %>
+  </div>
+
+  <div class="row" style="margin-top: 20px;">
+
+    <% stages = @app.stages.to_a %>
+    <% stages.each_with_index do |stage, index| %>
+      <% next_stage = stages[index + 1] %>
+      <div class="col-md-4">
+        <h4><%= stage.name %></h4>
+
+        <% if stage.review %>
+          <% stage.builds.each do |build| %>
+            <%= render 'card',
+              build: build,
+              undeployed: false,
+              stage: stage,
+              next_stage: next_stage
+            %>
+          <% end %>
+        <% else %>
+          <%# Show this latest build as undeployed. %>
+          <% if stage.current.try(:id) != stage.released.try(:id) %>
+            <%= render 'card',
+              build: stage.current,
+              undeployed: true,
+              stage: stage,
+              next_stage: next_stage
+            %>
+          <% end %>
+
+          <% if stage.released %>
+            <%# Get the latest release and show all deploys per cluster. %>
+            <% stage.released.release.deploys.each do |deploy| %>
+              <%= render 'card',
+                build: stage.released,
+                undeployed: false,
+                cluster: deploy.cluster.name,
+                stage: stage,
+                next_stage: next_stage
+              %>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
