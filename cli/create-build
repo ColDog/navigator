@@ -3,6 +3,6 @@
 api_url="${API_URL:-http://localhost:3000}"
 file="$1"
 
-curl -sS -XPOST $api_url/api/v1/builds \
+curl -siS -XPOST $api_url/api/v1/builds \
   -H 'content-type: application/json' \
   -d $file

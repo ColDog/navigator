@@ -23009,3 +23009,592 @@ Executing command Builds::CreateCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-870
   [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
 [ActiveJob] [ReleaseJob] [5aca8127-b759-48ff-b75d-3a2b928f6616] Performed ReleaseJob (Job ID: 5aca8127-b759-48ff-b75d-3a2b928f6616) from Async(default) in 203.73ms
 [ActiveJob] [ReleaseJob] [7b5580eb-60c9-4af3-bbf1-7b98f50b5b9a] Performed ReleaseJob (Job ID: 7b5580eb-60c9-4af3-bbf1-7b98f50b5b9a) from Async(default) in 157.77ms
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mFixture Delete (0.2ms)[0m  [1m[31mDELETE FROM "apps"[0m
+  [1m[36mFixture Insert (0.1ms)[0m  [1m[32mINSERT INTO "apps" ("id", "uid", "name", "created_at", "updated_at") VALUES (1, 'ba5155ed-2e21-4733-9ba0-87051cf4d238', 'one', '2018-11-05 03:25:22.855856', '2018-11-05 03:25:22.855856')[0m
+  [1m[36mFixture Delete (0.1ms)[0m  [1m[31mDELETE FROM "stages"[0m
+  [1m[36mFixture Insert (0.1ms)[0m  [1m[32mINSERT INTO "stages" ("id", "uid", "name", "app_id", "review", "auto", "promotion", "created_at", "updated_at") VALUES (1, 'ba5155ed-2e21-4733-9ba0-87051cf4d239', 'one', 1, 'f', 'f', 'f', '2018-11-05 03:25:22.857883', '2018-11-05 03:25:22.857883')[0m
+  [1m[36mFixture Delete (0.1ms)[0m  [1m[31mDELETE FROM "clusters"[0m
+  [1m[36mFixture Insert (0.1ms)[0m  [1m[32mINSERT INTO "clusters" ("uid", "name", "stage_id", "created_at", "updated_at", "id") VALUES ('ba5155ed-2e21-4733-9ba0-87051cf4d236', 'one', 1, '2018-11-05 03:25:22.859545', '2018-11-05 03:25:22.859545', 980190962)[0m
+  [1m[36mFixture Delete (0.1ms)[0m  [1m[31mDELETE FROM "builds"[0m
+  [1m[36mFixture Insert (0.1ms)[0m  [1m[32mINSERT INTO "builds" ("id", "uid", "app_id", "stage_id", "number", "version", "values", "created_at", "updated_at") VALUES (1, 'ba5155ed-2e21-4733-9ba0-87051cf4d232', 1, 1, 1, 'v1', '--- {}', '2018-11-05 03:25:22.861011', '2018-11-05 03:25:22.861011')[0m
+  [1m[36mFixture Delete (0.1ms)[0m  [1m[31mDELETE FROM "releases"[0m
+  [1m[36mFixture Insert (0.1ms)[0m  [1m[32mINSERT INTO "releases" ("uid", "build_id", "status", "created_at", "updated_at", "id") VALUES ('ba5155ed-2e21-4733-9ba0-87051cf4d236', 1, 'PENDING', '2018-11-05 03:25:22.862496', '2018-11-05 03:25:22.862496', 980190962)[0m
+  [1m[35m (3.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+BuildCommandsTest: test_create_a_build
+--------------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Builds::CreateCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :build_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d232", :stage_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d239", :version=>"v1", :values=>{:image=>{:repository=>"nginx", :tag=>"asdfasdf"}}}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "e9799b12-26de-48c7-b5e2-84d4d6ba3161"], ["name", "Builds::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\nbuild_uid: 5755f0cb-2889-493a-a29d-e4c6dfc6ae3a\nstage_uid: ba5155ed-2e21-4733-9ba0-87051cf4d239\nversion: v1\nvalues: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n  image: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n    repository: nginx\n    tag: asdfasdf\n"], ["created_at", "2018-11-05 03:25:22.886759"], ["updated_at", "2018-11-05 03:25:22.886759"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.2ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d239"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT MAX("builds"."number") FROM "builds" WHERE "builds"."stage_id" = ?[0m  [["stage_id", 1]]
+  [1m[36mBuild Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "builds" WHERE "builds"."version" = ? AND "builds"."stage_id" = ? AND "builds"."app_id" = ? LIMIT ?[0m  [["version", "v1"], ["stage_id", 1], ["app_id", 1], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+ReleaseCommandsTest: test_create_a_release
+------------------------------------------
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Releases::CreateCommand: {:build_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d232"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "aa7b49b8-25c2-4016-a327-75a7eb4b4273"], ["name", "Releases::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nbuild_uid: ba5155ed-2e21-4733-9ba0-87051cf4d232\nrelease_uid: 0b8f9690-b231-4c86-8eca-b8c95371d349\n"], ["created_at", "2018-11-05 03:25:22.901764"], ["updated_at", "2018-11-05 03:25:22.901764"]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d232"], ["LIMIT", 1]]
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "releases" ("uid", "build_id", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "0b8f9690-b231-4c86-8eca-b8c95371d349"], ["build_id", 1], ["status", "INITIAL"], ["created_at", "2018-11-05 03:25:22.908699"], ["updated_at", "2018-11-05 03:25:22.908699"]]
+[ActiveJob] Enqueued ReleaseJob (Job ID: b854147d-a43c-4a33-8a50-94e058764977) to Async(default) with arguments: "aa7b49b8-25c2-4016-a327-75a7eb4b4273"
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977] Performing ReleaseJob (Job ID: b854147d-a43c-4a33-8a50-94e058764977) from Async(default) with arguments: "aa7b49b8-25c2-4016-a327-75a7eb4b4273"
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[36mEvent Load (0.7ms)[0m  [1m[34mSELECT  "events".* FROM "events" WHERE "events"."uid" = ? LIMIT ?[0m  [["uid", "aa7b49b8-25c2-4016-a327-75a7eb4b4273"], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.5ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 1], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d232"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[36mStage Load (0.3ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977] Executing command Releases::StatusCommand: {:release_uid=>"0b8f9690-b231-4c86-8eca-b8c95371d349", :cluster_uid=>nil, :status=>"PENDING", :error=>nil}
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+ReleaseCommandsTest: test_deploy_a_release
+------------------------------------------
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35mSQL (0.4ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "66c5f77f-390a-469e-bb91-fec1227fae76"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 0b8f9690-b231-4c86-8eca-b8c95371d349\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:22.919386"], ["updated_at", "2018-11-05 03:25:22.919386"]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mRelease Load (4.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[36mRelease Load (0.4ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "0b8f9690-b231-4c86-8eca-b8c95371d349"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190962], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977] Executing command Releases::StatusCommand: {:release_uid=>"0b8f9690-b231-4c86-8eca-b8c95371d349", :cluster_uid=>nil, :status=>"ERRORED", :error=>#<ActiveRecord::RecordNotFound: Couldn't find Release>}
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "37d68bac-5e2a-4983-8c7d-bdd684c629ad"], ["name", "Releases::DeployEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: ba5155ed-2e21-4733-9ba0-87051cf4d236\ncluster_uid: ba5155ed-2e21-4733-9ba0-87051cf4d236\ndeploy_uid: 771fc314-014d-4d16-843c-1ba4e4490f10\n"], ["created_at", "2018-11-05 03:25:22.930450"], ["updated_at", "2018-11-05 03:25:22.930450"]]
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d236"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d236"], ["LIMIT", 1]]
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "deploys" ("release_id", "cluster_id", "uid", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["release_id", 980190962], ["cluster_id", 980190962], ["uid", "771fc314-014d-4d16-843c-1ba4e4490f10"], ["status", "PENDING"], ["created_at", "2018-11-05 03:25:22.939900"], ["updated_at", "2018-11-05 03:25:22.939900"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[35mSQL (8.2ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "3425239a-c886-412b-9709-b3d6e505acd5"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 0b8f9690-b231-4c86-8eca-b8c95371d349\nstatus: ERRORED\n"], ["created_at", "2018-11-05 03:25:22.932640"], ["updated_at", "2018-11-05 03:25:22.932640"]]
+  [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977]   [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "0b8f9690-b231-4c86-8eca-b8c95371d349"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b854147d-a43c-4a33-8a50-94e058764977] Error performing ReleaseJob (Job ID: b854147d-a43c-4a33-8a50-94e058764977) from Async(default) in 31.79ms: ActiveRecord::RecordNotFound (Couldn't find Release):
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activerecord-5.1.6/lib/active_record/core.rb:228:in `find_by!'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activerecord-5.1.6/lib/active_record/dynamic_matchers.rb:66:in `find_by_uid!'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/models/release.rb:22:in `block in <class:Release>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/models/event.rb:14:in `block (2 levels) in play'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/models/event.rb:13:in `each'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/models/event.rb:13:in `block in play'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activerecord-5.1.6/lib/active_record/connection_adapters/abstract/database_statements.rb:233:in `transaction'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activerecord-5.1.6/lib/active_record/transactions.rb:210:in `transaction'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/models/event.rb:10:in `play'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/events/application_event.rb:38:in `play'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/events/application_event.rb:26:in `play'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/commands/releases/status_command.rb:8:in `command'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/commands/application_command.rb:16:in `execute'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/commands/application_command.rb:10:in `execute'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/jobs/release_job.rb:38:in `set_status'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/jobs/release_job.rb:21:in `rescue in perform'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/app/jobs/release_job.rb:12:in `perform'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/execution.rb:37:in `block in perform_now'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:108:in `block in run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/i18n-1.1.0/lib/i18n.rb:284:in `with_locale'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/translation.rb:7:in `block (2 levels) in <module:Translation>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `instance_exec'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `block in run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/logging.rb:24:in `block (4 levels) in <module:Logging>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/notifications.rb:166:in `block in instrument'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/notifications/instrumenter.rb:21:in `instrument'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/notifications.rb:166:in `instrument'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/logging.rb:23:in `block (3 levels) in <module:Logging>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/logging.rb:44:in `block in tag_logger'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/tagged_logging.rb:69:in `block in tagged'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/tagged_logging.rb:26:in `tagged'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/tagged_logging.rb:69:in `tagged'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/logging.rb:44:in `tag_logger'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/logging.rb:20:in `block (2 levels) in <module:Logging>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `instance_exec'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `block in run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:135:in `run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/execution.rb:33:in `perform_now'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/execution.rb:22:in `block in execute'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:108:in `block in run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/railtie.rb:26:in `block (4 levels) in <class:Railtie>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/execution_wrapper.rb:85:in `wrap'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/reloader.rb:68:in `block in wrap'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/execution_wrapper.rb:85:in `wrap'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/reloader.rb:67:in `wrap'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/railtie.rb:25:in `block (3 levels) in <class:Railtie>'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `instance_exec'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:117:in `block in run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activesupport-5.1.6/lib/active_support/callbacks.rb:135:in `run_callbacks'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/execution.rb:20:in `execute'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/activejob-5.1.6/lib/active_job/queue_adapters/async_adapter.rb:68:in `perform'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:348:in `run_task'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:337:in `block (3 levels) in create_worker'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:320:in `loop'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:320:in `block (2 levels) in create_worker'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:319:in `catch'
+/home/colin/Workspace/src/github.com/coldog/navigator/api/.bundle/bundle/ruby/2.3.0/gems/concurrent-ruby-1.0.5/lib/concurrent/executor/ruby_thread_pool_executor.rb:319:in `block in create_worker'
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------
+AppsTest: test_crud_an_app
+--------------------------
+Started POST "/api/v1/apps" for 127.0.0.1 at 2018-11-04 19:25:22 -0800
+Processing by AppsController#create as HTML
+  Parameters: {"name"=>"test", "stages"=>[{"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}]}, {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}]}]}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+Executing command Apps::UpsertCommand: {"name"=>"test", "stages"=>[{"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}]}, {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}]}], "controller"=>"apps", "action"=>"create", "app_uid"=>nil}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "8fe2fea6-4e13-48d8-b747-1b8dd6c62c69"], ["name", "Apps::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: test\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:22.956622"], ["updated_at", "2018-11-05 03:25:22.956622"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "apps" ("uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["name", "test"], ["created_at", "2018-11-05 03:25:22.959022"], ["updated_at", "2018-11-05 03:25:22.959022"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}], "stage_uid"=>nil, "app_uid"=>"8ce63359-bb9c-48b5-9873-99d6892b873d"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "06a17a3f-3ae8-4cf4-a638-3b5fe788c066"], ["name", "Apps::StageCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: review\nstage_uid: 2bea4a5a-960a-415a-a24b-f16ca95ba573\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:22.962272"], ["updated_at", "2018-11-05 03:25:22.962272"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stages" ("app_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["app_id", 2], ["uid", "2bea4a5a-960a-415a-a24b-f16ca95ba573"], ["name", "review"], ["created_at", "2018-11-05 03:25:22.965897"], ["updated_at", "2018-11-05 03:25:22.965897"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "2bea4a5a-960a-415a-a24b-f16ca95ba573"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."name" = ? AND "clusters"."stage_id" = 2 LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {"name"=>"staging", "values"=>{"prefix"=>"review"}, "cluster_uid"=>nil, "stage_uid"=>"2bea4a5a-960a-415a-a24b-f16ca95ba573", "app_uid"=>"8ce63359-bb9c-48b5-9873-99d6892b873d"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "adbe3e26-7774-4b23-bf1b-212428984319"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nvalues: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n  prefix: review\ncluster_uid: 197e7ce0-ba0a-4257-8832-28f275b8450b\nstage_uid: 2bea4a5a-960a-415a-a24b-f16ca95ba573\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:22.969232"], ["updated_at", "2018-11-05 03:25:22.969232"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "2bea4a5a-960a-415a-a24b-f16ca95ba573"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "values", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 2], ["uid", "197e7ce0-ba0a-4257-8832-28f275b8450b"], ["name", "staging"], ["values", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nprefix: review\n"], ["created_at", "2018-11-05 03:25:22.972980"], ["updated_at", "2018-11-05 03:25:22.972980"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."app_id" = 2 AND "clusters"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}], "stage_uid"=>nil, "app_uid"=>"8ce63359-bb9c-48b5-9873-99d6892b873d"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "e17431c7-2fc9-4823-9e22-666166663bc7"], ["name", "Apps::StageCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nstage_uid: 08982520-9001-44e1-87f1-7252619415cd\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:22.976681"], ["updated_at", "2018-11-05 03:25:22.976681"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stages" ("app_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["app_id", 2], ["uid", "08982520-9001-44e1-87f1-7252619415cd"], ["name", "staging"], ["created_at", "2018-11-05 03:25:22.979172"], ["updated_at", "2018-11-05 03:25:22.979172"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "08982520-9001-44e1-87f1-7252619415cd"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."name" = ? AND "clusters"."stage_id" = 3 LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {"name"=>"staging", "values"=>{"prefix"=>"staging"}, "cluster_uid"=>nil, "stage_uid"=>"08982520-9001-44e1-87f1-7252619415cd", "app_uid"=>"8ce63359-bb9c-48b5-9873-99d6892b873d"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "55ecd1bc-9619-4b78-b3c4-1b0b1f8ab664"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nvalues: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n  prefix: staging\ncluster_uid: 3694e0ef-a170-4a8d-a29d-80468c4098c6\nstage_uid: 08982520-9001-44e1-87f1-7252619415cd\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:22.982068"], ["updated_at", "2018-11-05 03:25:22.982068"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "08982520-9001-44e1-87f1-7252619415cd"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "values", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 3], ["uid", "3694e0ef-a170-4a8d-a29d-80468c4098c6"], ["name", "staging"], ["values", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nprefix: staging\n"], ["created_at", "2018-11-05 03:25:22.985445"], ["updated_at", "2018-11-05 03:25:22.985445"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."app_id" = 2 AND "clusters"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.0ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT "stages".* FROM "stages" WHERE "stages"."app_id" = ?[0m  [["app_id", 2]]
+Completed 201 Created in 39ms (ActiveRecord: 3.7ms)
+Started GET "/api/v1/apps/test" for 127.0.0.1 at 2018-11-04 19:25:22 -0800
+Processing by AppsController#show as HTML
+  Parameters: {"app"=>"test"}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT "stages".* FROM "stages" WHERE "stages"."app_id" = ?[0m  [["app_id", 2]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.2ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.0ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 50]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.0ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 50]]
+Completed 200 OK in 14ms (Views: 0.4ms | ActiveRecord: 1.0ms)
+Started DELETE "/api/v1/apps/test" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+Processing by AppsController#destroy as HTML
+  Parameters: {"app"=>"test"}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+Executing command Apps::DeleteCommand: {:app_uid=>"8ce63359-bb9c-48b5-9873-99d6892b873d"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "baef373c-179f-4969-8cdc-1a9453af7d88"], ["name", "Apps::DeletedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: 8ce63359-bb9c-48b5-9873-99d6892b873d\n"], ["created_at", "2018-11-05 03:25:23.007439"], ["updated_at", "2018-11-05 03:25:23.007439"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "8ce63359-bb9c-48b5-9873-99d6892b873d"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[31mDELETE FROM "apps" WHERE "apps"."id" = ?[0m  [["id", 2]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 3ms (ActiveRecord: 0.4ms)
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.1ms)[0m  [1m[36mbegin transaction[0m
+------------------------------
+AppsTest: test_release_a_build
+------------------------------
+Started POST "/api/v1/apps" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+Processing by AppsController#create as HTML
+  Parameters: {"name"=>"test", "stages"=>[{"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}]}, {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}]}]}
+  [1m[36mApp Load (0.2ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+Executing command Apps::UpsertCommand: {"name"=>"test", "stages"=>[{"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}]}, {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}]}], "controller"=>"apps", "action"=>"create", "app_uid"=>nil}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "d1e40434-03d1-4385-8902-dfbe7dc53cf3"], ["name", "Apps::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: test\napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\n"], ["created_at", "2018-11-05 03:25:23.014070"], ["updated_at", "2018-11-05 03:25:23.014070"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "apps" ("uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["name", "test"], ["created_at", "2018-11-05 03:25:23.016998"], ["updated_at", "2018-11-05 03:25:23.016998"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {"name"=>"review", "review"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"review"}}], "stage_uid"=>nil, "app_uid"=>"58bb2b8c-7fe5-4592-aa66-b219b80bb524"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "ca1fdcb5-97d5-4bd2-b1a6-5b65beb1cda4"], ["name", "Apps::StageCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: review\nstage_uid: daf1756c-431a-4820-8b43-95776be69fda\napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\n"], ["created_at", "2018-11-05 03:25:23.019010"], ["updated_at", "2018-11-05 03:25:23.019010"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stages" ("app_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["app_id", 2], ["uid", "daf1756c-431a-4820-8b43-95776be69fda"], ["name", "review"], ["created_at", "2018-11-05 03:25:23.021388"], ["updated_at", "2018-11-05 03:25:23.021388"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "daf1756c-431a-4820-8b43-95776be69fda"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."name" = ? AND "clusters"."stage_id" = 2 LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {"name"=>"staging", "values"=>{"prefix"=>"review"}, "cluster_uid"=>nil, "stage_uid"=>"daf1756c-431a-4820-8b43-95776be69fda", "app_uid"=>"58bb2b8c-7fe5-4592-aa66-b219b80bb524"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "0544dd17-a193-460d-8448-1e0d81485565"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nvalues: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n  prefix: review\ncluster_uid: a8599731-e2b2-4071-8c22-99c8cc9578a8\nstage_uid: daf1756c-431a-4820-8b43-95776be69fda\napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\n"], ["created_at", "2018-11-05 03:25:23.024369"], ["updated_at", "2018-11-05 03:25:23.024369"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "daf1756c-431a-4820-8b43-95776be69fda"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "values", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 2], ["uid", "a8599731-e2b2-4071-8c22-99c8cc9578a8"], ["name", "staging"], ["values", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nprefix: review\n"], ["created_at", "2018-11-05 03:25:23.027185"], ["updated_at", "2018-11-05 03:25:23.027185"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."app_id" = 2 AND "clusters"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {"name"=>"staging", "promote"=>"true", "clusters"=>[{"name"=>"staging", "values"=>{"prefix"=>"staging"}}], "stage_uid"=>nil, "app_uid"=>"58bb2b8c-7fe5-4592-aa66-b219b80bb524"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "31826b82-dafb-4f81-ba23-f11db54784c3"], ["name", "Apps::StageCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nstage_uid: c393cc4e-b5ff-42e9-ad1b-2973c8e908fc\napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\n"], ["created_at", "2018-11-05 03:25:23.030508"], ["updated_at", "2018-11-05 03:25:23.030508"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "stages" ("app_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["app_id", 2], ["uid", "c393cc4e-b5ff-42e9-ad1b-2973c8e908fc"], ["name", "staging"], ["created_at", "2018-11-05 03:25:23.032759"], ["updated_at", "2018-11-05 03:25:23.032759"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "c393cc4e-b5ff-42e9-ad1b-2973c8e908fc"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."name" = ? AND "clusters"."stage_id" = 3 LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {"name"=>"staging", "values"=>{"prefix"=>"staging"}, "cluster_uid"=>nil, "stage_uid"=>"c393cc4e-b5ff-42e9-ad1b-2973c8e908fc", "app_uid"=>"58bb2b8c-7fe5-4592-aa66-b219b80bb524"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "61feeb77-e3e6-4569-ac8b-a62a2cad1960"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: staging\nvalues: !ruby/hash:ActiveSupport::HashWithIndifferentAccess\n  prefix: staging\ncluster_uid: 19b05a67-a91f-46b9-8bf9-e94bb8f6377c\nstage_uid: c393cc4e-b5ff-42e9-ad1b-2973c8e908fc\napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\n"], ["created_at", "2018-11-05 03:25:23.035402"], ["updated_at", "2018-11-05 03:25:23.035402"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "c393cc4e-b5ff-42e9-ad1b-2973c8e908fc"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "values", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 3], ["uid", "19b05a67-a91f-46b9-8bf9-e94bb8f6377c"], ["name", "staging"], ["values", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nprefix: staging\n"], ["created_at", "2018-11-05 03:25:23.038536"], ["updated_at", "2018-11-05 03:25:23.038536"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."app_id" = 2 AND "clusters"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.0ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT "stages".* FROM "stages" WHERE "stages"."app_id" = ?[0m  [["app_id", 2]]
+Completed 201 Created in 33ms (ActiveRecord: 3.6ms)
+Started POST "/api/v1/apps/test/review/builds" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+Processing by ReleasesController#build as HTML
+  Parameters: {"version"=>"v1", "app"=>"test", "stage"=>"review"}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+Executing command Builds::CreateCommand: {:version=>"v1", :values=>nil, :app_uid=>"58bb2b8c-7fe5-4592-aa66-b219b80bb524", :stage_uid=>"daf1756c-431a-4820-8b43-95776be69fda"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "bd6be53a-4a0e-4428-ab22-b93bd816ba67"], ["name", "Builds::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nversion: v1\nvalues: \napp_uid: 58bb2b8c-7fe5-4592-aa66-b219b80bb524\nstage_uid: daf1756c-431a-4820-8b43-95776be69fda\nbuild_uid: 6ca412c5-7e7b-4a7c-9388-dc1afb999865\n"], ["created_at", "2018-11-05 03:25:23.049027"], ["updated_at", "2018-11-05 03:25:23.049027"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "58bb2b8c-7fe5-4592-aa66-b219b80bb524"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "daf1756c-431a-4820-8b43-95776be69fda"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT MAX("builds"."number") FROM "builds" WHERE "builds"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mBuild Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "builds" WHERE "builds"."version" = ? AND "builds"."stage_id" = ? AND "builds"."app_id" = ? LIMIT ?[0m  [["version", "v1"], ["stage_id", 2], ["app_id", 2], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "builds" ("app_id", "stage_id", "uid", "version", "number", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 2], ["uid", "6ca412c5-7e7b-4a7c-9388-dc1afb999865"], ["version", "v1"], ["number", 1], ["created_at", "2018-11-05 03:25:23.053900"], ["updated_at", "2018-11-05 03:25:23.053900"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 8ms (ActiveRecord: 0.9ms)
+Started POST "/api/v1/apps/test/review/release?version=v1" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+Processing by ReleasesController#release as HTML
+  Parameters: {"version"=>"v1", "app"=>"test", "stage"=>"review"}
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."version" = ? AND "builds"."app_id" = 2 AND "builds"."stage_id" = 2 LIMIT ?[0m  [["version", "v1"], ["LIMIT", 1]]
+Executing command Releases::CreateCommand: {:build_uid=>"6ca412c5-7e7b-4a7c-9388-dc1afb999865"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "11d2b25c-48a0-4c81-ae66-b249ffc5f1c1"], ["name", "Releases::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nbuild_uid: 6ca412c5-7e7b-4a7c-9388-dc1afb999865\nrelease_uid: e677cfe9-837d-4807-8d81-f9a2302ebb3d\n"], ["created_at", "2018-11-05 03:25:23.058845"], ["updated_at", "2018-11-05 03:25:23.058845"]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "6ca412c5-7e7b-4a7c-9388-dc1afb999865"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "releases" ("uid", "build_id", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["build_id", 2], ["status", "INITIAL"], ["created_at", "2018-11-05 03:25:23.061103"], ["updated_at", "2018-11-05 03:25:23.061103"]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9] Performing ReleaseJob (Job ID: 76378421-fe42-437e-8fb7-7cbca160cbe9) from Async(default) with arguments: "11d2b25c-48a0-4c81-ae66-b249ffc5f1c1"
+[ActiveJob] Enqueued ReleaseJob (Job ID: 76378421-fe42-437e-8fb7-7cbca160cbe9) to Async(default) with arguments: "11d2b25c-48a0-4c81-ae66-b249ffc5f1c1"
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 6ms (ActiveRecord: 0.7ms)
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mEvent Load (0.1ms)[0m  [1m[34mSELECT  "events".* FROM "events" WHERE "events"."uid" = ? LIMIT ?[0m  [["uid", "11d2b25c-48a0-4c81-ae66-b249ffc5f1c1"], ["LIMIT", 1]]
+Started POST "/api/v1/apps/test/review/promote?version=v1&to=staging" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mBuild Load (1.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "6ca412c5-7e7b-4a7c-9388-dc1afb999865"], ["LIMIT", 1]]
+Processing by ReleasesController#promote as HTML
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Parameters: {"version"=>"v1", "to"=>"staging", "app"=>"test", "stage"=>"review"}
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9] Executing command Releases::StatusCommand: {:release_uid=>"e677cfe9-837d-4807-8d81-f9a2302ebb3d", :cluster_uid=>nil, :status=>"PENDING", :error=>nil}
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "e9bf3720-e672-4456-a45f-26a3bcdad8bc"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: e677cfe9-837d-4807-8d81-f9a2302ebb3d\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:23.068154"], ["updated_at", "2018-11-05 03:25:23.068154"]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "releases" SET "status" = ?, "updated_at" = ? WHERE "releases"."id" = ?[0m  [["status", "PENDING"], ["updated_at", "2018-11-05 03:25:23.071014"], ["id", 980190963]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.2ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."version" = ? AND "builds"."app_id" = 2 AND "builds"."stage_id" = 2 LIMIT ?[0m  [["version", "v1"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "92c76c92-ac1b-4f5c-8344-25d64ec14c0b"], ["name", "Releases::DeployEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: e677cfe9-837d-4807-8d81-f9a2302ebb3d\ncluster_uid: a8599731-e2b2-4071-8c22-99c8cc9578a8\ndeploy_uid: 5b95080b-383b-4d3c-a29f-bccab0c90d05\n"], ["created_at", "2018-11-05 03:25:23.076108"], ["updated_at", "2018-11-05 03:25:23.076108"]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."uid" = ? LIMIT ?[0m  [["uid", "a8599731-e2b2-4071-8c22-99c8cc9578a8"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "deploys" ("release_id", "cluster_id", "uid", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["release_id", 980190963], ["cluster_id", 980190963], ["uid", "5b95080b-383b-4d3c-a29f-bccab0c90d05"], ["status", "PENDING"], ["created_at", "2018-11-05 03:25:23.079149"], ["updated_at", "2018-11-05 03:25:23.079149"]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9] Executing command Releases::StatusCommand: {:release_uid=>"e677cfe9-837d-4807-8d81-f9a2302ebb3d", :cluster_uid=>"a8599731-e2b2-4071-8c22-99c8cc9578a8", :status=>"PENDING", :error=>nil}
+  [1m[36mStage Load (0.2ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+Executing command Builds::PromoteCommand: {:source_build_uid=>"6ca412c5-7e7b-4a7c-9388-dc1afb999865", :target_stage_uid=>"c393cc4e-b5ff-42e9-ad1b-2973c8e908fc"}
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "64baf63b-cb64-4934-a9bb-be91cc9ce6df"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: e677cfe9-837d-4807-8d81-f9a2302ebb3d\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:23.081462"], ["updated_at", "2018-11-05 03:25:23.081462"]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "b0321b14-4fd7-4857-8a6b-fb8ea0585786"], ["name", "Builds::PromotedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nsource_build_uid: 6ca412c5-7e7b-4a7c-9388-dc1afb999865\ntarget_stage_uid: c393cc4e-b5ff-42e9-ad1b-2973c8e908fc\nbuild_uid: 20a5c041-91ec-4819-966a-519808229789\n"], ["created_at", "2018-11-05 03:25:23.084818"], ["updated_at", "2018-11-05 03:25:23.084818"]]
+  [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "6ca412c5-7e7b-4a7c-9388-dc1afb999865"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "c393cc4e-b5ff-42e9-ad1b-2973c8e908fc"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT MAX("builds"."number") FROM "builds" WHERE "builds"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mBuild Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "builds" WHERE "builds"."version" = ? AND ("builds"."id" != ?) AND "builds"."stage_id" = ? AND "builds"."app_id" = ? LIMIT ?[0m  [["version", "v1"], ["id", 2], ["stage_id", 2], ["app_id", 2], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "builds" SET "promoted" = ?, "number" = ?, "updated_at" = ? WHERE "builds"."id" = ?[0m  [["promoted", "t"], ["number", 2], ["updated_at", "2018-11-05 03:25:23.092032"], ["id", 2]]
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT MAX("builds"."number") FROM "builds" WHERE "builds"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mBuild Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "builds" WHERE "builds"."version" = ? AND "builds"."stage_id" = ? AND "builds"."app_id" = ? LIMIT ?[0m  [["version", "v1"], ["stage_id", 3], ["app_id", 2], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "builds" ("app_id", "stage_id", "uid", "version", "number", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?)[0m  [["app_id", 2], ["stage_id", 3], ["uid", "20a5c041-91ec-4819-966a-519808229789"], ["version", "v1"], ["number", 1], ["created_at", "2018-11-05 03:25:23.094884"], ["updated_at", "2018-11-05 03:25:23.094884"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 29ms (ActiveRecord: 1.6ms)
+Started POST "/api/v1/apps/test/staging/release?version=v1" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+Processing by ReleasesController#release as HTML
+  Parameters: {"version"=>"v1", "app"=>"test", "stage"=>"staging"}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "staging"], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."version" = ? AND "builds"."app_id" = 2 AND "builds"."stage_id" = 3 LIMIT ?[0m  [["version", "v1"], ["LIMIT", 1]]
+Executing command Releases::CreateCommand: {:build_uid=>"20a5c041-91ec-4819-966a-519808229789"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "4b1e611c-b827-419c-a1be-03e354d01681"], ["name", "Releases::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nbuild_uid: 20a5c041-91ec-4819-966a-519808229789\nrelease_uid: cde1db2c-d8a3-4bcc-8685-243ae937148e\n"], ["created_at", "2018-11-05 03:25:23.100406"], ["updated_at", "2018-11-05 03:25:23.100406"]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "20a5c041-91ec-4819-966a-519808229789"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "releases" ("uid", "build_id", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "cde1db2c-d8a3-4bcc-8685-243ae937148e"], ["build_id", 3], ["status", "INITIAL"], ["created_at", "2018-11-05 03:25:23.102914"], ["updated_at", "2018-11-05 03:25:23.102914"]]
+[ActiveJob] Enqueued ReleaseJob (Job ID: b15499f2-5b1b-4b47-8a1e-8da41faa97c7) to Async(default) with arguments: "4b1e611c-b827-419c-a1be-03e354d01681"
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7] Performing ReleaseJob (Job ID: b15499f2-5b1b-4b47-8a1e-8da41faa97c7) from Async(default) with arguments: "4b1e611c-b827-419c-a1be-03e354d01681"
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 8ms (ActiveRecord: 0.7ms)
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mEvent Load (0.1ms)[0m  [1m[34mSELECT  "events".* FROM "events" WHERE "events"."uid" = ? LIMIT ?[0m  [["uid", "4b1e611c-b827-419c-a1be-03e354d01681"], ["LIMIT", 1]]
+Started DELETE "/api/v1/apps/test/review/release?version=v1" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mBuild Load (0.8ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."uid" = ? LIMIT ?[0m  [["uid", "20a5c041-91ec-4819-966a-519808229789"], ["LIMIT", 1]]
+Processing by ReleasesController#remove as HTML
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  Parameters: {"version"=>"v1", "app"=>"test", "stage"=>"review"}
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7] Executing command Releases::StatusCommand: {:release_uid=>"cde1db2c-d8a3-4bcc-8685-243ae937148e", :cluster_uid=>nil, :status=>"PENDING", :error=>nil}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "db51645a-9876-4c7b-8a84-3f78da94a171"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: cde1db2c-d8a3-4bcc-8685-243ae937148e\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:23.110106"], ["updated_at", "2018-11-05 03:25:23.110106"]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "cde1db2c-d8a3-4bcc-8685-243ae937148e"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "releases" SET "status" = ?, "updated_at" = ? WHERE "releases"."id" = ?[0m  [["status", "PENDING"], ["updated_at", "2018-11-05 03:25:23.112506"], ["id", 980190964]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.2ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."app_id" = 2 AND "stages"."name" = ? LIMIT ?[0m  [["name", "review"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mRelease Load (0.2ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "56d5f624-0a4f-4447-9d7a-462dbd40594c"], ["name", "Releases::DeployEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: cde1db2c-d8a3-4bcc-8685-243ae937148e\ncluster_uid: 19b05a67-a91f-46b9-8bf9-e94bb8f6377c\ndeploy_uid: 09422182-cafc-4f7a-aa74-89d0e186c1ed\n"], ["created_at", "2018-11-05 03:25:23.117255"], ["updated_at", "2018-11-05 03:25:23.117255"]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "cde1db2c-d8a3-4bcc-8685-243ae937148e"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mCluster Load (0.0ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."uid" = ? LIMIT ?[0m  [["uid", "19b05a67-a91f-46b9-8bf9-e94bb8f6377c"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "deploys" ("release_id", "cluster_id", "uid", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["release_id", 980190964], ["cluster_id", 980190964], ["uid", "09422182-cafc-4f7a-aa74-89d0e186c1ed"], ["status", "PENDING"], ["created_at", "2018-11-05 03:25:23.120006"], ["updated_at", "2018-11-05 03:25:23.120006"]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7] Executing command Releases::StatusCommand: {:release_uid=>"cde1db2c-d8a3-4bcc-8685-243ae937148e", :cluster_uid=>"19b05a67-a91f-46b9-8bf9-e94bb8f6377c", :status=>"PENDING", :error=>nil}
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "106819e9-5e28-4296-9476-682adac9c33c"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: cde1db2c-d8a3-4bcc-8685-243ae937148e\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:23.122534"], ["updated_at", "2018-11-05 03:25:23.122534"]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "cde1db2c-d8a3-4bcc-8685-243ae937148e"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mRelease Load (0.2ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+Executing command Releases::DeleteCommand: {:target_release_uid=>"e677cfe9-837d-4807-8d81-f9a2302ebb3d"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "4c2dc1d0-08cc-4b69-b49b-1e6b9a6b544b"], ["name", "Releases::DeletedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\ntarget_release_uid: e677cfe9-837d-4807-8d81-f9a2302ebb3d\nrelease_uid: 6b56fc81-125f-404f-b203-77cbc8338ea5\n"], ["created_at", "2018-11-05 03:25:23.126294"], ["updated_at", "2018-11-05 03:25:23.126294"]]
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "releases" ("uid", "build_id", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "6b56fc81-125f-404f-b203-77cbc8338ea5"], ["build_id", 2], ["status", "INITIAL"], ["created_at", "2018-11-05 03:25:23.129743"], ["updated_at", "2018-11-05 03:25:23.129743"]]
+[ActiveJob] Enqueued ReleaseRemoveJob (Job ID: ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce) to Async(default) with arguments: "4c2dc1d0-08cc-4b69-b49b-1e6b9a6b544b"
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce] Performing ReleaseRemoveJob (Job ID: ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce) from Async(default) with arguments: "4c2dc1d0-08cc-4b69-b49b-1e6b9a6b544b"
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+Completed 201 Created in 23ms (ActiveRecord: 1.1ms)
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mEvent Load (0.1ms)[0m  [1m[34mSELECT  "events".* FROM "events" WHERE "events"."uid" = ? LIMIT ?[0m  [["uid", "4c2dc1d0-08cc-4b69-b49b-1e6b9a6b544b"], ["LIMIT", 1]]
+Started GET "/api/v1/apps/test" for 127.0.0.1 at 2018-11-04 19:25:23 -0800
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mRelease Load (0.7ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "e677cfe9-837d-4807-8d81-f9a2302ebb3d"], ["LIMIT", 1]]
+Processing by AppsController#show as HTML
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  Parameters: {"app"=>"test"}
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce] Executing command Releases::StatusCommand: {:release_uid=>"6b56fc81-125f-404f-b203-77cbc8338ea5", :cluster_uid=>nil, :status=>"PENDING", :error=>nil}
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."name" = ? LIMIT ?[0m  [["name", "test"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "60b91746-b438-4a80-b9c5-b44635bf6da9"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 6b56fc81-125f-404f-b203-77cbc8338ea5\nstatus: PENDING\n"], ["created_at", "2018-11-05 03:25:23.137179"], ["updated_at", "2018-11-05 03:25:23.137179"]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "6b56fc81-125f-404f-b203-77cbc8338ea5"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "releases" SET "status" = ?, "updated_at" = ? WHERE "releases"."id" = ?[0m  [["status", "PENDING"], ["updated_at", "2018-11-05 03:25:23.139694"], ["id", 980190965]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT "stages".* FROM "stages" WHERE "stages"."app_id" = ?[0m  [["app_id", 2]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "c23c9eb4-95f1-41a6-b6a4-c4e71fe04bfe"], ["name", "Releases::DeployEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 6b56fc81-125f-404f-b203-77cbc8338ea5\ncluster_uid: a8599731-e2b2-4071-8c22-99c8cc9578a8\ndeploy_uid: e3666990-9a92-4593-9408-ef1eb303b2d5\n"], ["created_at", "2018-11-05 03:25:23.144355"], ["updated_at", "2018-11-05 03:25:23.144355"]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "6b56fc81-125f-404f-b203-77cbc8338ea5"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."uid" = ? LIMIT ?[0m  [["uid", "a8599731-e2b2-4071-8c22-99c8cc9578a8"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "deploys" ("release_id", "cluster_id", "uid", "status", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["release_id", 980190965], ["cluster_id", 980190963], ["uid", "e3666990-9a92-4593-9408-ef1eb303b2d5"], ["status", "PENDING"], ["created_at", "2018-11-05 03:25:23.147110"], ["updated_at", "2018-11-05 03:25:23.147110"]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce] Executing command Releases::StatusCommand: {:release_uid=>"6b56fc81-125f-404f-b203-77cbc8338ea5", :cluster_uid=>"a8599731-e2b2-4071-8c22-99c8cc9578a8", :status=>"REMOVED", :error=>nil}
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "e5e0fb95-bd6b-4f33-816b-2d2e38a29342"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 6b56fc81-125f-404f-b203-77cbc8338ea5\nstatus: REMOVED\n"], ["created_at", "2018-11-05 03:25:23.150397"], ["updated_at", "2018-11-05 03:25:23.150397"]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "6b56fc81-125f-404f-b203-77cbc8338ea5"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "releases" SET "status" = ?, "updated_at" = ? WHERE "releases"."id" = ?[0m  [["status", "REMOVED"], ["updated_at", "2018-11-05 03:25:23.153176"], ["id", 980190965]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce] Executing command Releases::StatusCommand: {:release_uid=>"6b56fc81-125f-404f-b203-77cbc8338ea5", :cluster_uid=>nil, :status=>"REMOVED", :error=>nil}
+  [1m[36mRelease Exists (0.2ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35mSQL (0.1ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "b97d4918-34fe-4797-9e9c-078550c1859c"], ["name", "Releases::ReleaseStatusEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nrelease_uid: 6b56fc81-125f-404f-b203-77cbc8338ea5\nstatus: REMOVED\n"], ["created_at", "2018-11-05 03:25:23.155736"], ["updated_at", "2018-11-05 03:25:23.155736"]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mRelease Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."uid" = ? LIMIT ?[0m  [["uid", "6b56fc81-125f-404f-b203-77cbc8338ea5"], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[36mBuild Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce]   [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+[ActiveJob] [ReleaseRemoveJob] [ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce] Performed ReleaseRemoveJob (Job ID: ec1e7ede-81a1-4cf7-9991-9dbf7ab0f3ce) from Async(default) in 27.43ms
+  [1m[36mRelease Load (0.2ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mDeploy Load (0.1ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190965]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190963], ["LIMIT", 1]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.2ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Build Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mRelease Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Deploy Load (0.0ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190965]]
+  [1m[36mCACHE Cluster Load (0.0ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190963], ["LIMIT", 1]]
+  [1m[36mCACHE App Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Build Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? AND (id < 2) ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 2]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 2], ["LIMIT", 50]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Deploy Load (0.0ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190965]]
+  [1m[36mCACHE Cluster Load (0.0ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190963], ["LIMIT", 1]]
+  [1m[36mCACHE App Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mRelease Exists (0.1ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mDeploy Load (0.0ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190964]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190964], ["LIMIT", 1]]
+  [1m[36mCACHE App Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mRelease Load (0.1ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Deploy Load (0.0ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190964]]
+  [1m[36mCACHE Cluster Load (0.0ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190964], ["LIMIT", 1]]
+  [1m[36mCACHE App Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" INNER JOIN "builds" ON "releases"."build_id" = "builds"."id" WHERE "builds"."stage_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Build Load (0.0ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."id" = ? LIMIT ?[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? AND (id < 3) ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 1]]
+  [1m[36mCluster Load (0.1ms)[0m  [1m[34mSELECT "clusters".* FROM "clusters" WHERE "clusters"."stage_id" = ?[0m  [["stage_id", 3]]
+  [1m[36mBuild Load (0.1ms)[0m  [1m[34mSELECT  "builds".* FROM "builds" WHERE "builds"."stage_id" = ? ORDER BY "builds"."id" DESC LIMIT ?[0m  [["stage_id", 3], ["LIMIT", 50]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Exists (0.0ms)[0m  [1m[34mSELECT  1 AS one FROM "releases" WHERE "releases"."build_id" = ? LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Release Load (0.0ms)[0m  [1m[34mSELECT  "releases".* FROM "releases" WHERE "releases"."build_id" = ? ORDER BY "releases"."id" DESC LIMIT ?[0m  [["build_id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Deploy Load (0.0ms)[0m  [1m[34mSELECT "deploys".* FROM "deploys" WHERE "deploys"."release_id" = ?[0m  [["release_id", 980190964]]
+  [1m[36mCACHE Cluster Load (0.0ms)[0m  [1m[34mSELECT  "clusters".* FROM "clusters" WHERE "clusters"."id" = ? LIMIT ?[0m  [["id", 980190964], ["LIMIT", 1]]
+  [1m[36mCACHE App Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+Completed 200 OK in 73ms (Views: 1.1ms | ActiveRecord: 2.7ms)
+  [1m[35m (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------------
+AppCommandsTest: test_delete_a_(non_existent)_app
+-------------------------------------------------
+Executing command Apps::DeleteCommand: {:app_uid=>"asdf"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "f2ad42c8-78db-4177-acbf-918c8fd52ea5"], ["name", "Apps::DeletedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: asdf\n"], ["created_at", "2018-11-05 03:25:23.211172"], ["updated_at", "2018-11-05 03:25:23.211172"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "asdf"], ["LIMIT", 1]]
+  [1m[35m (0.1ms)[0m  [1m[31mROLLBACK TO SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------
+AppCommandsTest: test_update_a_cluster
+--------------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :stage_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d239", :name=>"test2"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "1fcdf606-9e63-4e53-853e-c7b90ebeac4e"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\nstage_uid: ba5155ed-2e21-4733-9ba0-87051cf4d239\nname: test2\ncluster_uid: 01611e65-2f15-4f1f-85ab-161a9003a390\n"], ["created_at", "2018-11-05 03:25:23.216095"], ["updated_at", "2018-11-05 03:25:23.216095"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d239"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["app_id", 1], ["stage_id", 1], ["uid", "01611e65-2f15-4f1f-85ab-161a9003a390"], ["name", "test2"], ["created_at", "2018-11-05 03:25:23.219528"], ["updated_at", "2018-11-05 03:25:23.219528"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------
+AppCommandsTest: test_update_a_stage
+------------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :stage_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d239", :name=>"test2"}
+  [1m[35m (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "2c3c7e0e-d8c3-458c-8fc4-94f3ee2aa72c"], ["name", "Apps::StageUpdatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nstage_uid: ba5155ed-2e21-4733-9ba0-87051cf4d239\nname: test2\n"], ["created_at", "2018-11-05 03:25:23.222653"], ["updated_at", "2018-11-05 03:25:23.222653"]]
+  [1m[36mStage Load (0.1ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d239"], ["LIMIT", 1]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[33mUPDATE "stages" SET "name" = ?, "updated_at" = ? WHERE "stages"."id" = ?[0m  [["name", "test2"], ["updated_at", "2018-11-05 03:25:23.226122"], ["id", 1]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------
+AppCommandsTest: test_create_an_app
+-----------------------------------
+Executing command Apps::CreateCommand: {:name=>"test"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "548c24a0-f78b-4cdc-9cdb-4d9513159d86"], ["name", "Apps::CreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\nname: test\napp_uid: bd4a5caf-88b0-455f-8ad5-3721fd7d4dd6\n"], ["created_at", "2018-11-05 03:25:23.229274"], ["updated_at", "2018-11-05 03:25:23.229274"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "apps" ("uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["uid", "bd4a5caf-88b0-455f-8ad5-3721fd7d4dd6"], ["name", "test"], ["created_at", "2018-11-05 03:25:23.231791"], ["updated_at", "2018-11-05 03:25:23.231791"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------
+AppCommandsTest: test_delete_an_app
+-----------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::DeleteCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "fe0caac5-ba84-421f-941b-380d8774da52"], ["name", "Apps::DeletedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\n"], ["created_at", "2018-11-05 03:25:23.235073"], ["updated_at", "2018-11-05 03:25:23.235073"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[31mDELETE FROM "apps" WHERE "apps"."id" = ?[0m  [["id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------
+AppCommandsTest: test_add_a_cluster
+-----------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::UpsertClusterCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :stage_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d239", :name=>"test2"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "8cd6e9ff-2249-4ec3-b68d-63a203d4c8e8"], ["name", "Apps::ClusterCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\nstage_uid: ba5155ed-2e21-4733-9ba0-87051cf4d239\nname: test2\ncluster_uid: 76266fa8-a93e-4878-8312-b35dca809cc9\n"], ["created_at", "2018-11-05 03:25:23.239921"], ["updated_at", "2018-11-05 03:25:23.239921"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[36mStage Load (0.0ms)[0m  [1m[34mSELECT  "stages".* FROM "stages" WHERE "stages"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d239"], ["LIMIT", 1]]
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "clusters" ("app_id", "stage_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["app_id", 1], ["stage_id", 1], ["uid", "76266fa8-a93e-4878-8312-b35dca809cc9"], ["name", "test2"], ["created_at", "2018-11-05 03:25:23.243028"], ["updated_at", "2018-11-05 03:25:23.243028"]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------
+AppCommandsTest: test_add_a_stage
+---------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::UpsertStageCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :name=>"test"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.3ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "808f6a3b-84ff-4015-9f14-b346a02ed37a"], ["name", "Apps::StageCreatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\nname: test\nstage_uid: afd8cd94-b24f-4928-aef2-36d5cabf18ee\n"], ["created_at", "2018-11-05 03:25:23.245939"], ["updated_at", "2018-11-05 03:25:23.245939"]]
+  [1m[36mApp Load (0.0ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "stages" ("app_id", "uid", "name", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["app_id", 1], ["uid", "afd8cd94-b24f-4928-aef2-36d5cabf18ee"], ["name", "test"], ["created_at", "2018-11-05 03:25:23.248518"], ["updated_at", "2018-11-05 03:25:23.248518"]]
+  [1m[35m (0.1ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------
+AppCommandsTest: test_update_an_app
+-----------------------------------
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+Executing command Apps::UpdateCommand: {:app_uid=>"ba5155ed-2e21-4733-9ba0-87051cf4d238", :name=>"test2"}
+  [1m[35m (0.1ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[32mINSERT INTO "events" ("uid", "name", "params", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?)[0m  [["uid", "367da8d5-242b-45e1-b8ec-7adc7cf4ffe4"], ["name", "Apps::UpdatedEvent"], ["params", "--- !ruby/hash:ActiveSupport::HashWithIndifferentAccess\napp_uid: ba5155ed-2e21-4733-9ba0-87051cf4d238\nname: test2\n"], ["created_at", "2018-11-05 03:25:23.251608"], ["updated_at", "2018-11-05 03:25:23.251608"]]
+  [1m[36mApp Load (0.1ms)[0m  [1m[34mSELECT  "apps".* FROM "apps" WHERE "apps"."uid" = ? LIMIT ?[0m  [["uid", "ba5155ed-2e21-4733-9ba0-87051cf4d238"], ["LIMIT", 1]]
+  [1m[35mSQL (0.1ms)[0m  [1m[33mUPDATE "apps" SET "name" = ?, "updated_at" = ? WHERE "apps"."id" = ?[0m  [["name", "test2"], ["updated_at", "2018-11-05 03:25:23.253878"], ["id", 1]]
+  [1m[35m (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[35m (0.1ms)[0m  [1m[31mrollback transaction[0m
+[ActiveJob] [ReleaseJob] [76378421-fe42-437e-8fb7-7cbca160cbe9] Performed ReleaseJob (Job ID: 76378421-fe42-437e-8fb7-7cbca160cbe9) from Async(default) in 192.77ms
+[ActiveJob] [ReleaseJob] [b15499f2-5b1b-4b47-8a1e-8da41faa97c7] Performed ReleaseJob (Job ID: b15499f2-5b1b-4b47-8a1e-8da41faa97c7) from Async(default) in 150.49ms

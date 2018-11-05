@@ -25,7 +25,7 @@ class ApplicationSerializer
     self.class.fields.each do |field|
       output[field] = self.respond_to?(field) ? self.send(field) : @model.send(field)
     end
-    output
+    output.deep_transform_keys { |key| key.to_s.camelize(:lower) }
   end
 
 end

@@ -1,7 +1,7 @@
 class AppsController < ApplicationController
 
   def index
-    render json: { data: App.all.map { |app| { id: app.uid, name: app.name } } }
+    render json: App.all.map { |app| { id: app.uid, name: app.name } }
   end
 
   def show

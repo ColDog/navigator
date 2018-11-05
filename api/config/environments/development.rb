@@ -10,8 +10,8 @@ Rails.application.configure do
   # Eager load code on boot.
   config.eager_load = true
 
-  # Show full error reports.
-  config.consider_all_requests_local = true
+  # Don't show full error reports.
+  config.consider_all_requests_local = false
 
   # Enable/disable caching. By default caching is disabled.
   config.action_controller.perform_caching = true

@@ -3,6 +3,7 @@ class Build < ApplicationRecord
   belongs_to :stage
   has_many   :releases
   serialize  :values
+  validates_uniqueness_of :version, scope: :app_id
 
   before_validation { self.number = (stage.builds.maximum(:number) || 0) + 1 }
 

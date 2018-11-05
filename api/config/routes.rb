@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   scope :api do
     scope :v1 do
+      post   'builds'                   => 'releases#build'
       get    'apps'                     => 'apps#index'
       post   'apps'                     => 'apps#create'
       get    'apps/:app'                => 'apps#show'

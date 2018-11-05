@@ -1,6 +1,6 @@
 class BuildSerializer < ApplicationSerializer
   fields :id, :version, :values, :number, :promoted, :removed, :released,
-         :release
+         :release, :app
 
   def id
     model.uid
@@ -12,6 +12,10 @@ class BuildSerializer < ApplicationSerializer
 
   def released
     model.released?
+  end
+
+  def app
+    { name: model.app.name, id: model.app.uid }
   end
 
   def release

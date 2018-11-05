@@ -6,7 +6,7 @@ class ReleaseJob < ApplicationJob
 
   queue_as :default
 
-  subscribe(Releases::CreatedEvent) { |event| perform_later(event.event_uid) }
+  subscribe(Releases::CreatedEvent) { |event| perform_now(event.event_uid) }
 
   def perform(event_uid)
     event = Releases::CreatedEvent.find_by_uid!(event_uid).event

@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20180927031312) do
     t.boolean "promoted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["app_id", "stage_id", "version"], name: "index_builds_on_app_id_and_stage_id_and_version", unique: true
     t.index ["app_id"], name: "index_builds_on_app_id"
     t.index ["stage_id"], name: "index_builds_on_stage_id"
   end

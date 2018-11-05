@@ -5,6 +5,10 @@ class AppClient
     nil
   end
 
+  def self.manifest(app)
+    new.get_app_manifest(app)
+  end
+
   def create(config)
     app = get_or_create_app(config)
 
@@ -61,6 +65,21 @@ class AppClient
     ))
 
     Cluster.find_by!(app: app, name: cluster_config[:name]).uid
+  end
+
+  def get_app_manifest(app)
+    manifest = {}
+    manifest[:name] = app.name
+
+    manifest[:stages] = app.stages.map do |stage|
+      stage_map = stage.slice(:name, :review, :auto, :promotion)
+      stage_map[:clusters] = stage.clusters.map do |cluster|
+        cluster.slice(:name, :values)
+      end
+      stage_map
+    end
+
+    manifest
   end
 
 end

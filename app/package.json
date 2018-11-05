@@ -2,10 +2,21 @@
   "name": "app",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:4000",
+  "installConfig": {
+    "pnp": true
+  },
   "dependencies": {
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-scripts": "2.0.5"
+    "lodash": "^4.17.11",
+    "page": "^1.10.2",
+    "react": "16.5.2",
+    "react-dom": "16.5.2",
+    "react-redux": "^5.0.7",
+    "react-scripts": "2.0.5",
+    "redux": "^4.0.1",
+    "redux-logic": "^2.0.2",
+    "semantic-ui-css": "2.4.1",
+    "semantic-ui-react": "0.82.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -21,5 +32,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 80
+  }
 }

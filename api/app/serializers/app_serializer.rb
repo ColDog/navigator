@@ -1,5 +1,5 @@
 class AppSerializer < ApplicationSerializer
-  fields :name, :id, :stages
+  fields :name, :id, :stages, :manifest
 
   def id
     model.uid
@@ -7,6 +7,10 @@ class AppSerializer < ApplicationSerializer
 
   def stages
     model.stages.map { |stage| StageSerializer.serialize(stage) }
+  end
+
+  def manifest
+    AppClient.manifest(model)
   end
 
 end
