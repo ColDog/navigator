@@ -3,20 +3,26 @@ import { createLogicMiddleware } from 'redux-logic';
 
 import * as router from './router';
 import * as apps from './api/apps';
+import * as logs from './api/logs';
 
 const devtools =
   typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
     ? window.__REDUX_DEVTOOLS_EXTENSION__()
     : f => f;
 
+const reducers = {
+  router: router.reducer,
+  apps: apps.reducer,
+  logs: logs.reducer,
+};
+
+const logic = [...apps.logic, ...logs.logic];
+
 const store = createStore(
-  combineReducers({
-    router: router.reducer,
-    apps: apps.reducer,
-  }),
+  combineReducers(reducers),
   {},
   compose(
-    applyMiddleware(createLogicMiddleware([...apps.logic])),
+    applyMiddleware(createLogicMiddleware(logic)),
     devtools
   )
 );

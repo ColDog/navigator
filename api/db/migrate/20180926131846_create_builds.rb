@@ -9,7 +9,7 @@ class CreateBuilds < ActiveRecord::Migration[5.1]
       t.integer    :number,   null: false, unique: true
       t.boolean    :promoted, null: false, default: false
 
-      t.index [:app_id, :version], unique: true
+      t.index [:app_id, :stage_id, :version], unique: true
       t.timestamps
     end
   end

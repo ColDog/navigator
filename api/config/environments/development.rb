@@ -1,14 +1,8 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in
   # config/application.rb.
-
-  # In the development environment your application's code is reloaded on
-  # every request. This slows down response time but is perfect for development
-  # since you don't have to restart the web server when you make code changes.
-  config.cache_classes = false
-
-  # Eager load code on boot.
-  config.eager_load = true
+  config.cache_classes = true
+  config.eager_load    = true
 
   # Don't show full error reports.
   config.consider_all_requests_local = false
@@ -33,4 +27,13 @@ Rails.application.configure do
 
   # Raises error for missing translations
   config.action_view.raise_on_missing_translations = true
+
+  # Logging configuration that goes to STDOUT.
+  config.logger          = ActiveSupport::Logger.new(STDOUT)
+  config.lograge.enabled = true
+
+  config.after_initialize do
+    ActiveRecord::Base.logger = Rails.logger.clone
+    ActiveRecord::Base.logger.level = Logger::INFO
+  end
 end

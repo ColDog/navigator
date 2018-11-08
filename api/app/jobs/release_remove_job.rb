@@ -1,12 +1,7 @@
 class ReleaseRemoveJob < ApplicationJob
-  ERRORED = 'ERRORED'
-  PENDING = 'PENDING'
-  REMOVED = 'REMOVED'
-  INITIAL = 'INITIAL'
-
   queue_as :default
 
-  subscribe(Releases::DeletedEvent) { |event| perform_now(event.event_uid) }
+  subscribe(Releases::DeletedEvent) { |event| perform_later(event.event_uid) }
 
   def perform(event_uid)
     event = Releases::DeletedEvent.find_by_uid!(event_uid).event
@@ -19,18 +14,18 @@ class ReleaseRemoveJob < ApplicationJob
 
     run
   rescue ActiveRecord::RecordNotFound => e
-    set_status(ERRORED, nil, e)
+    set_status(Release::ERRORED, nil, e)
   end
 
   def run
-    set_status(PENDING)
+    set_status(Release::PENDING)
 
     @clusters.each do |cluster|
       create_deploy(cluster)
-      set_status(REMOVED, cluster)
+      set_status(Release::SUCCESS, cluster)
     end
 
-    set_status(REMOVED)
+    set_status(Release::SUCCESS)
   end
 
   def set_status(status, cluster=nil, error=nil)

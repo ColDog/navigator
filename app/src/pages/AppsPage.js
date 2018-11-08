@@ -5,6 +5,7 @@ import { appsRequest } from '../api/apps';
 import Header from '../components/Header';
 import Main from '../components/Main';
 import { List, Container, Segment } from 'semantic-ui-react';
+import capitalize from 'lodash/capitalize';
 
 class Apps extends React.Component {
   static route = '/';
@@ -33,7 +34,7 @@ class Apps extends React.Component {
             <List.Item key={app.id}>
               <List.Icon name="circle" size="large" verticalAlign="middle"></List.Icon>
               <List.Content>
-                <List.Header href={`/apps/${app.name}`}>{app.name}</List.Header>
+                <List.Header href={`/apps/${app.name}`}>{capitalize(app.name)}</List.Header>
                 <List.Description>Updated 10 minutes ago</List.Description>
               </List.Content>
             </List.Item>

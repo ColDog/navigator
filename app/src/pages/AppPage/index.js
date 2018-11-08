@@ -7,6 +7,7 @@ import { appRequest, appReleaseRequest, appRemoveRequest, appPromoteRequest } fr
 import StageList from './StageList';
 import { Loader, Menu, Container, Header } from 'semantic-ui-react';
 import AppMenu from '../../components/AppMenu';
+import { poller } from '../../api/fetch'
 
 class AppPage extends React.Component {
   static route = '/apps/:id';
@@ -34,13 +35,13 @@ class AppPage extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(appRequest(this.props.name));
-    // this.cancel = setInterval(() => {
-    //   this.props.dispatch(appRequest(this.props.name));
-    // }, 1000)
+    this.cancel = poller(1000, () => {
+      this.props.dispatch(appRequest(this.props.name));
+    })
   }
 
   componentWillUnmount() {
-    // clearInterval(this.cancel)
+    this.cancel && this.cancel()
   }
 
   render() {

@@ -1,5 +1,5 @@
 class ReleaseSerializer < ApplicationSerializer
-  fields :id, :status, :clusters
+  fields :id, :status, :clusters, :removal
 
   def id
     model.uid

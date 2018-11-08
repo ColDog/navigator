@@ -7,7 +7,7 @@ class BuildCommandsTest < ActiveSupport::TestCase
       app_uid: apps(:one).uid,
       build_uid: builds(:one).uid,
       stage_uid: stages(:one).uid,
-      version: 'v1',
+      version: 'v2',
       values: {
         image: { repository: 'nginx', tag: 'asdfasdf' },
       },

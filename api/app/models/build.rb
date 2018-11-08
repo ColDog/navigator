@@ -3,7 +3,7 @@ class Build < ApplicationRecord
   belongs_to :stage
   has_many   :releases
   serialize  :values
-  validates_uniqueness_of :version, scope: :app_id
+  validates_uniqueness_of :version, scope: [:app_id, :stage_id]
 
   before_validation { self.number = (stage.builds.maximum(:number) || 0) + 1 }
 
@@ -19,7 +19,7 @@ class Build < ApplicationRecord
   end
 
   def removed?
-    releases.last.try(:status) == 'REMOVED'
+    releases.last.try(:removal)
   end
 
   def release

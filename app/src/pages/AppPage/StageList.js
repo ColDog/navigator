@@ -2,12 +2,14 @@ import React from 'react';
 import { Grid, Header } from 'semantic-ui-react';
 import BuildCard from './BuildCard';
 import get from 'lodash/get';
+import capitalize from 'lodash/capitalize';
+import words from 'lodash/words';
 
 export default ({ stages, callbacks }) => (
   <Grid columns={stages.length} stackable>
     {stages.map((stage, idx) => (
       <Grid.Column key={stage.id}>
-        <Header>{stage.name}</Header>
+        <Header>{capitalize(words(stage.name).join(' '))}</Header>
 
         {stage.review &&
           stage.builds

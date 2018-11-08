@@ -38,10 +38,10 @@ class ReleasesController < ApplicationController
   def remove
     app = App.find_by!(name: params[:app])
     stage = Stage.find_by!(app: app, name: params[:stage])
-    release = stage.released.try(:release)
+    build = Build.find_by!(version: params[:version], app: app, stage: stage)
 
-    if release
-      Releases::DeleteCommand.execute(target_release_uid: release.uid)
+    if build.released?
+      Releases::DeleteCommand.execute(target_release_uid: build.release.uid)
     end
     head :created
   end

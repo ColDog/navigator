@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { start } from './router';
 
-import { AppPage, AppsPage, AppSettingsPage } from './pages'
+import { AppPage, AppsPage, AppSettingsPage, LogsPage } from './pages'
 
 import 'semantic-ui-css/semantic.min.css';
 
@@ -14,6 +14,7 @@ const App = () => (
       <AppPage />
       <AppsPage />
       <AppSettingsPage />
+      <LogsPage />
     </div>
   </Provider>
 );

@@ -21,9 +21,25 @@ export const request = async (method, url, body) => {
     const data = await res.json();
     return data;
   }
-  return null
+  return null;
 };
 
 export const get = url => request('GET', url, null);
 export const post = (url, body) => request('POST', url, body);
 export const destroy = (url, body) => request('DELETE', url, body);
+
+export const poller = (interval, cb) => {
+  let latest = null;
+  const id = setInterval(async () => {
+    const res = await get('/api/v1/poll');
+    if (res.latest === latest) {
+      return;
+    }
+
+    latest = res.latest;
+    cb();
+  }, interval);
+  return () => {
+    clearInterval(id);
+  };
+};

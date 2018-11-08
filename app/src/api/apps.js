@@ -1,7 +1,7 @@
 import { createLogic } from 'redux-logic';
 import * as fetch from './fetch';
 
-const q = 'API';
+const q = '[app]';
 
 export const APPS_REQUEST = `${q}/APPS_REQUEST`;
 export const APPS_SUCCESS = `${q}/APPS_SUCCESS`;

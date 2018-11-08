@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Icon } from 'semantic-ui-react';
 import get from 'lodash/get';
 
 export default ({
@@ -16,11 +16,13 @@ export default ({
     <Card.Content>
       <Card.Header>
         <code>
-          {build.version}-{build.number}
+          {build.version}
         </code>
       </Card.Header>
       <Card.Meta>{cluster}</Card.Meta>
-      <Card.Description>{get(build, 'release.status')}</Card.Description>
+      <Card.Description>
+        {get(build, 'release.status')}
+      </Card.Description>
     </Card.Content>
     <Card.Content extra>
       {stage.review &&
@@ -82,5 +84,12 @@ export default ({
         </Button>
       )}
     </Card.Content>
+    {build.released &&
+    <Card.Content extra>
+      <a href={`/logs/${build.release.id}`}>
+        <Icon name='terminal' />
+      </a>
+    </Card.Content>
+    }
   </Card>
 );
