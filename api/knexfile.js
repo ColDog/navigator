@@ -1,1 +1,1 @@
-module.exports = require('./src/config').database
+module.exports = require('./dist/config').database

@@ -3,8 +3,8 @@ exports.up = function(knex) {
     table.string("name").primary();
     table.string("id").notNullable();
     table.text("stages").notNullable();
-    table.timestamp("updatedAt").defaultTo(knex.fn.now());
-    table.timestamp("createdAt").defaultTo(knex.fn.now());
+    table.timestamp("updated").defaultTo(knex.fn.now());
+    table.timestamp("created").defaultTo(knex.fn.now());
   });
 };
 

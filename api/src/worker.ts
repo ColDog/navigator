@@ -1,9 +1,9 @@
-const uuid = require("uuid/v4");
-const apps = require("./repo/apps");
-const releases = require("./repo/releases");
-const logs = require("./repo/logs");
+import { v4 as uuid } from "uuid";
+import * as apps from './repo/apps'
+import * as releases from "./repo/releases";
+import * as logs from "./repo/logs";
 
-async function doRelease(releaseId) {
+export async function doRelease(releaseId: string) {
   try {
     const release = await releases.get(releaseId);
     const app = await apps.fetch(release.app);
@@ -16,10 +16,10 @@ async function doRelease(releaseId) {
 
     await logs.log(releaseId, `starting release "${releaseId}"`);
 
-    const results = {
+    const results: releases.Results = {
       stage: stage.name,
       app: app.name,
-      clusters: []
+      clusters: [],
     };
     await releases.update(release.id, "PENDING", results);
 
@@ -48,7 +48,7 @@ async function doRelease(releaseId) {
   }
 }
 
-async function run() {
+export async function run() {
   const id = uuid();
   console.log("starting worker", id);
   while (true) {
@@ -67,8 +67,6 @@ async function run() {
   }
 }
 
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-module.exports = { run, doRelease };

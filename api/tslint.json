@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-config-prettier"
+  ],
+  "rules": {
+    "jsx-key": false,
+    "jsx-boolean-value": false,
+    "ordered-imports": false,
+    "object-literal-sort-keys": false,
+    "interface-name": false,
+    "no-empty": false,
+    "no-conditional-assignment": false,
+    "max-classes-per-file": false,
+    "member-ordering": false,
+    "member-access": false,
+    "jsx-no-lambda": false,
+    "interface-over-type-literal": false,
+    "jsx-no-string-ref": false,
+    "no-string-literal": false
+  }
+}

@@ -6,7 +6,7 @@ exports.up = function(knex) {
     table.string("stage").notNullable();
     table.text("values").notNullable();
     table.unique(["app", "stage", "version"]);
-    table.timestamp("createdAt").defaultTo(knex.fn.now());
+    table.timestamp("created").defaultTo(knex.fn.now());
   });
 };
 

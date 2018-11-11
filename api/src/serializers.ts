@@ -1,7 +1,8 @@
-const releaseRepo = require("./repo/releases");
-const buildRepo = require("./repo/builds");
+import * as releaseRepo from "./repo/releases";
+import * as buildRepo from "./repo/builds";
+import * as appRepo from "./repo/apps";
 
-async function appSerializer(app) {
+export async function appSerializer(app: appRepo.App) {
   return {
     ...app,
     stages: await Promise.all(
@@ -14,7 +15,7 @@ async function appSerializer(app) {
   };
 }
 
-async function stageSerializer(app, stage) {
+export async function stageSerializer(app: appRepo.App, stage: appRepo.Stage) {
   const releases = await releaseRepo.listByStage(app.name, stage.name, 25);
   const builds = await buildRepo.last(app.name, stage.name, 25);
   const released = releases[releases.length - 1] || null;
@@ -30,5 +31,3 @@ async function stageSerializer(app, stage) {
     current
   };
 }
-
-module.exports = { appSerializer, stageSerializer };

@@ -1,22 +1,20 @@
-const apps = require("./apps");
-const db = require('../db');
+import * as apps from "./apps";
+import db from "../db";
 
 beforeEach(async () => {
   await db.migrate.latest();
-})
+});
 
 describe("apps", () => {
   it("inserts an app", async () => {
     await apps.insert({ name: "test", stages: [] });
-    expect(await apps.fetch("test")).toEqual({
-      name: "test",
-      stages: []
-    });
+    const out = await apps.fetch("test");
+    expect(out.stages).toEqual([]);
   });
 
   it("fails on an invalid app", async () => {
     try {
-      await apps.insert({ name: "test", stages: [{}] });
+      await apps.insert({ name: "test", stages: [{}] } as any);
     } catch (e) {
       expect(e.message).toEqual("App is invalid");
     }

@@ -1,7 +1,24 @@
-const validate = require("jsonschema").validate;
-const db = require("../db");
-const uuid = require("uuid/v4");
-const { NotFoundError, ValidationError } = require("../errors");
+import { validate } from "jsonschema";
+import db from "../db";
+import { v4 as uuid } from "uuid";
+import { NotFoundError, ValidationError } from "../errors";
+
+export interface Cluster {
+  name: string;
+  values: object;
+}
+
+export interface Stage {
+  name: string;
+  clusters: Cluster[];
+}
+
+export interface App {
+  name: string;
+  stages: Stage[];
+  modified?: Date,
+  created?: Date,
+}
 
 const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -37,11 +54,11 @@ const schema = {
   }
 };
 
-async function list() {
+export async function list(): Promise<Array<{ id: string; name: string }>> {
   return await db.select(["id", "name"]).from("apps");
 }
 
-async function fetch(name) {
+export async function fetch(name: string): Promise<App> {
   const app = await db
     .select("*")
     .from("apps")
@@ -56,7 +73,7 @@ async function fetch(name) {
   };
 }
 
-async function insert(app) {
+export async function insert(app: App) {
   const result = validate(app || {}, schema);
   if (result.errors.length > 0) {
     throw new ValidationError("App is invalid", result.errors);
@@ -81,9 +98,3 @@ async function insert(app) {
     }
   });
 }
-
-module.exports = {
-  list,
-  insert,
-  fetch
-};

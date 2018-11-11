@@ -8,7 +8,7 @@ exports.up = function(knex) {
     table.text("results").notNullable();
     table.string("worker");
     table.boolean("removal").notNullable();
-    table.timestamp("createdAt").defaultTo(knex.fn.now());
+    table.timestamp("created").defaultTo(knex.fn.now());
   });
 };
 

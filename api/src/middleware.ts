@@ -1,21 +1,22 @@
-const uuid = require("uuid/v4");
+import * as Koa from "koa";
+import { v4 as uuid } from "uuid";
 
-function logger() {
+export function logger(): Koa.Middleware {
   return async (ctx, next) => {
     const t1 = Date.now();
-    ctx.requestId = uuid();
-    ctx.response.headers["x-request-id"] = ctx.requestId;
+    const id = uuid();
+    ctx.response.headers["x-request-id"] = id;
     await next();
     const t2 = Date.now();
     console.log(
-      `[${ctx.request.method}] ${ctx.request.path}: status=${ctx.response.status} requestId=${
-        ctx.requestId
-      } (${t2 - t1}ms)`
+      `[${ctx.request.method}] ${ctx.request.path}: status=${
+        ctx.response.status
+      } requestId=${id} (${t2 - t1}ms)`
     );
   };
 }
 
-function errors() {
+export function errors(): Koa.Middleware {
   return async (ctx, next) => {
     try {
       await next();
@@ -34,5 +35,3 @@ function errors() {
     }
   };
 }
-
-module.exports = { logger, errors };

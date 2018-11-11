@@ -1,16 +1,10 @@
-const Router = require("koa-router");
-const apps = require("./repo/apps");
-const builds = require("./repo/builds");
-const releases = require("./repo/releases");
-const { appSerializer } = require("./serializers");
+import * as Router from "koa-router";
+import * as apps from "./repo/apps";
+import * as builds from "./repo/builds";
+import * as releases from "./repo/releases";
+import { appSerializer } from "./serializers";
 
-const router = new Router({ prefix: "/api/v1" });
-
-router.get("/", async ctx => {
-  ctx.body = {
-    routes: ["/apps", "/apps/:name", "/build", "/promote", "/release"]
-  };
-});
+export const router = new Router({ prefix: "/api/v1" });
 
 router.get("/apps", async ctx => {
   ctx.body = { data: await apps.list() };
@@ -26,32 +20,30 @@ router.get("/apps/:name/stages", async ctx => {
 });
 
 router.post("/apps", async ctx => {
-  await apps.insert(ctx.request.body);
+  await apps.insert(ctx.request.body as any);
   created(ctx);
 });
 
 router.post("/build", async ctx => {
-  await builds.insert(ctx.request.body);
+  await builds.insert(ctx.request.body as any);
   created(ctx);
 });
 
 router.post("/promote", async ctx => {
-  await builds.promote(ctx.request.body);
+  await builds.promote(ctx.request.body as any);
   created(ctx);
 });
 
 router.post("/release", async ctx => {
-  await releases.insert(ctx.request.body);
+  await releases.insert(ctx.request.body as any);
   created(ctx);
 });
 
 router.delete("/release", async ctx => {
-  await releases.remove(ctx.request.body);
+  await releases.remove(ctx.request.body as any);
   created(ctx);
 });
 
-function created(ctx) {
+function created(ctx: any) {
   ctx.body = { status: "created", requestId: ctx.requestId };
 }
-
-module.exports = { router };

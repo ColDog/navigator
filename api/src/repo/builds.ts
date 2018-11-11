@@ -1,7 +1,17 @@
-const validate = require("jsonschema").validate;
-const db = require("../db");
-const { ValidationError, NotFoundError } = require("../errors");
-const uuid = require("uuid/v4");
+import { validate } from "jsonschema";
+import db from "../db";
+import { ValidationError, NotFoundError } from "../errors";
+import { v4 as uuid } from "uuid";
+import * as knex from "knex";
+
+export interface Build {
+  id?: string;
+  app: string;
+  stage: string;
+  version: string;
+  values?: object;
+  created?: Date;
+}
 
 const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
@@ -19,14 +29,19 @@ const schema = {
   }
 };
 
-async function list(app) {
+export async function list(app: string): Promise<Build[]> {
   return await db
     .select("*")
     .from("builds")
-    .where("app", app);
+    .where("app", app)
+    .map(load);
 }
 
-async function exists(app, stage, version) {
+export async function exists(
+  app: string,
+  stage: string,
+  version: string
+): Promise<boolean> {
   try {
     await fetch(app, stage, version);
     return true;
@@ -35,26 +50,23 @@ async function exists(app, stage, version) {
   }
 }
 
-async function find(cb) {
+export async function find(
+  cb: (db: knex) => knex.QueryBuilder
+): Promise<Build> {
   const data = await cb(db);
   if (!data) {
     throw new NotFoundError("Build does not exist");
   }
-  return {
-    ...data,
-    values: JSON.parse(data.values)
-  };
+  return load(data);
 }
 
-async function query(cb) {
-  const list = await cb(db);
-  return list.map(data => ({
-    ...data,
-    values: JSON.parse(data.values)
-  }));
+export async function query(
+  cb: (db: knex) => knex.QueryBuilder
+): Promise<Build[]> {
+  return await cb(db).map(load);
 }
 
-async function fetch(app, stage, version) {
+export async function fetch(app: string, stage: string, version: string) {
   return find(db =>
     db
       .select("*")
@@ -64,7 +76,7 @@ async function fetch(app, stage, version) {
   );
 }
 
-async function current(app, stage) {
+export async function current(app: string, stage: string) {
   return find(db =>
     db
       .select("*")
@@ -75,7 +87,7 @@ async function current(app, stage) {
   );
 }
 
-async function last(app, stage, n) {
+export async function last(app: string, stage: string, n: number = 25) {
   return query(db =>
     db
       .select("*")
@@ -86,7 +98,7 @@ async function last(app, stage, n) {
   );
 }
 
-async function insert(build) {
+export async function insert(build: Build) {
   const buildExists = await exists(build.app, build.stage, build.version);
   if (buildExists) {
     throw new ValidationError("Build already exists");
@@ -103,10 +115,25 @@ async function insert(build) {
   });
 }
 
-async function promote(app, stage, version, to) {
+export async function promote({
+  app,
+  stage,
+  version,
+  to
+}: {
+  app: string;
+  stage: string;
+  version: string;
+  to: string;
+}) {
   const build = await fetch(app, stage, version);
   build.stage = to;
   return await insert(build);
 }
 
-module.exports = { list, fetch, current, last, insert, promote };
+function load(data: any): Build {
+  return {
+    ...data,
+    values: JSON.parse(data.values)
+  };
+}

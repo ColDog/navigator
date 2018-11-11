@@ -1,5 +1,5 @@
-const builds = require("./builds");
-const db = require("../db");
+import * as builds from "./builds";
+import db from "../db";
 
 beforeEach(async () => {
   await db.migrate.latest();

@@ -1,7 +1,7 @@
-const releases = require("./repo/releases");
-const apps = require("./repo/apps");
-const db = require("./db");
-const worker = require('./worker')
+import * as apps from "./repo/apps";
+import * as releases from "./repo/releases";
+import * as worker from "./worker";
+import db from "./db";
 
 beforeEach(async () => {
   await db.migrate.latest();

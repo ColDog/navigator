@@ -1,5 +1,5 @@
-const releases = require("./releases");
-const db = require("../db");
+import * as releases from "./releases";
+import db from "../db";
 
 beforeEach(async () => {
   await db.migrate.latest();
@@ -29,7 +29,7 @@ describe("releases", () => {
     const rel = await releases.get(id);
     expect(rel.worker).toEqual("worker-id");
 
-    releases.update(id, 'WORKING', {});
+    releases.update(id, 'WORKING', {} as any);
 
     const rel2 = await releases.get(id);
     expect(rel2.status).toEqual("WORKING");
