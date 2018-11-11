@@ -6,7 +6,11 @@ async function appSerializer(app) {
     ...app,
     stages: await Promise.all(
       app.stages.map(async stage => await stageSerializer(app, stage))
-    )
+    ),
+    manifest: {
+      name: app.name,
+      stages: app.stages,
+    }
   };
 }
 

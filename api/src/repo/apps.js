@@ -1,5 +1,6 @@
 const validate = require("jsonschema").validate;
 const db = require("../db");
+const uuid = require("uuid/v4");
 const { NotFoundError, ValidationError } = require("../errors");
 
 const schema = {
@@ -37,7 +38,7 @@ const schema = {
 };
 
 async function list() {
-  return await db.select("name").from("apps");
+  return await db.select(["id", "name"]).from("apps");
 }
 
 async function fetch(name) {
@@ -50,7 +51,7 @@ async function fetch(name) {
     throw new NotFoundError("App not found");
   }
   return {
-    name: app.name,
+    ...app,
     stages: JSON.parse(app.stages)
   };
 }
@@ -67,11 +68,16 @@ async function insert(app) {
       .from("apps")
       .where("name", app.name);
     if (row.length > 0) {
-      await tx.table("apps").update({ stages: JSON.stringify(app.stages) });
+      await tx.table("apps").update({
+        updatedAt: Date.now(),
+        stages: JSON.stringify(app.stages)
+      });
     } else {
-      await tx
-        .table("apps")
-        .insert({ stages: JSON.stringify(app.stages), name: app.name });
+      await tx.table("apps").insert({
+        id: uuid(),
+        stages: JSON.stringify(app.stages),
+        name: app.name
+      });
     }
   });
 }

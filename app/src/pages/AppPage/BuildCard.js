@@ -4,6 +4,7 @@ import get from 'lodash/get';
 
 export default ({
   stage,
+  app,
   build,
   undeployed,
   nextStage,
@@ -15,44 +16,43 @@ export default ({
   <Card>
     <Card.Content>
       <Card.Header>
-        <code>
-          {build.version}
-        </code>
+        <code>{build.version}</code>
       </Card.Header>
-      <Card.Meta>{cluster}</Card.Meta>
-      <Card.Description>
-        {get(build, 'release.status')}
-      </Card.Description>
+      {cluster && (
+        <Card.Meta>
+          {cluster.name} - {cluster.status || build.status}
+        </Card.Meta>
+      )}
     </Card.Content>
     <Card.Content extra>
-      {stage.review &&
-        build.released && (
-          <Button
-            onClick={() => onRemove(build.app.name, stage.name, build.version)}
-            basic={true}
-            color="red"
-          >
-            Close
-          </Button>
-        )}
+      {stage.review && build.released && (
+        <Button
+          onClick={() => onRemove(app.name, stage.name, build.version)}
+          basic={true}
+          color="red"
+        >
+          Close
+        </Button>
+      )}
 
-      {stage.review &&
-        !build.released && (
-          <Button
-            onClick={() => onRelease(build.app.name, stage.name, build.version)}
-            basic={true}
-            color="green"
-          >
-            Review
-          </Button>
-        )}
+      {stage.review && !build.released && (
+        <Button
+          onClick={() => onRelease(app.name, stage.name, build.version)}
+          basic={true}
+          color="green"
+        >
+          Review
+        </Button>
+      )}
 
       {!stage.review &&
         build.released &&
         stage.previous &&
         build.id === get(stage, 'released.id') && (
           <Button
-            onClick={() => onRelease(build.app.name, stage.name, get(stage, 'previous.version'))}
+            onClick={() =>
+              onRelease(app.name, stage.name, get(stage, 'previous.version'))
+            }
             basic={true}
             color="red"
           >
@@ -66,7 +66,9 @@ export default ({
         !undeployed &&
         build.id === get(stage, 'released.id') && (
           <Button
-            onClick={() => onPromote(build.app.name, stage.name, build.version, nextStage.name)}
+            onClick={() =>
+              onPromote(app.name, stage.name, build.version, nextStage.name)
+            }
             basic={true}
             color="green"
           >
@@ -76,7 +78,7 @@ export default ({
 
       {undeployed && (
         <Button
-          onClick={() => onRelease(build.app.name, stage.name, build.version)}
+          onClick={() => onRelease(app.name, stage.name, build.version)}
           basic={true}
           color="green"
         >
@@ -84,12 +86,12 @@ export default ({
         </Button>
       )}
     </Card.Content>
-    {build.released &&
-    <Card.Content extra>
-      <a href={`/logs/${build.release.id}`}>
-        <Icon name='terminal' />
-      </a>
-    </Card.Content>
-    }
+    {build.released && (
+      <Card.Content extra>
+        <a href={`/logs/${build.release.id}`}>
+          <Icon name="terminal" />
+        </a>
+      </Card.Content>
+    )}
   </Card>
 );

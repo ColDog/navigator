@@ -15,6 +15,7 @@
   "scripts": {
     "start": "node src/index.js",
     "migrate": "knex migrate:latest",
+    "reset": "rm development.sqlite && knex migrate:latest",
     "test": "NODE_ENV=test jest"
   }
 }

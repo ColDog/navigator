@@ -15,7 +15,8 @@ class AppPage extends React.Component {
   static mapStateToProps(state) {
     return {
       name: state.router.params.id,
-      ...state.apps.data[state.router.params.id],
+      loaded: state.apps.data[state.router.params.id],
+      app: state.apps.data[state.router.params.id],
     };
   }
 
@@ -35,13 +36,13 @@ class AppPage extends React.Component {
 
   componentWillMount() {
     this.props.dispatch(appRequest(this.props.name));
-    this.cancel = poller(1000, () => {
-      this.props.dispatch(appRequest(this.props.name));
-    })
+    // this.cancel = poller(1000, () => {
+    //   this.props.dispatch(appRequest(this.props.name));
+    // })
   }
 
   componentWillUnmount() {
-    this.cancel && this.cancel()
+    // this.cancel && this.cancel()
   }
 
   render() {
@@ -55,13 +56,13 @@ class AppPage extends React.Component {
       );
     }
 
-    const { name, stages } = this.props
+    const { name, app } = this.props
     return (
       <Main>
         <Heading />
         <AppMenu name={name} active="pipeline" />
         <div style={{padding: 20}}>
-          <StageList stages={stages} callbacks={this.callbacks} />
+          <StageList app={app} stages={app.stages} callbacks={this.callbacks} />
         </div>
       </Main>
     );

@@ -21,7 +21,7 @@ export const appsLogic = createLogic({
   async process(_, dispatch, done) {
     try {
       const res = await fetch.get('/api/v1/apps');
-      dispatch(appsSuccess(fetch.toMap(res, 'name', { loaded: false })));
+      dispatch(appsSuccess(fetch.toMap(res.data, 'name', { loaded: false })));
     } catch (e) {
       console.error(e);
       dispatch(appsFailure(e));
@@ -35,7 +35,7 @@ export const APP_SUCCESS = `${q}/APP_SUCCESS`;
 export const APP_ABORTED = `${q}/APP_ABORTED`;
 export const APP_FAILURE = `${q}/APP_FAILURE`;
 
-export const appRequest = id => ({ type: APP_REQUEST, id });
+export const appRequest = name => ({ type: APP_REQUEST, name });
 export const appSuccess = app => ({ type: APP_SUCCESS, app });
 export const appAborted = () => ({ type: APP_ABORTED });
 export const appFailure = error => ({ type: APP_FAILURE, error });
@@ -47,8 +47,8 @@ export const appLogic = createLogic({
 
   async process({ action }, dispatch, done) {
     try {
-      const res = await fetch.get(`/api/v1/apps/${action.id}`);
-      dispatch(appSuccess(res));
+      const res = await fetch.get(`/api/v1/apps/${action.name}/stages`);
+      dispatch(appSuccess(res.data));
     } catch (e) {
       console.error(e);
       dispatch(appFailure(e));
@@ -82,10 +82,12 @@ export const appReleaseLogic = createLogic({
 
   async process({ action }, dispatch, done) {
     try {
-      const url = `/api/v1/apps/${action.app}/${action.stage}/release?version=${
-        action.version
-      }`;
-      await fetch.post(url);
+      const url = `/api/v1/release`;
+      await fetch.post(url, {
+        app: action.app,
+        stage: action.stage,
+        version: action.version,
+      });
       dispatch(appReleaseSuccess());
       dispatch(appRequest(action.app));
     } catch (e) {
@@ -122,10 +124,13 @@ export const appPromoteLogic = createLogic({
 
   async process({ action }, dispatch, done) {
     try {
-      const url = `/api/v1/apps/${action.app}/${action.stage}/promote?version=${
-        action.version
-      }&to=${action.to}`;
-      await fetch.post(url);
+      const url = `/api/v1/promote`;
+      await fetch.post(url, {
+        app: action.app,
+        stage: action.stage,
+        version: action.version,
+        to: action.to,
+      });
       dispatch(appPromoteSuccess());
       dispatch(appRequest(action.app));
     } catch (e) {
@@ -161,10 +166,12 @@ export const appRemoveLogic = createLogic({
 
   async process({ action }, dispatch, done) {
     try {
-      const url = `/api/v1/apps/${action.app}/${action.stage}/release?version=${
-        action.version
-      }`;
-      await fetch.destroy(url);
+      const url = `/api/v1/release`;
+      await fetch.destroy(url, {
+        app: action.app,
+        stage: action.stage,
+        version: action.version,
+      });
       dispatch(appRemoveSuccess());
       dispatch(appRequest(action.app));
     } catch (e) {

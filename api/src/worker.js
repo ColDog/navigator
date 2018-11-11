@@ -26,7 +26,7 @@ async function doRelease(releaseId) {
     for (const cluster of stage.clusters) {
       await logs.log(releaseId, `deploying to cluster "${cluster.name}"`);
       results.clusters.push({
-        cluster: cluster.name,
+        name: cluster.name,
         status: "SUCCESS"
       });
       await releases.update(release.id, "PENDING", results);
