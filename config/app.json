@@ -1,0 +1,29 @@
+{
+  "name": "test",
+  "stages": [
+    {
+      "name": "review",
+      "review": true,
+      "clusters": [
+        {
+          "name": "staging",
+          "values": {
+            "prefix": "review"
+          }
+        }
+      ]
+    },
+    {
+      "name": "staging",
+      "promote": true,
+      "clusters": [
+        {
+          "name": "staging",
+          "values": {
+            "prefix": "staging"
+          }
+        }
+      ]
+    }
+  ]
+}
