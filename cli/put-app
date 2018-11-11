@@ -1,9 +1,0 @@
-#!/bin/bash
-
-api_url="${API_URL:-http://localhost:4000}"
-file="$1"
-
-curl -sfS -XPOST $api_url/api/v1/apps \
-  -H 'content-type: application/json' \
-  -d "@${file}" \
-  | jq
