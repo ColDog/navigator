@@ -2,10 +2,13 @@ import { v4 as uuid } from "uuid";
 import * as apps from './repo/apps'
 import * as releases from "./repo/releases";
 import * as logs from "./repo/logs";
+import * as builds from "./repo/builds";
+import { execute, values } from './executor';
 
 export async function doRelease(releaseId: string) {
   try {
     const release = await releases.get(releaseId);
+    const build = await builds.get(release.app, release.stage, release.version);
     const app = await apps.get(release.app);
     const stage = app.stages.find(stage => stage.name === release.stage);
 
@@ -25,10 +28,31 @@ export async function doRelease(releaseId: string) {
 
     for (const cluster of stage.clusters) {
       await logs.log(releaseId, `deploying to cluster "${cluster.name}"`);
-      results.clusters.push({
-        name: cluster.name,
-        status: "SUCCESS"
-      });
+
+      try {
+        await execute({
+          executable: app.deploy || './deployer.sh',
+          values: values(build, cluster, release),
+          cluster: cluster.name,
+          stage: build.stage,
+          app: build.app,
+          release: releaseId,
+          version: build.version,
+          namespace: cluster.namespace,
+        })
+        results.clusters.push({
+          name: cluster.name,
+          status: "SUCCESS"
+        });
+      } catch(e) {
+        console.error(e)
+        await logs.log(releaseId, `cluster ${cluster.name} failed: ${e.message}`)
+        results.clusters.push({
+          name: cluster.name,
+          status: "ERRORED"
+        });
+      }
+
       await releases.update(release.id, "PENDING", results);
     }
 

@@ -1,6 +1,6 @@
 import { validate } from "jsonschema";
 import { v4 as uuid } from "uuid";
-import { NotFoundError, ValidationError } from "../errors";
+import { ValidationError } from "../errors";
 import { QuerySet } from "./repo";
 
 const db = new QuerySet(
@@ -12,6 +12,7 @@ const db = new QuerySet(
 
 export interface Cluster {
   name: string;
+  namespace: string;
   values: object;
 }
 
@@ -22,6 +23,7 @@ export interface Stage {
 
 export interface App {
   name: string;
+  deploy?: string;
   stages: Stage[];
   modified?: Date;
   created?: Date;
@@ -48,8 +50,9 @@ const schema = {
             type: "array",
             items: {
               type: "object",
-              required: ["name"],
+              required: ["name", "namespace"],
               properties: {
+                namespace: { type: "string" },
                 name: { type: "string" },
                 values: { type: "object" }
               }
