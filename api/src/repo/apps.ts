@@ -18,6 +18,9 @@ export interface Cluster {
 
 export interface Stage {
   name: string;
+  promote?: boolean;
+  auto?: boolean;
+  review?: boolean;
   clusters: Cluster[];
 }
 

@@ -66,11 +66,10 @@ export default ({
           </Button>
         )}
 
-      {stage.promotion &&
+      {stage.promote &&
         nextStage &&
-        !build.promoted &&
         !undeployed &&
-        build.id === get(stage, 'released.id') && (
+        build.version === get(stage, 'released.version') && (
           <Button
             onClick={() =>
               onPromote(app.name, stage.name, build.version, nextStage.name)
@@ -89,6 +88,15 @@ export default ({
           color="green"
         >
           Deploy
+        </Button>
+      )}
+
+      {undeployed && (
+        <Button
+          onClick={() => onRelease(app.name, stage.name, build.version)}
+          basic={true}
+        >
+          Canary
         </Button>
       )}
     </Card.Content>

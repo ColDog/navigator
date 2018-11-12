@@ -19,6 +19,7 @@ describe("executor", () => {
       values: {name: 'test'},
       cluster: 'cluster-name',
       stage: 'stage-name',
+      namespace: 'default',
       app: 'app-name',
       release: 'releaseId',
       version: 'build-version',

@@ -94,9 +94,9 @@ export async function stageSerializer(
 ): Promise<Stage> {
   const releases = await releaseRepo.listByStage(app.name, stage.name, 2);
   const builds = await buildRepo.last(app.name, stage.name, 25);
-  const released = await serializeRelease(releases[releases.length - 2]);
-  const previous = await serializeRelease(releases[releases.length - 1]);
-  const current = await serializeBuild(builds[builds.length - 1]);
+  const released = await serializeRelease(releases[0]); // Latest release.
+  const previous = await serializeRelease(releases[1]); // Preceding release.
+  const current = await serializeBuild(builds[builds.length - 1]); // Latest.
 
   return {
     ...stage,

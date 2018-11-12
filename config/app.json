@@ -6,7 +6,8 @@
       "review": true,
       "clusters": [
         {
-          "name": "staging",
+          "name": "staging-us-east-2",
+          "namespace": "default",
           "values": {
             "prefix": "review"
           }
@@ -18,7 +19,34 @@
       "promote": true,
       "clusters": [
         {
-          "name": "staging",
+          "name": "staging-us-east-2",
+          "namespace": "default",
+          "values": {
+            "prefix": "staging"
+          }
+        },
+        {
+          "name": "staging-us-west-2",
+          "namespace": "default",
+          "values": {
+            "prefix": "staging"
+          }
+        }
+      ]
+    },
+    {
+      "name": "production",
+      "clusters": [
+        {
+          "name": "production-us-east-2",
+          "namespace": "default",
+          "values": {
+            "prefix": "staging"
+          }
+        },
+        {
+          "name": "production-us-west-2",
+          "namespace": "default",
           "values": {
             "prefix": "staging"
           }

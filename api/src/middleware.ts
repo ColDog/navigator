@@ -1,5 +1,6 @@
 import * as Koa from "koa";
 import { v4 as uuid } from "uuid";
+import * as log from './log';
 
 export function logger(): Koa.Middleware {
   return async (ctx, next) => {
@@ -8,8 +9,8 @@ export function logger(): Koa.Middleware {
     ctx.response.headers["x-request-id"] = id;
     await next();
     const t2 = Date.now();
-    console.log(
-      `[${ctx.request.method}] ${ctx.request.path}: status=${
+    log.info(
+      `${ctx.request.method} ${ctx.request.path} status=${
         ctx.response.status
       } requestId=${id} (${t2 - t1}ms)`
     );

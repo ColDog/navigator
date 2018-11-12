@@ -3,6 +3,7 @@ import * as logs from "./repo/logs";
 import { Build } from "./repo/builds";
 import { Cluster } from "./repo/apps";
 import { Release } from "./repo/releases";
+import * as log from './log';
 
 export async function sh(
   root: string,
@@ -88,11 +89,11 @@ export async function execute(deploy: Deploy) {
     `${JSON.stringify(deploy.values)}`
   ];
   await sh(deploy.executable, args, async (line: string) => {
-    console.log(`release: ${deploy.release}`, chomp(line));
+    log.info(`release: ${deploy.release}`, chomp(line));
     try {
       await logs.log(deploy.release, chomp(line));
     } catch (e) {
-      console.error(e);
+      log.exception('writing release log failed', e)
     }
   });
 }

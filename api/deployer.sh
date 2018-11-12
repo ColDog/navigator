@@ -8,7 +8,7 @@ version=""
 values=""
 namespace=""
 
-while getopts ":r:c:s:a:v:q:g:u:" opt; do
+while getopts ":r:c:s:a:v:q:g:u:n:" opt; do
   case ${opt} in
     r ) release=$OPTARG ;;
     c ) cluster=$OPTARG ;;
@@ -19,9 +19,11 @@ while getopts ":r:c:s:a:v:q:g:u:" opt; do
     n ) namespace=$OPTARG ;;
     \? )
       echo "Invalid option: $OPTARG"
+      exit 1
       ;;
     : )
       echo "Invalid option: $OPTARG requires an argument"
+      exit 1
       ;;
   esac
 done
