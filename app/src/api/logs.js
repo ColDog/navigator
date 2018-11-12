@@ -26,7 +26,7 @@ export const logsLogic = createLogic({
     try {
       const url = `/api/v1/logs/${action.releaseId}`;
       const res = await fetch.get(url);
-      dispatch(logsSuccess(action.releaseId, res.logs));
+      dispatch(logsSuccess(action.releaseId, res.data));
     } catch (e) {
       console.error(e);
       dispatch(logsFailure(e));

@@ -6,7 +6,7 @@ import * as logs from "./repo/logs";
 export async function doRelease(releaseId: string) {
   try {
     const release = await releases.get(releaseId);
-    const app = await apps.fetch(release.app);
+    const app = await apps.get(release.app);
     const stage = app.stages.find(stage => stage.name === release.stage);
 
     if (!stage) {

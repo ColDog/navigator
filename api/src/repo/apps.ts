@@ -1,7 +1,14 @@
 import { validate } from "jsonschema";
-import db from "../db";
 import { v4 as uuid } from "uuid";
 import { NotFoundError, ValidationError } from "../errors";
+import { QuerySet } from "./repo";
+
+const db = new QuerySet(
+  (data: any): App => ({
+    ...data,
+    stages: JSON.parse(data.stages)
+  })
+);
 
 export interface Cluster {
   name: string;
@@ -16,8 +23,8 @@ export interface Stage {
 export interface App {
   name: string;
   stages: Stage[];
-  modified?: Date,
-  created?: Date,
+  modified?: Date;
+  created?: Date;
 }
 
 const schema = {
@@ -55,22 +62,17 @@ const schema = {
 };
 
 export async function list(): Promise<Array<{ id: string; name: string }>> {
-  return await db.select(["id", "name"]).from("apps");
+  return await db.table("apps").select(["id", "name"]);
 }
 
-export async function fetch(name: string): Promise<App> {
-  const app = await db
-    .select("*")
-    .from("apps")
-    .where("name", name)
-    .first();
-  if (!app) {
-    throw new NotFoundError("App not found");
-  }
-  return {
-    ...app,
-    stages: JSON.parse(app.stages)
-  };
+export async function get(name: string): Promise<App> {
+  return await db.find(t =>
+    t
+      .select("*")
+      .from("apps")
+      .where("name", name)
+      .first()
+  );
 }
 
 export async function insert(app: App) {
@@ -79,14 +81,14 @@ export async function insert(app: App) {
     throw new ValidationError("App is invalid", result.errors);
   }
 
-  await db.transaction(async tx => {
+  await db.db().transaction(async tx => {
     const row = await tx
       .select("name")
       .from("apps")
       .where("name", app.name);
     if (row.length > 0) {
       await tx.table("apps").update({
-        updatedAt: Date.now(),
+        updated: Date.now(),
         stages: JSON.stringify(app.stages)
       });
     } else {

@@ -8,16 +8,15 @@ beforeEach(async () => {
 describe("releases", () => {
   it("inserts a release", async () => {
     await releases.insert({ app: "test", version: "v1", stage: "review" });
-    const list = await releases.listByApp("test", "review", "v1");
-    const rel = list[0];
+    const rel = await releases.getByApp("test", "review", "v1");
     expect(rel.status).toEqual("PENDING");
     expect(rel.removal).toEqual(false);
   });
 
   it("inserts a removal release", async () => {
-    await releases.remove({ app: "test", version: "v1", stage: "review" });
-    const list = await releases.listByApp("test", "review", "v1");
-    const rel = list[list.length - 1];
+    await releases.insert({ app: "test", version: "v3", stage: "review" });
+    await releases.remove({ app: "test", version: "v3", stage: "review" });
+    const rel = await releases.getByApp("test", "review", "v3");
     expect(rel.status).toEqual("PENDING");
     expect(rel.removal).toEqual(true);
   });

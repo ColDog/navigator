@@ -54,7 +54,7 @@ export default ({ app, stages, callbacks }) => (
           ))}
 
         {!stage.review &&
-          stage.released.results &&
+          stage.released &&
           get(stage, 'released.results.clusters', []).length === 0 &&
           stage.clusters.map(cluster => (
             <BuildCard

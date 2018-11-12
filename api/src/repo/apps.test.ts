@@ -8,7 +8,7 @@ beforeEach(async () => {
 describe("apps", () => {
   it("inserts an app", async () => {
     await apps.insert({ name: "test", stages: [] });
-    const out = await apps.fetch("test");
+    const out = await apps.get("test");
     expect(out.stages).toEqual([]);
   });
 

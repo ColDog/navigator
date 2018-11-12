@@ -3,11 +3,18 @@ import { route } from '../../router';
 import { connect } from 'react-redux';
 import Heading from '../../components/Header';
 import Main from '../../components/Main';
-import { appRequest, appReleaseRequest, appRemoveRequest, appPromoteRequest } from '../../api/apps';
+import {
+  appRequest,
+  appReleaseRequest,
+  appRemoveRequest,
+  appPromoteRequest,
+} from '../../api/apps';
 import StageList from './StageList';
-import { Loader, Menu, Container, Header } from 'semantic-ui-react';
-import AppMenu from '../../components/AppMenu';
-import { poller } from '../../api/fetch'
+import { Loader, Button } from 'semantic-ui-react';
+import AppMenu, { Divider, Section } from '../../components/AppMenu';
+import Fab from '../../components/Fab';
+import { poller } from '../../api/fetch';
+import capitalize from 'lodash/capitalize';
 
 class AppPage extends React.Component {
   static route = '/apps/:id';
@@ -24,15 +31,15 @@ class AppPage extends React.Component {
 
   callbacks = {
     onRemove: (app, stage, version) => {
-      this.props.dispatch(appRemoveRequest(app, stage, version))
+      this.props.dispatch(appRemoveRequest(app, stage, version));
     },
     onPromote: (app, stage, version, to) => {
-      this.props.dispatch(appPromoteRequest(app, stage, version, to))
+      this.props.dispatch(appPromoteRequest(app, stage, version, to));
     },
     onRelease: (app, stage, version) => {
-      this.props.dispatch(appReleaseRequest(app, stage, version))
+      this.props.dispatch(appReleaseRequest(app, stage, version));
     },
-  }
+  };
 
   componentWillMount() {
     this.props.dispatch(appRequest(this.props.name));
@@ -46,7 +53,7 @@ class AppPage extends React.Component {
   }
 
   render() {
-    const { loaded } = this.props
+    const { loaded } = this.props;
     if (!loaded) {
       return (
         <Main>
@@ -56,20 +63,24 @@ class AppPage extends React.Component {
       );
     }
 
-    const { name, app } = this.props
+    const { name, app } = this.props;
     return (
       <Main>
         <Heading />
-        <AppMenu name={name} active="pipeline" />
-        <div style={{padding: 20}}>
-          <StageList app={app} stages={app.stages} callbacks={this.callbacks} />
+        <AppMenu>
+          <Section href="/">Apps</Section>
+          <Divider>/</Divider>
+          <Section active>{capitalize(name)}</Section>
+        </AppMenu>
+
+        <Fab href={`/apps/${name}/settings`} icon="edit" />
+
+        <div style={{ padding: 20 }}>
+          <StageList app={app} stages={app.stages || []} callbacks={this.callbacks} />
         </div>
       </Main>
     );
   }
 }
 
-export default route(
-  AppPage.route,
-  connect(AppPage.mapStateToProps)(AppPage)
-);
+export default route(AppPage.route, connect(AppPage.mapStateToProps)(AppPage));

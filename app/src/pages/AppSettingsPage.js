@@ -5,9 +5,10 @@ import Heading from '../components/Header';
 import Main from '../components/Main';
 import { appRequest, appSaveRequest } from '../api/apps';
 import { Loader } from 'semantic-ui-react';
-import AppMenu from '../components/AppMenu';
+import AppMenu, { Section, Divider } from '../components/AppMenu';
 import { Form, TextArea, Container, Button } from 'semantic-ui-react';
 import SettingsForm from '../components/SettingsForm';
+import capitalize from 'lodash/capitalize'
 
 class AppSettingsPage extends React.Component {
   static route = '/apps/:id/settings';
@@ -55,7 +56,13 @@ class AppSettingsPage extends React.Component {
     return (
       <Main>
         <Heading />
-        <AppMenu name={name} active="settings" />
+        <AppMenu>
+          <Section href="/">Apps</Section>
+          <Divider />
+          <Section href={`/apps/${name}`}>{capitalize(name)}</Section>
+          <Divider />
+          <Section active>Settings</Section>
+        </AppMenu>
 
         <Container>
           <SettingsForm

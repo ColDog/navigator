@@ -86,9 +86,9 @@ export default ({
         </Button>
       )}
     </Card.Content>
-    {build.released && (
+    {build.status && (
       <Card.Content extra>
-        <a href={`/logs/${build.release.id}`}>
+        <a href={`/logs/${build.releaseId}`}>
           <Icon name="terminal" />
         </a>
       </Card.Content>

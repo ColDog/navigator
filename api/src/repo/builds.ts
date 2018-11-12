@@ -1,8 +1,14 @@
 import { validate } from "jsonschema";
-import db from "../db";
-import { ValidationError, NotFoundError } from "../errors";
+import { ValidationError } from "../errors";
 import { v4 as uuid } from "uuid";
-import * as knex from "knex";
+import { QuerySet } from "./repo";
+
+const db = new QuerySet(
+  (data: any): Build => ({
+    ...data,
+    values: JSON.parse(data.values)
+  })
+);
 
 export interface Build {
   id?: string;
@@ -30,45 +36,27 @@ const schema = {
 };
 
 export async function list(app: string): Promise<Build[]> {
-  return await db
-    .select("*")
-    .from("builds")
-    .where("app", app)
-    .map(load);
+  return await db.query(t =>
+    t
+      .select("*")
+      .from("builds")
+      .where("app", app)
+  );
 }
 
-export async function exists(
-  app: string,
-  stage: string,
-  version: string
-): Promise<boolean> {
-  try {
-    await fetch(app, stage, version);
-    return true;
-  } catch (e) {
-    return false;
-  }
+export async function exists(app: string, stage: string, version: string) {
+  return await db.exists(t =>
+    t
+      .select("id")
+      .from("builds")
+      .where({ app, stage, version })
+      .first()
+  );
 }
 
-export async function find(
-  cb: (db: knex) => knex.QueryBuilder
-): Promise<Build> {
-  const data = await cb(db);
-  if (!data) {
-    throw new NotFoundError("Build does not exist");
-  }
-  return load(data);
-}
-
-export async function query(
-  cb: (db: knex) => knex.QueryBuilder
-): Promise<Build[]> {
-  return await cb(db).map(load);
-}
-
-export async function fetch(app: string, stage: string, version: string) {
-  return find(db =>
-    db
+export async function get(app: string, stage: string, version: string) {
+  return await db.find(t =>
+    t
       .select("*")
       .from("builds")
       .where({ app, stage, version })
@@ -76,24 +64,13 @@ export async function fetch(app: string, stage: string, version: string) {
   );
 }
 
-export async function current(app: string, stage: string) {
-  return find(db =>
-    db
-      .select("*")
-      .from("builds")
-      .where({ app, stage })
-      .orderBy("createdAt", "desc")
-      .first()
-  );
-}
-
 export async function last(app: string, stage: string, n: number = 25) {
-  return query(db =>
-    db
+  return await db.query(t =>
+    t
       .select("*")
       .from("builds")
       .where({ app, stage })
-      .orderBy("createdAt", "desc")
+      .orderBy("revision", "asc")
       .limit(n)
   );
 }
@@ -108,10 +85,17 @@ export async function insert(build: Build) {
   if (result.errors.length > 0) {
     throw new ValidationError("Build is invalid", result.errors);
   }
-  return await db.table("builds").insert({
-    ...build,
-    id: uuid(),
-    values: JSON.stringify(build.values || {})
+  await db.db().transaction(async tx => {
+    const row = await tx
+      .table("builds")
+      .max({ revision: "revision" })
+      .first();
+    return await tx.table("builds").insert({
+      ...build,
+      revision: row.revision + 1 || 1,
+      id: uuid(),
+      values: JSON.stringify(build.values || {})
+    });
   });
 }
 
@@ -126,14 +110,7 @@ export async function promote({
   version: string;
   to: string;
 }) {
-  const build = await fetch(app, stage, version);
+  const build = await get(app, stage, version);
   build.stage = to;
   return await insert(build);
-}
-
-function load(data: any): Build {
-  return {
-    ...data,
-    values: JSON.parse(data.values)
-  };
 }

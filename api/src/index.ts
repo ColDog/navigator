@@ -1,4 +1,4 @@
-import Koa from "koa";
+import * as Koa from "koa";
 import parser = require("koa-bodyparser");
 import api = require("./api");
 import worker = require("./worker");
