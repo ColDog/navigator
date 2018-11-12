@@ -16,7 +16,13 @@ export default ({
   <Card>
     <Card.Content>
       <Card.Header>
-        <code>{build.version}</code>
+        {build.released ? (
+          <a href={`/logs/${build.releaseId}`}>
+            <code>{build.version}</code>
+          </a>
+        ) : (
+          <code>{build.version}</code>
+        )}
       </Card.Header>
       {cluster && (
         <Card.Meta>
@@ -86,12 +92,5 @@ export default ({
         </Button>
       )}
     </Card.Content>
-    {build.status && (
-      <Card.Content extra>
-        <a href={`/logs/${build.releaseId}`}>
-          <Icon name="terminal" />
-        </a>
-      </Card.Content>
-    )}
   </Card>
 );

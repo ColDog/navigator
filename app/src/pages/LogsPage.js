@@ -49,13 +49,7 @@ class Logs extends React.Component {
       );
     }
 
-    const lines = [
-      `version: ${release.version}`,
-      `app:     ${release.app}`,
-      `stage:   ${release.stage}`,
-      `worker:  ${release.worker}`,
-      '',
-    ].concat(release.logs.map(l => l.line));
+    const lines = release.logs.map(l => '[' + l.created + '] ' + l.line);
 
     return (
       <Main>
@@ -152,7 +146,7 @@ class Logs extends React.Component {
               </Grid.Column>
 
               <Grid.Column width={12}>
-                <Segment style={{ backgroundColor: 'black', color: 'white' }}>
+                <Segment style={{ backgroundColor: 'black', color: 'white', overflow: 'scroll' }}>
                   <pre>
                     <code>{lines.join('\n')}</code>
                   </pre>
