@@ -8,7 +8,7 @@ beforeEach(async () => {
 
 describe("executor", () => {
   it("runs a command", async () => {
-    await sh("ls", ["-la"], (line: string) => {
+    await sh("ls", ["-la"], async (line: string) => {
       console.log(line);
     });
   });
@@ -18,6 +18,7 @@ describe("executor", () => {
       executable: './deployer.sh',
       values: {name: 'test'},
       cluster: 'cluster-name',
+      chart: 'test',
       stage: 'stage-name',
       namespace: 'default',
       app: 'app-name',

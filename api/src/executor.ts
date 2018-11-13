@@ -3,14 +3,10 @@ import * as logs from "./repo/logs";
 import { Build } from "./repo/builds";
 import { Cluster } from "./repo/apps";
 import { Release } from "./repo/releases";
-import * as log from './log';
+import * as log from "./log";
 
-export async function sh(
-  root: string,
-  args: string[],
-  log: (line: string) => void
-) {
-  return new Promise(async (resolve, reject) => {
+export function sh(root: string, args: string[], log: (line: string) => void) {
+  return new Promise((resolve, reject) => {
     const cmd = spawn(root, args);
     const logger = () => {
       let buffer = "";
@@ -30,7 +26,6 @@ export async function sh(
     };
 
     cmd.stdout.on("data", logger());
-    cmd.stderr.on("data", logger());
 
     cmd.on("close", code => {
       if (code === 0) {
@@ -60,6 +55,7 @@ interface Deploy {
   namespace: string;
   stage: string;
   app: string;
+  chart: string;
   release: string;
   version: string;
 }
@@ -67,7 +63,7 @@ interface Deploy {
 export function values(build: Build, cluster: Cluster, release: Release) {
   return Object.assign({}, build.values, cluster.values, {
     image: { tag: build.version },
-    version: build.version,
+    version: build.version
   });
 }
 
@@ -75,6 +71,8 @@ export async function execute(deploy: Deploy) {
   const args = [
     "-r",
     deploy.release,
+    "-b",
+    deploy.chart,
     "-c",
     deploy.cluster,
     "-n",
@@ -88,12 +86,10 @@ export async function execute(deploy: Deploy) {
     "-q",
     `${JSON.stringify(deploy.values)}`
   ];
-  await sh(deploy.executable, args, async (line: string) => {
+  await sh(deploy.executable, args, (line: string) => {
     log.info(`release: ${deploy.release}`, chomp(line));
-    try {
-      await logs.log(deploy.release, chomp(line));
-    } catch (e) {
-      log.exception('writing release log failed', e)
-    }
+    logs.log(deploy.release, chomp(line)).catch(err => {
+      log.exception("writing release log failed", err);
+    });
   });
 }

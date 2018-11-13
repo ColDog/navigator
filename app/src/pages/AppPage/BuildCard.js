@@ -13,7 +13,7 @@ export default ({
   onRemove,
   onRelease,
 }) => (
-  <Card>
+  <Card color={build.status === 'FAILED' ? 'red' : null}>
     <Card.Content>
       <Card.Header>
         {build.released ? (
@@ -80,6 +80,16 @@ export default ({
             Promote
           </Button>
         )}
+
+      {!undeployed && (
+        <Button
+          onClick={() => onRelease(app.name, stage.name, build.version)}
+          basic={true}
+          color="green"
+        >
+          Redeploy
+        </Button>
+      )}
 
       {undeployed && (
         <Button

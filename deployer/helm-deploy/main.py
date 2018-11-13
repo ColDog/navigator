@@ -48,7 +48,7 @@ output.write(f"Namespace: {namespace}")
 output.write(f"Context:   {context}")
 
 chart = kubernetes.render_chart(chart, name, namespace, values)
-manifests = commands.order(list(yaml.load_all(chart)))
+manifests = commands.order([m for m in yaml.load_all(chart) if m])
 
 output.write("\nDiscovering types:")
 for manifest in manifests:

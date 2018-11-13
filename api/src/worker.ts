@@ -40,6 +40,7 @@ export async function doRelease(releaseId: string) {
           cluster: cluster.name,
           stage: build.stage,
           app: build.app,
+          chart: app.chart,
           release: releaseId,
           version: build.version,
           namespace: cluster.namespace,

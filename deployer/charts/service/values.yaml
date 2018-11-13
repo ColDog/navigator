@@ -6,6 +6,8 @@ image:
   tag: stable
   pullPolicy: IfNotPresent
 
+istio: false
+
 canary:
   # Canary deployment, requires a canary tag to be specified and enabled to be
   # set to true. This will then configure the VirtualService resource to weight

@@ -26,6 +26,7 @@ export interface Stage {
 
 export interface App {
   name: string;
+  chart: string;
   deploy?: string;
   stages: Stage[];
   modified?: Date;
@@ -36,9 +37,10 @@ const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   description: "Application Schema",
   type: "object",
-  required: ["stages", "name"],
+  required: ["stages", "name", "chart"],
   properties: {
     name: { type: "string" },
+    chart: { type: "string" },
     stages: {
       type: "array",
       items: {
@@ -95,12 +97,14 @@ export async function insert(app: App) {
     if (row.length > 0) {
       await tx.table("apps").update({
         updated: Date.now(),
+        chart: app.chart,
         stages: JSON.stringify(app.stages)
       });
     } else {
       await tx.table("apps").insert({
         id: uuid(),
         stages: JSON.stringify(app.stages),
+        chart: app.chart,
         name: app.name
       });
     }

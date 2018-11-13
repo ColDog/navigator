@@ -1,0 +1,20 @@
+{
+  "name": "local",
+  "chart": "../charts/service",
+  "stages": [
+    {
+      "name": "local",
+      "clusters": [
+        {
+          "name": "minikube",
+          "namespace": "default",
+          "values": {
+            "image": {
+              "repository": "nginx"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

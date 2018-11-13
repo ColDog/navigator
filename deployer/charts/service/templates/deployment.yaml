@@ -2,8 +2,10 @@ apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: {{ template "service.fullname" . }}
+{{- if .Values.istio -}}
   annotations:
     helm-deploy.k8s.io/istio: "true"
+{{- end }}
   labels:
     app: {{ template "service.name" . }}
     chart: {{ template "service.chart" . }}

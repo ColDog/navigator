@@ -6,20 +6,12 @@ import { appsRequest } from '../api/apps';
 import Heading from '../components/Header';
 import Main from '../components/Main';
 import AppMenu, { Divider, Section } from '../components/AppMenu';
-import {
-  Header,
-  Table,
-  Container,
-  Segment,
-  Loader,
-  Grid,
-  Icon,
-} from 'semantic-ui-react';
+import { Table, Container, Loader, Grid, Segment } from 'semantic-ui-react';
 import capitalize from 'lodash/capitalize';
+import Console from '../components/Console';
 
 class Logs extends React.Component {
   static route = '/logs/:id';
-
   static mapStateToProps(state) {
     return {
       releaseId: state.router.params.id,
@@ -48,8 +40,6 @@ class Logs extends React.Component {
         </Main>
       );
     }
-
-    const lines = release.logs.map(l => '[' + l.created + '] ' + l.line);
 
     return (
       <Main>
@@ -95,62 +85,15 @@ class Logs extends React.Component {
                     </Table.Row>
                   </Table.Body>
                 </Table>
-
-                <Header>Checks</Header>
-                <Table>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Rollback:</Table.Cell>
-                      <Table.Cell>
-                        <Icon name="check" color="green" />
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>My-Name:</Table.Cell>
-                      <Table.Cell>
-                        <Icon name="x" color="red" />
-                      </Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-
-                <Header>Canary</Header>
-                <Table>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell>Weight:</Table.Cell>
-                      <Table.Cell>50%</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Canary:</Table.Cell>
-                      <Table.Cell>canary</Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Stable:</Table.Cell>
-                      <Table.Cell>stable</Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
-
-                <Header>Links</Header>
-                <Table>
-                  <Table.Body>
-                    <Table.Row>
-                      <Table.Cell><a href="#">Logs</a></Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell><a href="#">Monitoring</a></Table.Cell>
-                    </Table.Row>
-                  </Table.Body>
-                </Table>
               </Grid.Column>
 
               <Grid.Column width={12}>
-                <Segment style={{ backgroundColor: 'black', color: 'white', overflow: 'scroll' }}>
-                  <pre>
-                    <code>{lines.join('\n')}</code>
-                  </pre>
-                </Segment>
+                {release.status === 'FAILED' && (
+                  <Segment color="red" inverted>
+                    Release Failed
+                  </Segment>
+                )}
+                <Console logs={release.logs} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

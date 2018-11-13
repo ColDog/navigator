@@ -15,5 +15,5 @@ export async function list(release: string): Promise<Log[]> {
     .select(["line", "created"])
     .from("logs")
     .where("release", release)
-    .orderBy("created", "desc");
+    .orderBy("id", "asc");
 }

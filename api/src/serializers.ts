@@ -83,7 +83,8 @@ export async function appSerializer(app: appRepo.App): Promise<App> {
     manifest: {
       name: app.name,
       deploy: app.deploy,
-      stages: app.stages
+      stages: app.stages,
+      chart: app.chart,
     }
   };
 }

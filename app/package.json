@@ -7,6 +7,7 @@
     "pnp": true
   },
   "dependencies": {
+    "ansi-to-html": "^0.6.8",
     "lodash": "^4.17.11",
     "page": "^1.10.2",
     "react": "16.5.2",

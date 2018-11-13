@@ -1,5 +1,6 @@
 #!/bin/bash
 
+chart=""
 release=""
 cluster=""
 stage=""
@@ -8,7 +9,7 @@ version=""
 values=""
 namespace=""
 
-while getopts ":r:c:s:a:v:q:g:u:n:" opt; do
+while getopts ":r:c:s:a:v:q:g:u:n:b:" opt; do
   case ${opt} in
     r ) release=$OPTARG ;;
     c ) cluster=$OPTARG ;;
@@ -17,6 +18,7 @@ while getopts ":r:c:s:a:v:q:g:u:n:" opt; do
     v ) version=$OPTARG ;;
     q ) values=$OPTARG ;;
     n ) namespace=$OPTARG ;;
+    b ) chart=$OPTARG ;;
     \? )
       echo "Invalid option: $OPTARG"
       exit 1
@@ -33,6 +35,7 @@ echo "==> deploy to $cluster starting"
 echo "release:   $release"
 echo "cluster:   $cluster"
 echo "stage:     $stage"
+echo "chart:     $chart"
 echo "app:       $app"
 echo "version:   $version"
 echo "values:    $values"
@@ -42,7 +45,12 @@ echo ""
 values_file=$(mktemp)
 echo $values > $values_file
 
-pushd ../deployer/helm-deploy
-  # Execute the helm deploy script.
-  # python main.py -c $cluster -n $namespace -f $values_file
-popd
+cd ../deployer/helm-deploy
+
+# Execute the helm deploy script.
+PYTHONUNBUFFERED=1 python3.6 main.py apply \
+  -c $cluster \
+  -n $namespace \
+  -f $values_file \
+  $app \
+  $chart
