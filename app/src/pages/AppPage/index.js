@@ -13,6 +13,7 @@ import StageList from './StageList';
 import { Loader } from 'semantic-ui-react';
 import AppMenu, { Divider, Section } from '../../components/AppMenu';
 import capitalize from 'lodash/capitalize';
+import { poller } from '../../api/fetch';
 
 class AppPage extends React.Component {
   static route = '/apps/:id';
@@ -40,14 +41,15 @@ class AppPage extends React.Component {
   };
 
   componentWillMount() {
-    this.props.dispatch(appRequest(this.props.name));
-    // this.cancel = poller(1000, () => {
-    //   this.props.dispatch(appRequest(this.props.name));
-    // })
+    this.cancel = poller(3000, `/apps/${this.props.name}`, () => {
+      this.props.dispatch(appRequest(this.props.name));
+    });
   }
 
   componentWillUnmount() {
-    // this.cancel && this.cancel()
+    if (this.cancel) {
+      this.cancel();
+    }
   }
 
   render() {

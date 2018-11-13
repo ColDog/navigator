@@ -100,8 +100,8 @@ export async function execute(deploy: Deploy) {
     args.push("-d", "true");
   }
   await sh(deploy.executable, args, (line: string) => {
-    log.info(`release: ${deploy.release}`, chomp(line));
-    logs.log(deploy.release, chomp(line)).catch(err => {
+    log.info(`release: ${deploy.release}`, line.trimRight());
+    logs.log(deploy.release, line.trimRight()).catch(err => {
       log.exception("writing release log failed", err);
     });
   });

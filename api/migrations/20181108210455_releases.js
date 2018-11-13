@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.createTable("releases", function(table) {
-    table.string("id").primary();
+    table.increments("id").primary();
     table.string("version").notNullable();
     table.string("app").notNullable();
     table.string("stage").notNullable();
@@ -8,8 +8,8 @@ exports.up = function(knex) {
     table.text("results").notNullable();
     table.string("worker");
     table.boolean("removal").notNullable();
-    table.integer("revision").notNullable();
-    table.timestamp("created").defaultTo(knex.fn.now());
+    table.timestamp("modified").notNullable();
+    table.timestamp("created").notNullable();
   });
 };
 

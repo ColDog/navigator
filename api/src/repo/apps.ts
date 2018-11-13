@@ -1,7 +1,7 @@
 import { validate } from "jsonschema";
-import { v4 as uuid } from "uuid";
 import { ValidationError } from "../errors";
 import { QuerySet } from "./repo";
+import * as crypto from "crypto";
 
 const db = new QuerySet(
   (data: any): App => ({
@@ -25,12 +25,13 @@ export interface Stage {
 }
 
 export interface App {
+  id: string;
   name: string;
   chart: string;
   deploy?: string;
   stages: Stage[];
-  modified?: Date;
-  created?: Date;
+  modified: string;
+  created: string;
 }
 
 const schema = {
@@ -83,8 +84,32 @@ export async function get(name: string): Promise<App> {
   );
 }
 
-export async function insert(app: App) {
-  const result = validate(app || {}, schema);
+export async function getKey(name: string): Promise<string> {
+  const app = await db
+    .table("apps")
+    .select({ key: "modified" })
+    .where("name", name)
+    .first();
+  const release = await db
+    .table("releases")
+    .max({ key: "modified" })
+    .where("app", name)
+    .first();
+  const build = await db
+    .table("builds")
+    .max({ key: "id" })
+    .where("app", name)
+    .first();
+
+  const md5 = crypto.createHash("md5");
+  md5.update(`${build.key}`);
+  md5.update(`${app.key}`);
+  md5.update(`${release.key}`);
+  return md5.digest("hex");
+}
+
+export async function insert(app: any) {
+  const result = validate(app || {}, schema, { allowUnknownAttributes: false });
   if (result.errors.length > 0) {
     throw new ValidationError("App is invalid", result.errors);
   }
@@ -96,16 +121,17 @@ export async function insert(app: App) {
       .where("name", app.name);
     if (row.length > 0) {
       await tx.table("apps").update({
-        updated: Date.now(),
+        modified: new Date().toISOString(),
         chart: app.chart,
         stages: JSON.stringify(app.stages)
       });
     } else {
       await tx.table("apps").insert({
-        id: uuid(),
         stages: JSON.stringify(app.stages),
         chart: app.chart,
-        name: app.name
+        name: app.name,
+        modified: new Date().toISOString(),
+        created: new Date().toISOString()
       });
     }
   });

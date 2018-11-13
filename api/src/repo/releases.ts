@@ -1,6 +1,5 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
-import { v4 as uuid } from "uuid";
 import { QuerySet } from "./repo";
 
 const db = new QuerySet(
@@ -21,15 +20,16 @@ export interface Results {
 }
 
 export interface Release {
-  id?: string;
+  id: string;
   app: string;
   stage: string;
   version: string;
-  removal?: boolean;
+  removal: boolean;
   results?: Results;
   worker?: string;
   status?: string;
-  created?: Date;
+  modified: string;
+  created: string;
 }
 
 const schema = {
@@ -64,7 +64,7 @@ export async function listByStage(
       .select("*")
       .from("releases")
       .where({ app, stage })
-      .orderBy("revision", "DESC")
+      .orderBy("id", "DESC")
       .limit(n)
   );
 }
@@ -79,40 +79,38 @@ export async function getByApp(
       .select("*")
       .from("releases")
       .where({ app, stage, version })
-      .orderBy("revision", "DESC")
+      .orderBy("id", "DESC")
       .first()
   );
 }
 
-export async function insert(release: Release, removal?: boolean) {
+export async function insert(release: any, removal?: boolean) {
   const result = validate(release, schema);
   if (result.errors.length > 0) {
     throw new ValidationError("Release is invalid", result.errors);
   }
-  await db.db().transaction(async tx => {
-    const row = await tx
-      .table("releases")
-      .max({ revision: "revision" })
-      .first();
-    return await tx.table("releases").insert({
-      ...release,
-      results: "{}",
-      removal: removal || false,
-      status: "PENDING",
-      revision: row.revision + 1 || 1,
-      id: uuid()
-    });
+  return await db.table("releases").insert({
+    ...release,
+    results: "{}",
+    removal: removal || false,
+    status: "PENDING",
+    modified: new Date().toISOString(),
+    created: new Date().toISOString()
   });
 }
 
-export async function remove(release: Release) {
+export async function remove(release: any) {
   return insert(release, true);
 }
 
 export async function update(id: string, status: string, results?: Results) {
   return await db
     .table("releases")
-    .update({ status, results: JSON.stringify(results) })
+    .update({
+      modified: new Date().toISOString(),
+      status,
+      results: JSON.stringify(results)
+    })
     .where("id", id);
 }
 

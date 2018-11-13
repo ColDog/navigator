@@ -5,7 +5,13 @@ import Convert from 'ansi-to-html';
 const convert = new Convert();
 
 const format = line =>
-  line === '' ? { __html: '<br />' } : { __html: convert.toHtml(line) };
+  line === ''
+    ? { __html: '<br />' }
+    : {
+        __html: convert.toHtml(
+          line.replace(' ', '&nbsp;').replace('\n', '<br />')
+        ),
+      };
 
 const styles = {
   container: {

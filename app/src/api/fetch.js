@@ -28,16 +28,24 @@ export const get = url => request('GET', url, null);
 export const post = (url, body) => request('POST', url, body);
 export const destroy = (url, body) => request('DELETE', url, body);
 
-export const poller = (interval, cb) => {
+export const poller = (interval, resource, cb) => {
+  cb();
+
   let latest = null;
   const id = setInterval(async () => {
-    const res = await get('/api/v1/poll');
-    if (res.latest === latest) {
+    const res = await get(`/api/v1/${resource}?key=true`);
+    if (res.key === latest) {
       return;
     }
 
-    latest = res.latest;
+    console.log('refreshing', resource);
+    latest = res.key;
     cb();
+
+    if (res.done) {
+      console.log('done', resource);
+      clearInterval(id);
+    }
   }, interval);
   return () => {
     clearInterval(id);

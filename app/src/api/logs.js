@@ -35,15 +35,6 @@ export const logsLogic = createLogic({
   },
 });
 
-export const tail = (dispatch, releaseId) => {
-  const id = setInterval(async () => {
-    dispatch(logsRequest(releaseId));
-  }, 1000);
-  return () => {
-    clearInterval(id);
-  };
-};
-
 export const reducer = (state = { data: {}, error: null }, action) => {
   switch (action.type) {
     // LOGS

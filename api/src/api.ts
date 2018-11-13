@@ -8,10 +8,22 @@ import { appSerializer } from "./serializers";
 export const router = new Router({ prefix: "/api/v1" });
 
 router.get("/logs/:id", async ctx => {
-  ctx.body = { data: {
-    logs: await logs.list(ctx.params.id),
-    ...await releases.get(ctx.params.id),
-  } };
+  const release = await releases.get(ctx.params.id);
+
+  if (ctx.query.key) {
+    ctx.body = {
+      done: release.status !== "PENDING" && !!release.status,
+      key: await logs.getKey(ctx.params.id)
+    };
+    return;
+  }
+
+  ctx.body = {
+    data: {
+      logs: await logs.list(ctx.params.id),
+      ...release
+    }
+  };
 });
 
 router.get("/apps", async ctx => {
@@ -19,6 +31,10 @@ router.get("/apps", async ctx => {
 });
 
 router.get("/apps/:name", async ctx => {
+  if (ctx.query.key) {
+    ctx.body = { done: false, key: await apps.getKey(ctx.params.name) };
+    return;
+  }
   ctx.body = { data: await apps.get(ctx.params.name) };
 });
 

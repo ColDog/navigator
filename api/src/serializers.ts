@@ -14,7 +14,7 @@ export interface Build {
   released: boolean;
   removed: boolean;
   namespace: string | null;
-  created: Date;
+  created: string;
 }
 
 export interface Stage extends appRepo.Stage {
@@ -26,7 +26,12 @@ export interface Stage extends appRepo.Stage {
 
 export interface App extends appRepo.App {
   stages: Stage[];
-  manifest: appRepo.App;
+  manifest: {
+    name: string;
+    chart: string;
+    deploy: string;
+    stages: appRepo.Stage[]
+  };
 }
 
 export async function buildSerializer(

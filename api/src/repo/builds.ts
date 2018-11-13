@@ -1,6 +1,5 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
-import { v4 as uuid } from "uuid";
 import { QuerySet } from "./repo";
 
 const db = new QuerySet(
@@ -11,13 +10,13 @@ const db = new QuerySet(
 );
 
 export interface Build {
-  id?: string;
+  id: string;
   app: string;
   stage: string;
   version: string;
   namespace?: string;
   values?: object;
-  created?: Date;
+  created: string;
 }
 
 const schema = {
@@ -93,7 +92,7 @@ export async function latest(
       .select("*")
       .from("builds")
       .where({ app, stage })
-      .orderBy("revision", "desc")
+      .orderBy("id", "desc")
   );
   return bs[0];
 }
@@ -119,32 +118,26 @@ export async function last(app: string, stage: string, n: number = 25) {
       .select("*")
       .from("builds")
       .where({ app, stage })
-      .orderBy("revision", "asc")
+      .orderBy("id", "asc")
       .limit(n)
   );
 }
 
-export async function insert(build: Build) {
+export async function insert(build: any) {
+  const result = validate(build || {}, schema, {
+    allowUnknownAttributes: false
+  });
+  if (result.errors.length > 0) {
+    throw new ValidationError("Build is invalid", result.errors);
+  }
   const buildExists = await exists(build.app, build.stage, build.version);
   if (buildExists) {
     throw new ValidationError("Build already exists");
   }
-
-  const result = validate(build, schema);
-  if (result.errors.length > 0) {
-    throw new ValidationError("Build is invalid", result.errors);
-  }
-  await db.db().transaction(async tx => {
-    const row = await tx
-      .table("builds")
-      .max({ revision: "revision" })
-      .first();
-    return await tx.table("builds").insert({
-      ...build,
-      revision: row.revision + 1 || 1,
-      id: uuid(),
-      values: JSON.stringify(build.values || {})
-    });
+  return await db.table("builds").insert({
+    ...build,
+    values: JSON.stringify(build.values || {}),
+    created: new Date().toISOString()
   });
 }
 
@@ -161,5 +154,6 @@ export async function promote({
 }) {
   const build = await get(app, stage, version);
   build.stage = to;
+  delete build.id;
   return await insert(build);
 }

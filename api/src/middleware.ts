@@ -10,7 +10,7 @@ export function logger(): Koa.Middleware {
     await next();
     const t2 = Date.now();
     log.info(
-      `${ctx.request.method} ${ctx.request.path} status=${
+      `${ctx.request.method} ${ctx.request.url} status=${
         ctx.response.status
       } requestId=${id} (${t2 - t1}ms)`
     );
