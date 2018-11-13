@@ -8,23 +8,26 @@ beforeEach(async () => {
 
 describe("executor", () => {
   it("runs a command", async () => {
+    const lines: string[] = [];
     await sh("ls", ["-la"], async (line: string) => {
-      console.log(line);
+      lines.push(line);
     });
+    expect(lines.length).toBeGreaterThanOrEqual(1);
   });
 
   it("executes a deploy", async () => {
     await execute({
-      executable: './deployer.sh',
-      values: {name: 'test'},
-      cluster: 'cluster-name',
-      chart: 'test',
-      stage: 'stage-name',
-      namespace: 'default',
-      app: 'app-name',
-      release: 'releaseId',
-      version: 'build-version',
-    })
-    console.log(await logs.list('releaseId'));
-  })
+      executable: "echo",
+      values: { name: "test" },
+      cluster: "cluster-name",
+      chart: "test",
+      stage: "stage-name",
+      namespace: "default",
+      app: "app-name",
+      release: "releaseId",
+      version: "build-version"
+    });
+    const lines = await logs.list("releaseId");
+    expect(lines.length).toBeGreaterThanOrEqual(1);
+  });
 });

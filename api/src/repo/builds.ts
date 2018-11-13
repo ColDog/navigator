@@ -44,6 +44,25 @@ export async function list(app: string): Promise<Build[]> {
   );
 }
 
+export async function listUnreleased(
+  app: string,
+  stage: string
+): Promise<Build[]> {
+  return await db.query(t =>
+    t
+      .select("builds.*")
+      .from("builds")
+      .where("builds.app", app)
+      .where("builds.stage", stage)
+      .whereNull("releases.id")
+      .leftJoin("releases", function() {
+        this.on("builds.version", "=", "releases.version")
+          .andOn("builds.stage", "=", "releases.stage")
+          .andOn("builds.app", "=", "releases.app");
+      })
+  );
+}
+
 export async function exists(app: string, stage: string, version: string) {
   return await db.exists(t =>
     t

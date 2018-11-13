@@ -15,6 +15,37 @@
           }
         }
       ]
+    },
+    {
+      "name": "staging",
+      "promote": true,
+      "auto": true,
+      "clusters": [
+        {
+          "name": "minikube",
+          "namespace": "default",
+          "values": {
+            "image": {
+              "repository": "nginx"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "production",
+      "auto": true,
+      "clusters": [
+        {
+          "name": "minikube",
+          "namespace": "default",
+          "values": {
+            "image": {
+              "repository": "nginx"
+            }
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
-import * as apps from './repo/apps'
-import * as releases from "./repo/releases";
-import * as logs from "./repo/logs";
-import * as builds from "./repo/builds";
-import { execute, values } from './executor';
-import * as log from './log';
+import * as apps from '../repo/apps'
+import * as releases from "../repo/releases";
+import * as logs from "../repo/logs";
+import * as builds from "../repo/builds";
+import { execute, values } from '../executor';
+import * as log from '../log';
 
 export async function doRelease(releaseId: string) {
   const results: releases.Results = {

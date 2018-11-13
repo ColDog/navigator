@@ -1,8 +1,8 @@
-import * as apps from "./repo/apps";
-import * as builds from "./repo/builds";
-import * as releases from "./repo/releases";
-import * as worker from "./worker";
-import db from "./db";
+import * as apps from "../repo/apps";
+import * as builds from "../repo/builds";
+import * as releases from "../repo/releases";
+import * as worker from "./release";
+import db from "../db";
 
 beforeEach(async () => {
   await db.migrate.latest();
@@ -10,7 +10,7 @@ beforeEach(async () => {
 
 describe("worker", () => {
   it("pops a release", async () => {
-    await apps.insert({ name: "test", chart: 'service', stages: [] });
+    await apps.insert({ name: "test", chart: "service", stages: [] });
     await builds.insert({ app: "test", version: "v3", stage: "review" });
     await releases.insert({ app: "test", version: "v3", stage: "review" });
     const id = await releases.pop("worker-id");

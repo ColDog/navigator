@@ -1,7 +1,7 @@
 import { spawn } from "child_process";
 import * as logs from "./repo/logs";
 import { Build } from "./repo/builds";
-import { Cluster } from "./repo/apps";
+import { Cluster, Stage } from "./repo/apps";
 import { Release } from "./repo/releases";
 import * as log from "./log";
 

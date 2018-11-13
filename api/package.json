@@ -17,7 +17,7 @@
     "start": "tsc && node dist/index.js",
     "migrate": "knex migrate:latest",
     "reset": "rm development.sqlite && knex migrate:latest",
-    "test": "tsc && NODE_ENV=test jest",
+    "test": "tsc && LOG_LEVEL=6 NODE_ENV=test jest",
     "lint": "tslint 'src/**/*.ts'"
   },
   "devDependencies": {

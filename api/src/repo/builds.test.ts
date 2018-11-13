@@ -8,5 +8,7 @@ beforeEach(async () => {
 describe("builds", () => {
   it("inserts a build", async () => {
     await builds.insert({ app: "test", version: "v1", stage: "review" });
+    const list = await builds.listUnreleased("test", "review");
+    expect(list.length).toBeGreaterThanOrEqual(0);
   });
 });

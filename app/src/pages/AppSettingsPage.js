@@ -3,12 +3,11 @@ import { route } from '../router';
 import { connect } from 'react-redux';
 import Heading from '../components/Header';
 import Main from '../components/Main';
-import { appRequest, appSaveRequest } from '../api/apps';
+import { appRequest } from '../api/apps';
 import { Loader } from 'semantic-ui-react';
 import AppMenu, { Section, Divider } from '../components/AppMenu';
-import { Form, TextArea, Container, Button } from 'semantic-ui-react';
-import SettingsForm from '../components/SettingsForm';
-import capitalize from 'lodash/capitalize'
+import { Container, Segment } from 'semantic-ui-react';
+import capitalize from 'lodash/capitalize';
 
 class AppSettingsPage extends React.Component {
   static route = '/apps/:id/settings';
@@ -25,21 +24,6 @@ class AppSettingsPage extends React.Component {
     this.props.dispatch(appRequest(this.props.name));
   }
 
-  handleSave = () => {
-    if (this.state.value) {
-      try {
-        const manifest = JSON.parse(this.state.value);
-        this.props.dispatch(appSaveRequest(manifest));
-      } catch (e) {
-        // Ignore.
-      }
-    }
-  };
-
-  handleChange = e => {
-    this.setState({ value: e.target.value });
-  };
-
   render() {
     const { loaded } = this.props;
     if (!loaded) {
@@ -51,7 +35,6 @@ class AppSettingsPage extends React.Component {
       );
     }
 
-    const { value } = this.state;
     const { name, manifest } = this.props;
     return (
       <Main>
@@ -64,13 +47,12 @@ class AppSettingsPage extends React.Component {
           <Section active>Settings</Section>
         </AppMenu>
 
-        <Container>
-          <SettingsForm
-            value={value}
-            manifest={manifest}
-            onSave={this.handleSave}
-            onChange={this.handleChange}
-          />
+        <Container style={{ paddingTop: 20 }}>
+          <Segment inverted>
+            <pre>
+              <code>{JSON.stringify(manifest, null, 2)}</code>
+            </pre>
+          </Segment>
         </Container>
       </Main>
     );

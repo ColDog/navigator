@@ -10,9 +10,8 @@ import {
   appPromoteRequest,
 } from '../../api/apps';
 import StageList from './StageList';
-import { Loader, Button } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 import AppMenu, { Divider, Section } from '../../components/AppMenu';
-import Fab from '../../components/Fab';
 import { poller } from '../../api/fetch';
 import capitalize from 'lodash/capitalize';
 
@@ -68,15 +67,20 @@ class AppPage extends React.Component {
       <Main>
         <Heading />
         <AppMenu>
+          <Section style={{ float: 'right' }} href={`/apps/${name}/settings`}>
+            Config
+          </Section>
           <Section href="/">Apps</Section>
           <Divider>/</Divider>
           <Section active>{capitalize(name)}</Section>
         </AppMenu>
 
-        <Fab href={`/apps/${name}/settings`} icon="edit" />
-
         <div style={{ padding: 20 }}>
-          <StageList app={app} stages={app.stages || []} callbacks={this.callbacks} />
+          <StageList
+            app={app}
+            stages={app.stages || []}
+            callbacks={this.callbacks}
+          />
         </div>
       </Main>
     );
