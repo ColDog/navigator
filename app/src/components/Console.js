@@ -11,7 +11,6 @@ const styles = {
   container: {
     backgroundColor: 'black',
     color: 'white',
-    overflow: 'scroll',
     fontFamily: 'monospace',
     overflow: 'scroll',
   },

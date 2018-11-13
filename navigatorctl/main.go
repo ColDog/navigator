@@ -61,14 +61,16 @@ func main() {
 			Usage: "push a build into the app",
 			Flags: []cli.Flag{
 				cli.StringFlag{Name: "app"},
+				cli.StringFlag{Name: "namespace"},
 				cli.StringFlag{Name: "stage"},
 				cli.StringFlag{Name: "version"},
 			},
 			Action: func(c *cli.Context) error {
 				return request("POST", "/api/v1/build", map[string]string{
-					"app":     c.String("app"),
-					"stage":   c.String("stage"),
-					"version": c.String("version"),
+					"app":       c.String("app"),
+					"stage":     c.String("stage"),
+					"namespace": c.String("namespace"),
+					"version":   c.String("version"),
 				})
 			},
 		},

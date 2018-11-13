@@ -25,9 +25,17 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
       };
     };
 
+    // Give up after 15 seconds.
+    const timeout = setTimeout(() => {
+      log("deploy timed out\n");
+      cmd.kill("SIGTERM");
+    }, 15000);
+
     cmd.stdout.on("data", logger());
+    cmd.stderr.on("data", logger());
 
     cmd.on("close", code => {
+      clearTimeout(timeout);
       if (code === 0) {
         resolve();
         return;
@@ -36,6 +44,7 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
     });
 
     cmd.on("error", err => {
+      clearTimeout(timeout);
       reject(err);
     });
   });
@@ -57,6 +66,7 @@ interface Deploy {
   app: string;
   chart: string;
   release: string;
+  remove: boolean;
   version: string;
 }
 
@@ -86,6 +96,9 @@ export async function execute(deploy: Deploy) {
     "-q",
     `${JSON.stringify(deploy.values)}`
   ];
+  if (deploy.remove) {
+    args.push("-d", "true");
+  }
   await sh(deploy.executable, args, (line: string) => {
     log.info(`release: ${deploy.release}`, chomp(line));
     logs.log(deploy.release, chomp(line)).catch(err => {

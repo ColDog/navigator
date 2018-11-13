@@ -4,6 +4,7 @@
   "stages": [
     {
       "name": "local",
+      "review": true,
       "clusters": [
         {
           "name": "minikube",

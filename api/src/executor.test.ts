@@ -25,7 +25,8 @@ describe("executor", () => {
       namespace: "default",
       app: "app-name",
       release: "releaseId",
-      version: "build-version"
+      version: "build-version",
+      remove: false,
     });
     const lines = await logs.list("releaseId");
     expect(lines.length).toBeGreaterThanOrEqual(1);

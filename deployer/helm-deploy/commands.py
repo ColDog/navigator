@@ -3,6 +3,7 @@ import output
 import kubernetes
 import time
 import plugins.istio
+import sh
 
 
 def order(manifests):
@@ -29,7 +30,7 @@ def order(manifests):
     return ordered + manifests
 
 
-def apply(kubectl, manifests):
+def apply(kubectl, manifests, namespace):
     def apply_manifest(manifest):
         rendered = yaml.dump(manifest)
         kubectl("apply", "-f", "-", write=rendered, capture=True)
@@ -50,6 +51,11 @@ def apply(kubectl, manifests):
             kubernetes.await_pod(kubectl, name)
         finally:
             kubectl("delete", "pods", name, quiet=True)
+
+    try:
+        kubectl("create", "namespace", namespace, quiet=True, quiet_stderr=True)
+    except sh.ProcessError:
+        pass
 
     for manifest in manifests:
         t1 = time.time()
@@ -75,7 +81,7 @@ def apply(kubectl, manifests):
         output.write(f"apply complete ({elapsed}s)\n", fg="purple", style="bold")
 
 
-def delete(kubectl, manifests):
+def delete(kubectl, manifests, namespace):
     def remove(manifest):
         try:
             kubectl("delete", manifest["kind"], manifest["metadata"]["name"])

@@ -15,6 +15,7 @@ export interface Build {
   app: string;
   stage: string;
   version: string;
+  namespace?: string;
   values?: object;
   created?: Date;
 }
@@ -81,6 +82,35 @@ export async function get(app: string, stage: string, version: string) {
       .where({ app, stage, version })
       .first()
   );
+}
+
+export async function latest(
+  app: string,
+  stage: string
+): Promise<Build | undefined> {
+  const bs = await db.query(t =>
+    t
+      .select("*")
+      .from("builds")
+      .where({ app, stage })
+      .orderBy("revision", "desc")
+  );
+  return bs[0];
+}
+
+export async function lastByNamespace(
+  app: string,
+  stage: string,
+  n: number = 25
+) {
+  const builds = await last(app, stage, n);
+  const namespaces = builds
+    .map(b => b.namespace)
+    .filter((ns, i, s) => s.indexOf(ns) === i); // Unique namespaces.
+  const byNamespace = namespaces
+    .map(ns => builds.find(b => b.namespace === ns))
+    .filter(b => b);
+  return byNamespace;
 }
 
 export async function last(app: string, stage: string, n: number = 25) {

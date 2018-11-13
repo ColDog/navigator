@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Button, Icon } from 'semantic-ui-react';
+import { Card, Button } from 'semantic-ui-react';
 import get from 'lodash/get';
 
 export default ({
@@ -13,7 +13,7 @@ export default ({
   onRemove,
   onRelease,
 }) => (
-  <Card color={build.status === 'FAILED' ? 'red' : null}>
+  <Card fluid color={build.status === 'FAILED' ? 'red' : null}>
     <Card.Content>
       <Card.Header>
         {build.released ? (

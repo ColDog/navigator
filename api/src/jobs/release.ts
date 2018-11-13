@@ -1,16 +1,16 @@
 import { v4 as uuid } from "uuid";
-import * as apps from '../repo/apps'
+import * as apps from "../repo/apps";
 import * as releases from "../repo/releases";
 import * as logs from "../repo/logs";
 import * as builds from "../repo/builds";
-import { execute, values } from '../executor';
-import * as log from '../log';
+import { execute, values } from "../executor";
+import * as log from "../log";
 
 export async function doRelease(releaseId: string) {
   const results: releases.Results = {
-    stage: '',
-    app: '',
-    clusters: [],
+    stage: "",
+    app: "",
+    clusters: []
   };
 
   try {
@@ -19,8 +19,8 @@ export async function doRelease(releaseId: string) {
     const app = await apps.get(release.app);
     const stage = app.stages.find(stage => stage.name === release.stage);
 
-    results.stage = build.stage
-    results.app = app.name
+    results.stage = build.stage;
+    results.app = app.name;
 
     if (!stage) {
       await releases.update(release.id, "INVALID_STAGE");
@@ -35,7 +35,7 @@ export async function doRelease(releaseId: string) {
 
       try {
         await execute({
-          executable: app.deploy || './deployer.sh',
+          executable: app.deploy || "./deployer.sh",
           values: values(build, cluster, release),
           cluster: cluster.name,
           stage: build.stage,
@@ -43,20 +43,24 @@ export async function doRelease(releaseId: string) {
           chart: app.chart,
           release: releaseId,
           version: build.version,
-          namespace: cluster.namespace,
-        })
+          remove: !!release.removal,
+          namespace: build.namespace || cluster.namespace
+        });
         results.clusters.push({
           name: cluster.name,
           status: "SUCCESS"
         });
-      } catch(e) {
-        log.exception('cluster release failed', e)
-        await logs.log(releaseId, `cluster ${cluster.name} failed: ${e.message}`)
+      } catch (e) {
+        log.exception("cluster release failed", e);
+        await logs.log(
+          releaseId,
+          `cluster ${cluster.name} failed: ${e.message}`
+        );
         results.clusters.push({
           name: cluster.name,
           status: "ERRORED"
         });
-        throw e
+        throw e;
       }
 
       await releases.update(release.id, "PENDING", results);
@@ -66,12 +70,12 @@ export async function doRelease(releaseId: string) {
     await releases.update(release.id, "SUCCESS", results);
   } catch (e) {
     await logs.log(releaseId, "-- release failed --");
-    log.exception('release failed', e)
+    log.exception("release failed", e);
 
     try {
       await releases.update(releaseId, "FAILED", results);
     } catch (e) {
-      log.exception('release update failed', e)
+      log.exception("release update failed", e);
     }
   }
 }
@@ -88,7 +92,7 @@ export async function run() {
         log.info("release complete", releaseId);
       }
     } catch (e) {
-      log.exception('release failed', e);
+      log.exception("release failed", e);
     }
 
     await sleep(1000);

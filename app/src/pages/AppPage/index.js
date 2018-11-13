@@ -12,7 +12,6 @@ import {
 import StageList from './StageList';
 import { Loader } from 'semantic-ui-react';
 import AppMenu, { Divider, Section } from '../../components/AppMenu';
-import { poller } from '../../api/fetch';
 import capitalize from 'lodash/capitalize';
 
 class AppPage extends React.Component {

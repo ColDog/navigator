@@ -59,7 +59,7 @@ for manifest in manifests:
 output.write(f"\n=== Starting {arg} ===\n", fg="green", style="bold")
 
 try:
-    command(kubectl, manifests)
+    command(kubectl, manifests, namespace)
 except Exception as e:
-    output.write(f"Delete failed: {str(e)}", fg="red", style="bold")
+    output.write(f"Failed: {str(e)}", fg="red", style="bold")
     sys.exit(1)

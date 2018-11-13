@@ -8,8 +8,9 @@ app=""
 version=""
 values=""
 namespace=""
+command="apply"
 
-while getopts ":r:c:s:a:v:q:g:u:n:b:" opt; do
+while getopts ":r:c:s:a:v:q:g:u:n:b:d:" opt; do
   case ${opt} in
     r ) release=$OPTARG ;;
     c ) cluster=$OPTARG ;;
@@ -19,6 +20,7 @@ while getopts ":r:c:s:a:v:q:g:u:n:b:" opt; do
     q ) values=$OPTARG ;;
     n ) namespace=$OPTARG ;;
     b ) chart=$OPTARG ;;
+    d ) command="delete" ;;
     \? )
       echo "Invalid option: $OPTARG"
       exit 1
@@ -48,7 +50,8 @@ echo $values > $values_file
 cd ../deployer/helm-deploy
 
 # Execute the helm deploy script.
-PYTHONUNBUFFERED=1 python3.6 main.py apply \
+PYTHONUNBUFFERED=1 python3.6 main.py \
+  $command \
   -c $cluster \
   -n $namespace \
   -f $values_file \
