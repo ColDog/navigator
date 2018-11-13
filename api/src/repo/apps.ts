@@ -27,7 +27,7 @@ export interface Stage {
 export interface App {
   id: string;
   name: string;
-  chart: string;
+  chart?: string;
   deploy?: string;
   stages: Stage[];
   modified: string;
@@ -38,7 +38,7 @@ const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   description: "Application Schema",
   type: "object",
-  required: ["stages", "name", "chart"],
+  required: ["stages", "name"],
   properties: {
     name: { type: "string" },
     chart: { type: "string" },

@@ -14,6 +14,7 @@ export interface Build {
   app: string;
   stage: string;
   version: string;
+  chart?: string;
   namespace?: string;
   values?: object;
   created: string;
@@ -28,9 +29,10 @@ const schema = {
     app: { type: "string" },
     stage: { type: "string" },
     version: { type: "string" },
+    chart: { type: "string" },
     values: {
       type: "object",
-      additionalProperties: false
+      additionalProperties: true
     }
   }
 };
