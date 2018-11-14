@@ -1,7 +1,7 @@
 import * as apps from "../repo/apps";
 import * as builds from "../repo/builds";
-import * as releases from "../repo/releases";
-import * as worker from "./release";
+import * as releases from "../read/releases";
+import * as worker from "../jobs/release";
 import db from "../db";
 
 beforeEach(async () => {

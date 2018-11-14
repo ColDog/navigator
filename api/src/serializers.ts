@@ -1,4 +1,4 @@
-import * as releaseRepo from "./repo/releases";
+import * as releaseRepo from "./read/releases";
 import * as buildRepo from "./repo/builds";
 import * as appRepo from "./repo/apps";
 

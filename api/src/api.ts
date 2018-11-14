@@ -2,23 +2,14 @@ import * as Router from "koa-router";
 import * as apps from "./repo/apps";
 import * as builds from "./repo/builds";
 import * as logs from "./repo/logs";
-import * as events from "./repo/events";
 import * as releases from "./repo/releases";
+import * as events from "./repo/events";
 import { appSerializer } from "./serializers";
 
 export const router = new Router({ prefix: "/api/v1" });
 
 router.get("/logs/:id", async ctx => {
   const release = await releases.get(ctx.params.id);
-
-  if (ctx.query.key) {
-    ctx.body = {
-      done: release.status !== "PENDING" && !!release.status,
-      key: await logs.getKey(ctx.params.id)
-    };
-    return;
-  }
-
   ctx.body = {
     data: {
       logs: await logs.list(ctx.params.id),
@@ -28,11 +19,11 @@ router.get("/logs/:id", async ctx => {
 });
 
 router.get("/events", async ctx => {
-  if (ctx.query.key) {
-    ctx.body = { key: await events.getKey() };
-    return;
+  const data: any = { events: await events.list() };
+  if (ctx.query.logs) {
+    data.logs = logs.getKey(ctx.query.release);
   }
-  ctx.body = { data: await events.list() };
+  ctx.body = { data };
 });
 
 router.get("/apps", async ctx => {
@@ -40,10 +31,6 @@ router.get("/apps", async ctx => {
 });
 
 router.get("/apps/:name", async ctx => {
-  if (ctx.query.key) {
-    ctx.body = { done: false, key: await apps.getKey(ctx.params.name) };
-    return;
-  }
   ctx.body = { data: await apps.get(ctx.params.name) };
 });
 
@@ -59,11 +46,6 @@ router.post("/apps", async ctx => {
 
 router.post("/build", async ctx => {
   await builds.insert(ctx.request.body as any);
-  created(ctx);
-});
-
-router.post("/promote", async ctx => {
-  await builds.promote(ctx.request.body as any);
   created(ctx);
 });
 

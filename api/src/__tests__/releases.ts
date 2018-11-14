@@ -1,4 +1,4 @@
-import * as releases from "./releases";
+import * as releases from "../read/releases";
 import db from "../db";
 
 beforeEach(async () => {
