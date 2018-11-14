@@ -4,6 +4,7 @@ exports.up = function(knex) {
     table.string("version").notNullable();
     table.string("app").notNullable();
     table.string("stage").notNullable();
+    table.string("chart");
     table.text("values").notNullable();
     table.string("namespace");
     table.unique(["app", "stage", "version"]);

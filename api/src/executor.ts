@@ -4,6 +4,7 @@ import { Build } from "./repo/builds";
 import { Cluster, Stage } from "./repo/apps";
 import { Release } from "./repo/releases";
 import * as log from "./log";
+import * as _ from "lodash";
 
 export function sh(root: string, args: string[], log: (line: string) => void) {
   return new Promise((resolve, reject) => {
@@ -27,9 +28,10 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
 
     // Give up after 15 seconds.
     const timeout = setTimeout(() => {
+      cmd.kill();
       log("deploy timed out\n");
-      cmd.kill("SIGTERM");
-    }, 15000);
+      reject(new Error(`deploy timed out after 120s`));
+    }, 120000);
 
     cmd.stdout.on("data", logger());
     cmd.stderr.on("data", logger());
@@ -71,10 +73,16 @@ interface Deploy {
 }
 
 export function values(build: Build, cluster: Cluster, release: Release) {
-  return Object.assign({}, build.values, cluster.values, {
-    image: { tag: build.version },
+  return {
+    ...cluster.values,
+    ...build.values,
+    image: {
+      ..._.get(cluster, "values.image", {}),
+      ..._.get(build, "values.image", {}),
+      tag: build.version
+    },
     version: build.version
-  });
+  };
 }
 
 export async function execute(deploy: Deploy) {

@@ -2,6 +2,7 @@ import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { QuerySet } from "./repo";
 import * as crypto from "crypto";
+import _ = require("lodash");
 
 const db = new QuerySet(
   (data: any): App => ({
@@ -102,9 +103,9 @@ export async function getKey(name: string): Promise<string> {
     .first();
 
   const md5 = crypto.createHash("md5");
-  md5.update(`${build.key}`);
-  md5.update(`${app.key}`);
-  md5.update(`${release.key}`);
+  md5.update(`${_.get(build, "key", "-")}`);
+  md5.update(`${_.get(app, "key", "-")}`);
+  md5.update(`${_.get(release, "key", "-")}`);
   return md5.digest("hex");
 }
 

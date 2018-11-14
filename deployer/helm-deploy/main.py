@@ -4,6 +4,9 @@ import output
 import kubernetes
 import yaml
 import sys
+import signal
+import sh
+
 
 usage = "usage: helm-deploy (apply|delete) [options] name chart"
 parser = optparse.OptionParser(usage)
@@ -24,6 +27,15 @@ name = args[1]
 chart = args[2]
 namespace = options.get("namespace") or "default"
 values = options.get("values")
+
+
+def handler(*args):
+    sh.cleanup()
+    sys.exit(1)
+
+
+signal.signal(signal.SIGINT, handler)
+signal.signal(signal.SIGTERM, handler)
 
 if arg == "delete":
     command = commands.delete

@@ -1,5 +1,6 @@
 import db from "../db";
 import * as crypto from "crypto";
+import _ = require("lodash");
 
 export interface Log {
   line: string;
@@ -29,6 +30,6 @@ export async function getKey(release: string): Promise<string> {
     .first();
   return crypto
     .createHash("md5")
-    .update(`${key.id}`)
+    .update(`${_.get(key, "id", "-")}`)
     .digest("hex");
 }

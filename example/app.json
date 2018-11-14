@@ -5,13 +5,14 @@
     {
       "name": "review",
       "review": true,
+      "auto": true,
       "clusters": [
         {
           "name": "minikube",
           "namespace": "default",
           "values": {
             "image": {
-              "repository": "nginx"
+              "repository": "coldog/nginx"
             }
           }
         }
@@ -27,7 +28,7 @@
           "namespace": "default",
           "values": {
             "image": {
-              "repository": "nginx"
+              "repository": "coldog/nginx"
             }
           }
         }
@@ -42,7 +43,7 @@
           "namespace": "default",
           "values": {
             "image": {
-              "repository": "nginx"
+              "repository": "coldog/nginx"
             }
           }
         }

@@ -99,7 +99,7 @@ func main() {
 	app := cli.NewApp()
 	app.Flags = []cli.Flag{
 		cli.StringFlag{Name: "api-key, k", Usage: "navigator api key", EnvVar: "API_KEY"},
-		cli.StringFlag{Name: "api-url, u", Usage: "navigator api url", EnvVar: "API_URL"},
+		cli.StringFlag{Name: "api-url, u", Usage: "navigator api url", EnvVar: "API_URL", Value: "http://localhost:4000"},
 	}
 	app.Version = version
 	app.Name = "navctl"

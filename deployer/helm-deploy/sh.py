@@ -2,6 +2,7 @@ import subprocess
 
 ProcessError = subprocess.CalledProcessError
 
+processes = {}
 
 def sh(*cmd, write=None, quiet=False, quiet_stderr=False, capture=False, verbose=False):
     if verbose:
@@ -17,6 +18,7 @@ def sh(*cmd, write=None, quiet=False, quiet_stderr=False, capture=False, verbose
         if write:
             kwargs["stdin"] = subprocess.PIPE
         p = subprocess.Popen(cmd, **kwargs)
+        processes[p.pid] = p
         out = None
         if capture or write:
             out = p.communicate(input=write)[0]
@@ -27,3 +29,9 @@ def sh(*cmd, write=None, quiet=False, quiet_stderr=False, capture=False, verbose
     finally:
         if p:
             p.kill()
+            del processes[p.pid]
+
+
+def cleanup():
+    for p in processes.values():
+        p.terminate()

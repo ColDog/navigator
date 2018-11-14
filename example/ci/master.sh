@@ -8,6 +8,6 @@ docker push coldog/nginx:$commit
 navctl apply ./app.json
 
 navctl build \
-  -a test \
+  -a example \
   -s staging \
   -v $commit

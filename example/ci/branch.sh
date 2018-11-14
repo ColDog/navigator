@@ -7,7 +7,7 @@ docker build -t coldog/nginx:$commit .
 docker push coldog/nginx:$commit
 
 navctl build \
-  -a test \
+  -a example \
   -n $branch \
-  -s staging \
+  -s review \
   -v $commit

@@ -44,16 +44,20 @@ echo "values:    $values"
 echo "namespace: $namespace"
 echo ""
 
+chart_dir=$(mktemp -d)
+go-getter $chart $chart_dir
+
 values_file=$(mktemp)
 echo $values > $values_file
 
 cd ../deployer/helm-deploy
 
 # Execute the helm deploy script.
-PYTHONUNBUFFERED=1 python3.6 main.py \
+export PYTHONUNBUFFERED=1
+exec python3.6 main.py \
   $command \
   -c $cluster \
   -n $namespace \
   -f $values_file \
   $app \
-  $chart
+  $chart_dir
