@@ -1,5 +1,6 @@
 import React from 'react';
 import { route } from '../../router';
+import { notify } from '../../notify';
 import { connect } from 'react-redux';
 import Heading from '../../components/Header';
 import Main from '../../components/Main';
@@ -41,8 +42,11 @@ class AppPage extends React.Component {
   };
 
   componentWillMount() {
-    this.cancel = poller(3000, `/apps/${this.props.name}`, () => {
-      this.props.dispatch(appRequest(this.props.name));
+    this.cancel = poller({
+      interval: 3000,
+      resource: `/apps/${this.props.name}`,
+      onRefresh: () => this.props.dispatch(appRequest(this.props.name)),
+      onError: () => this.props.dispatch(notify('error', 'Network error')),
     });
   }
 

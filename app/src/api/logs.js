@@ -1,5 +1,6 @@
 import { createLogic } from 'redux-logic';
 import * as fetch from './fetch';
+import { notify } from '../notify';
 
 const q = '[logs]';
 
@@ -30,6 +31,7 @@ export const logsLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(logsFailure(e));
+      dispatch(notify('error', `Failed to get logs`))
     }
     done();
   },
@@ -37,7 +39,6 @@ export const logsLogic = createLogic({
 
 export const reducer = (state = { data: {}, error: null }, action) => {
   switch (action.type) {
-    // LOGS
     case LOGS_SUCCESS:
       return {
         ...state,
@@ -46,10 +47,6 @@ export const reducer = (state = { data: {}, error: null }, action) => {
           [action.releaseId]: action.logs,
         },
       };
-    case LOGS_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case LOGS_FAILURE:
-      return { ...state, error: action.error };
 
     default:
       return state;

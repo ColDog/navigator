@@ -1,5 +1,6 @@
 import { createLogic } from 'redux-logic';
 import * as fetch from './fetch';
+import { notify } from '../notify';
 
 const q = '[app]';
 
@@ -25,6 +26,7 @@ export const appsLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appsFailure(e));
+      dispatch(notify('error', `Failed to get apps`))
     }
     done();
   },
@@ -52,6 +54,7 @@ export const appLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appFailure(e));
+      dispatch(notify('error', `Failed to get app "${action.name}"`))
     }
     done();
   },
@@ -90,9 +93,11 @@ export const appReleaseLogic = createLogic({
       });
       dispatch(appReleaseSuccess());
       dispatch(appRequest(action.app));
+      dispatch(notify('info', `Release started to version "${action.version}"`))
     } catch (e) {
       console.error(e);
       dispatch(appReleaseFailure(e));
+      dispatch(notify('error', `Failed to release build "${action.version}"`))
     }
     done();
   },
@@ -133,9 +138,11 @@ export const appPromoteLogic = createLogic({
       });
       dispatch(appPromoteSuccess());
       dispatch(appRequest(action.app));
+      dispatch(notify('info', `Release "${action.version}" promoted`))
     } catch (e) {
       console.error(e);
       dispatch(appPromoteFailure(e));
+      dispatch(notify('error', `Failed to promote build "${action.version}"`))
     }
     done();
   },
@@ -174,9 +181,11 @@ export const appRemoveLogic = createLogic({
       });
       dispatch(appRemoveSuccess());
       dispatch(appRequest(action.app));
+      dispatch(notify('info', `Release "${action.version}" removed`))
     } catch (e) {
       console.error(e);
       dispatch(appRemoveFailure(e));
+      dispatch(notify('error', `Failed to remove build "${action.version}"`))
     }
     done();
   },
@@ -212,6 +221,7 @@ export const appSaveLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appSaveFailure(e));
+      dispatch(notify('error', `Failed to save app "${action.app.name}"`))
     }
     done();
   },
@@ -220,8 +230,6 @@ export const appSaveLogic = createLogic({
 export const reducer = (state = { data: {}, notifications: [] }, action) => {
   switch (action.type) {
     // APP
-    case APP_REQUEST:
-      return state;
     case APP_SUCCESS:
       return {
         ...state,
@@ -233,44 +241,10 @@ export const reducer = (state = { data: {}, notifications: [] }, action) => {
           },
         },
       };
-    case APP_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APP_FAILURE:
-      return { ...state, error: action.error };
 
     // APPS
-    case APPS_REQUEST:
-      return state;
     case APPS_SUCCESS:
       return { ...state, data: action.apps };
-    case APPS_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APPS_FAILURE:
-      return { ...state, error: action.error };
-
-    // APP_RELEASE
-    case APP_RELEASE_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APP_RELEASE_FAILURE:
-      return { ...state, error: action.error };
-
-    // APP_PROMOTE
-    case APP_PROMOTE_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APP_PROMOTE_FAILURE:
-      return { ...state, error: action.error };
-
-    // APP_REMOVE
-    case APP_REMOVE_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APP_REMOVE_FAILURE:
-      return { ...state, error: action.error };
-
-    // APP_SAVE
-    case APP_SAVE_ABORTED:
-      return { ...state, error: 'ABORTED' };
-    case APP_SAVE_FAILURE:
-      return { ...state, error: action.error };
 
     default:
       return state;

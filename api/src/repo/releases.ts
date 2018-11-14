@@ -1,6 +1,7 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { QuerySet } from "./repo";
+import { emit } from "./events";
 
 const db = new QuerySet(
   (data: any): Release => ({
@@ -89,7 +90,7 @@ export async function insert(release: any, removal?: boolean) {
   if (result.errors.length > 0) {
     throw new ValidationError("Release is invalid", result.errors);
   }
-  return await db.table("releases").insert({
+  const resp = await db.table("releases").insert({
     ...release,
     results: "{}",
     removal: removal || false,
@@ -97,6 +98,8 @@ export async function insert(release: any, removal?: boolean) {
     modified: new Date().toISOString(),
     created: new Date().toISOString()
   });
+  const id = resp[0];
+  await emit("releases.created", { id, ...release });
 }
 
 export async function remove(release: any) {
@@ -104,7 +107,7 @@ export async function remove(release: any) {
 }
 
 export async function update(id: string, status: string, results?: Results) {
-  return await db
+  await db
     .table("releases")
     .update({
       modified: new Date().toISOString(),
@@ -112,6 +115,7 @@ export async function update(id: string, status: string, results?: Results) {
       results: JSON.stringify(results)
     })
     .where("id", id);
+  await emit("releases.updated", { id, status, results });
 }
 
 export async function pop(worker: string) {

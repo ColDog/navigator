@@ -1,6 +1,7 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { QuerySet } from "./repo";
+import { emit } from "./events";
 
 const db = new QuerySet(
   (data: any): Build => ({
@@ -120,7 +121,7 @@ export async function last(app: string, stage: string, n: number = 25) {
       .select("*")
       .from("builds")
       .where({ app, stage })
-      .orderBy("id", "asc")
+      .orderBy("id", "desc")
       .limit(n)
   );
 }
@@ -136,11 +137,12 @@ export async function insert(build: any) {
   if (buildExists) {
     throw new ValidationError("Build already exists");
   }
-  return await db.table("builds").insert({
+  await db.table("builds").insert({
     ...build,
     values: JSON.stringify(build.values || {}),
     created: new Date().toISOString()
   });
+  await emit("releases.created", { ...build });
 }
 
 export async function promote({

@@ -2,6 +2,7 @@ import * as Router from "koa-router";
 import * as apps from "./repo/apps";
 import * as builds from "./repo/builds";
 import * as logs from "./repo/logs";
+import * as events from "./repo/events";
 import * as releases from "./repo/releases";
 import { appSerializer } from "./serializers";
 
@@ -24,6 +25,14 @@ router.get("/logs/:id", async ctx => {
       ...release
     }
   };
+});
+
+router.get("/events", async ctx => {
+  if (ctx.query.key) {
+    ctx.body = { key: await events.getKey() };
+    return;
+  }
+  ctx.body = { data: await events.list() };
 });
 
 router.get("/apps", async ctx => {

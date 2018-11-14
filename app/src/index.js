@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store';
-import { start } from './router';
-
+import * as router from './router';
+import * as events from './api/events'
 import { AppPage, AppsPage, AppSettingsPage, LogsPage } from './pages'
 
 import 'semantic-ui-css/semantic.min.css';
@@ -21,4 +21,5 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
-start(store);
+router.start(store);
+events.start(store);
