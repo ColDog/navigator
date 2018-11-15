@@ -11,7 +11,7 @@ export async function listByApp(app: string): Promise<Event[]> {
   let q = db
     .select("*")
     .from("events")
-    .orderBy("id", "asc")
+    .orderBy("id", "desc")
     .limit(25);
   if (app) {
     q = q.where("app", app);

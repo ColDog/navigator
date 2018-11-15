@@ -40,22 +40,6 @@ export default ({ app, stages, callbacks }) => (
 
         {!stage.review &&
           stage.released &&
-          get(stage, 'released.results.clusters', []).map(cluster => (
-            <BuildCard
-              key={cluster.id}
-              build={stage.released}
-              app={app}
-              stage={stage}
-              cluster={cluster}
-              undeployed={false}
-              nextStage={stages[idx + 1]}
-              {...callbacks}
-            />
-          ))}
-
-        {!stage.review &&
-          stage.released &&
-          get(stage, 'released.results.clusters', []).length === 0 &&
           stage.clusters.map(cluster => (
             <BuildCard
               build={stage.released}

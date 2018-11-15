@@ -30,16 +30,23 @@ export const destroy = (url, body) => request('DELETE', url, body);
 
 export const poller = ({ interval, resource, onRefresh, onError }) => {
   let latest = null;
-  const id = setInterval(async () => {
+
+  const sync = async () => {
     try {
-      const res = await get(`/api/v1/${resource}`);
+      const res = await get(`/api/v1/${resource}?key=true`);
       if (res.key === latest) {
         return;
       }
 
       console.log('refreshing', resource);
       latest = res.key;
-      onRefresh(res.data);
+
+      if (res.data) {
+        onRefresh(res.data);
+      } else {
+        const full = await get(`/api/v1/${resource}`);
+        onRefresh(full.data);
+      }
 
       if (res.done) {
         console.log('done', resource);
@@ -49,7 +56,10 @@ export const poller = ({ interval, resource, onRefresh, onError }) => {
       console.error('poller failed', e);
       onError(e);
     }
-  }, interval);
+  };
+
+  const id = setInterval(sync, interval);
+  setTimeout(sync, 0); // Do immediately, async.
   return () => {
     clearInterval(id);
   };

@@ -7,31 +7,33 @@ import { execute, values } from "../executor";
 import * as log from "../log";
 
 export async function doRelease(releaseId: string) {
-  const results: releases.Results = {
-    stage: "",
-    app: "",
-    clusters: []
+  const release = await releases.get(releaseId);
+  const app = await apps.get(release.app);
+  const build = await builds.get(release.app, release.stage, release.version);
+  const stage = app.stages.find(stage => stage.name === release.stage);
+  if (!stage) {
+    throw new Error(`Stage not found "${build.stage}"`);
+  }
+
+  const update = (status: string, cluster?: string) => {
+    const rel: releases.Updated = {
+      id: releaseId,
+      status: releases.Status.Pending,
+      stage: build.stage,
+      app: app.name,
+      version: build.version,
+      cluster: null
+    };
+    releases.update({ ...rel, status, cluster });
   };
 
   try {
-    const release = await releases.get(releaseId);
-    const build = await builds.get(release.app, release.stage, release.version);
-    const app = await apps.get(release.app);
-    const stage = app.stages.find(stage => stage.name === release.stage);
-
-    results.stage = build.stage;
-    results.app = app.name;
-
-    if (!stage) {
-      await releases.update(release.id, "INVALID_STAGE", results);
-      return;
-    }
-
     await logs.log(releaseId, `starting release "${releaseId}"`);
-    await releases.update(release.id, "PENDING", results);
+    await update(releases.Status.Pending);
 
     for (const cluster of stage.clusters) {
       await logs.log(releaseId, `deploying to cluster "${cluster.name}"`);
+      await update(releases.Status.Running, cluster.name);
 
       try {
         await execute({
@@ -46,37 +48,24 @@ export async function doRelease(releaseId: string) {
           remove: !!release.removal,
           namespace: build.namespace || cluster.namespace
         });
-        results.clusters.push({
-          name: cluster.name,
-          status: "SUCCESS"
-        });
       } catch (e) {
         log.exception("cluster release failed", e);
         await logs.log(
           releaseId,
-          `cluster ${cluster.name} failed: ${e.message}`
+          `cluster ${cluster.name} failed: "${e.message}"`
         );
-        results.clusters.push({
-          name: cluster.name,
-          status: "ERRORED"
-        });
+
+        await update(releases.Status.Errored, cluster.name);
         throw e;
       }
-
-      await releases.update(release.id, "PENDING", results);
     }
 
     await logs.log(releaseId, "-- release completed --");
-    await releases.update(release.id, "SUCCESS", results);
+    await update(releases.Status.Success);
   } catch (e) {
-    await logs.log(releaseId, "-- release failed --");
     log.exception("release failed", e);
-
-    try {
-      await releases.update(releaseId, "FAILED", results);
-    } catch (e) {
-      log.exception("release update failed", e);
-    }
+    await logs.log(releaseId, "-- release failed --");
+    await update(releases.Status.Errored);
   }
 }
 
@@ -88,11 +77,16 @@ export async function run() {
       const releaseId = await releases.pop(id);
       if (releaseId) {
         log.info("release starting", releaseId);
-        doRelease(releaseId);
+        try {
+          doRelease(releaseId);
+        } catch (e) {
+          log.exception("unexpected release error", e);
+          releases.invalid(releaseId);
+        }
         log.info("release complete", releaseId);
       }
     } catch (e) {
-      log.exception("release failed", e);
+      log.exception("release worker failed", e);
     }
 
     await sleep(1000);

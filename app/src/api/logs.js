@@ -45,11 +45,9 @@ export const logsWatcherLogic = createLogic({
   latest: true,
 
   async process({ action, cancelled$ }, dispatch, done) {
-    dispatch(logsRequest(action.releaseId));
-
     const cancel = fetch.poller({
       interval: 3000,
-      resource: `/logs/${action.releaseId}`,
+      resource: `logs/${action.releaseId}`,
       onError: err => {
         console.error(err);
         dispatch(logsFailure(err));

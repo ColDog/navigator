@@ -1,24 +1,14 @@
 import { QuerySet } from "./repo";
 import { subscribe } from "../write";
 import * as Knex from "knex";
-import { Created, Updated } from "../write/releases";
+import { Created, Updated, Status } from "../write/releases";
 
 const db = new QuerySet(
   (data: any): Release => ({
     ...data,
-    results: JSON.parse(data.results),
     removal: !!data.removal
   })
 );
-
-export interface Results {
-  stage: string;
-  app: string;
-  clusters: Array<{
-    name: string;
-    status: string;
-  }>;
-}
 
 export interface Release {
   id: string;
@@ -26,7 +16,6 @@ export interface Release {
   stage: string;
   version: string;
   removal: boolean;
-  results?: Results;
   worker?: string;
   status?: string;
   modified: string;
@@ -105,12 +94,22 @@ async function update(tx: Knex.Transaction, release: Updated) {
   await tx
     .table("releases")
     .update({
-      ...release,
-      results: JSON.stringify(release.results),
+      status: release.status,
       modified: new Date().toISOString()
     })
     .where("id", release.id);
 }
 
+async function invalid(tx: Knex.Transaction, payload: { releaseId: string }) {
+  await tx
+    .table("releases")
+    .update({
+      status: Status.Invalid,
+      modified: new Date().toISOString()
+    })
+    .where("id", payload.releaseId);
+}
+
 subscribe("releases.created", insert);
 subscribe("releases.updated", update);
+subscribe("releases.invalid", invalid);

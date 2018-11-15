@@ -62,17 +62,29 @@ export const appLogic = createLogic({
   },
 });
 
+const handleEvent = (dispatch, event) => {
+  switch (event.name) {
+    case 'releases.created':
+      dispatch(notify('info', `Release beginning "${event.id}"`));
+      break;
+    case 'releases.updated':
+      dispatch(
+        notify('info', `Release status updated to "${event.payload.status}"`)
+      );
+      break;
+  }
+};
+
 export const appWatcherLogic = createLogic({
   type: APP_WATCHER,
   cancelType: APP_ABORTED,
   latest: true,
 
   async process({ action, cancelled$ }, dispatch, done) {
-    dispatch(appsRequest(action.name));
-
+    let latest = new Date();
     const cancel = fetch.poller({
       interval: 3000,
-      resource: `/apps/${action.name}/stages`,
+      resource: `apps/${action.name}/stages`,
       onError: err => {
         console.error(err);
         dispatch(appFailure(err));
@@ -80,6 +92,14 @@ export const appWatcherLogic = createLogic({
       },
       onRefresh: data => {
         dispatch(appSuccess(data));
+
+        data.events.forEach(event => {
+          const ts = Date.parse(event.created);
+          if (ts >= latest) {
+            handleEvent(dispatch, event);
+            latest = ts;
+          }
+        });
       },
     });
     cancelled$.subscribe(() => {

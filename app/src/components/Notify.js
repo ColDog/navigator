@@ -32,9 +32,11 @@ class Notification extends React.Component {
       return null;
     }
     return (
-      <Message style={style.container} color={mapLevelToColor(message.level)}>
-        {message.message}
-      </Message>
+      <div style={style.container}>
+        <Message style={style.container} color={mapLevelToColor(message.level)}>
+          {message.message}
+        </Message>
+      </div>
     );
   }
 }

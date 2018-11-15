@@ -12,12 +12,9 @@ router.get("/logs/:id", async ctx => {
   const release = await releases.get(ctx.params.id);
   const log = await logs.list(ctx.params.id);
   ctx.body = {
-    data: {
-      ...release,
-      logs: log,
-      done: release.status !== "PENDING" && !!release.status,
-      key: log[0] ? log[0].id : "_"
-    }
+    key: log[log.length - 1] ? log[log.length - 1].id : "_",
+    done: release.status !== "PENDING" && !!release.status,
+    data: { ...release, logs: log }
   };
 });
 
@@ -31,14 +28,13 @@ router.get("/apps/:name", async ctx => {
 
 router.get("/apps/:name/stages", async ctx => {
   const eventList = await events.listByApp(ctx.params.name);
-  const app = await appSerializer(await apps.get(ctx.params.name));
-  ctx.body = {
-    data: {
-      ...app,
-      key: eventList[0] ? eventList[0].id : "_",
-      events: eventList
-    }
-  };
+  const key = eventList[0] ? eventList[0].id : "_";
+  if (ctx.query.key) {
+    ctx.body = { key };
+    return;
+  }
+  const data = await appSerializer(await apps.get(ctx.params.name));
+  ctx.body = { key, data: { ...data, events: eventList } };
 });
 
 router.post("/apps", async ctx => {

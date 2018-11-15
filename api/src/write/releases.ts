@@ -2,6 +2,14 @@ import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { emit } from "./events";
 
+export enum Status {
+  Pending = "PENDING",
+  Running = "RUNNING",
+  Success = "SUCCESS",
+  Errored = "ERRORED",
+  Invalid = "INVALID",
+}
+
 export interface Created {
   app: string;
   stage: string;
@@ -10,20 +18,14 @@ export interface Created {
   status: string;
 }
 
-export interface WriteResults {
-  stage: string;
-  app: string;
-  clusters: Array<{
-    name: string;
-    status: string;
-  }>;
-}
-
 export interface Updated {
   id: string;
   app: string;
+  stage: string;
+  version: string;
   status: string;
-  results: WriteResults;
+  // Cluster is the current cluster that is being worked on.
+  cluster?: string;
 }
 
 const schema = {
@@ -55,11 +57,10 @@ export async function remove(release: any) {
   await insert(release, true);
 }
 
-export async function update(
-  id: string,
-  status: string,
-  results: WriteResults
-) {
-  const payload: Updated = { id, status, results, app: results.app };
-  await emit("releases.updated", payload);
+export async function update(update: Updated) {
+  await emit("releases.updated", update);
+}
+
+export async function invalid(releaseId: string) {
+  await emit("releases.invalid", { releaseId });
 }
