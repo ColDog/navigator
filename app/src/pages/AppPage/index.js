@@ -1,11 +1,11 @@
 import React from 'react';
 import { route } from '../../router';
-import { notify } from '../../notify';
 import { connect } from 'react-redux';
 import Heading from '../../components/Header';
 import Main from '../../components/Main';
 import {
-  appRequest,
+  appWatcher,
+  appAborted,
   appReleaseRequest,
   appRemoveRequest,
   appPromoteRequest,
@@ -14,7 +14,6 @@ import StageList from './StageList';
 import { Loader } from 'semantic-ui-react';
 import AppMenu, { Divider, Section } from '../../components/AppMenu';
 import capitalize from 'lodash/capitalize';
-import { poller } from '../../api/fetch';
 
 class AppPage extends React.Component {
   static route = '/apps/:id';
@@ -26,8 +25,6 @@ class AppPage extends React.Component {
       app: state.apps.data[state.router.params.id],
     };
   }
-
-  cancel = null;
 
   callbacks = {
     onRemove: (app, stage, version) => {
@@ -42,18 +39,11 @@ class AppPage extends React.Component {
   };
 
   componentWillMount() {
-    this.cancel = poller({
-      interval: 3000,
-      resource: `/apps/${this.props.name}`,
-      onRefresh: () => this.props.dispatch(appRequest(this.props.name)),
-      onError: () => this.props.dispatch(notify('error', 'Network error')),
-    });
+    this.props.dispatch(appWatcher(this.props.name));
   }
 
   componentWillUnmount() {
-    if (this.cancel) {
-      this.cancel();
-    }
+    this.props.dispatch(appAborted(this.props.name));
   }
 
   render() {

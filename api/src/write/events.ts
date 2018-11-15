@@ -16,11 +16,13 @@ export function subscribe(name: string, sub: Subscription) {
   subscriptions[name].push(sub);
 }
 
-export async function emit(name: string, payload: object) {
+export async function emit(name: string, payload: any) {
   db.transaction(async tx => {
     await tx
       .insert({
         name,
+        app: payload.app || null,
+        subject: payload.subject || null,
         payload: JSON.stringify(payload),
         created: new Date().toISOString()
       })

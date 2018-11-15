@@ -1,6 +1,6 @@
-import { sh, execute } from "./executor";
-import * as logs from "./repo/logs";
-import db from "./db";
+import { sh, execute } from "../executor";
+import * as logs from "../repo/logs";
+import db from "../db";
 
 beforeEach(async () => {
   await db.migrate.latest();

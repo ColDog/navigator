@@ -7,14 +7,17 @@ export interface Event {
   payload: object;
 }
 
-export async function list(): Promise<Event[]> {
-  return await db
+export async function listByApp(app: string): Promise<Event[]> {
+  let q = db
     .select("*")
     .from("events")
     .orderBy("id", "asc")
-    .limit(25)
-    .map((evt: any) => ({
-      ...evt,
-      payload: JSON.parse(evt.payload)
-    }));
+    .limit(25);
+  if (app) {
+    q = q.where("app", app);
+  }
+  return await q.map((evt: any) => ({
+    ...evt,
+    payload: JSON.parse(evt.payload)
+  }));
 }

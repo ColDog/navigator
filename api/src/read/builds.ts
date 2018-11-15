@@ -112,7 +112,7 @@ export async function last(app: string, stage: string, n: number = 25) {
 async function insert(tx: Knex.Transaction, build: Created) {
   await tx.table("builds").insert({
     ...build,
-    values: JSON.stringify(build.values),
+    values: JSON.stringify(build.values || {}),
     created: new Date().toISOString()
   });
 }

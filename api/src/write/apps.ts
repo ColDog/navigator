@@ -62,7 +62,7 @@ const schema = {
 export async function insert(app: any) {
   const result = validate(app, schema);
   if (result.errors.length > 0) {
-    throw new ValidationError("Release is invalid", result.errors);
+    throw new ValidationError("App is invalid", result.errors);
   }
   const payload: Upserted = { ...app };
   await emit("apps.upserted", payload);

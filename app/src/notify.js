@@ -1,19 +1,37 @@
+import { createLogic } from 'redux-logic';
+
 export const NOTIFY = '[notify]/NOTIFY';
 export const CLOSE = '[notify]/CLOSE';
 
-export const notify = (level, message) => ({ type: NOTIFY, level, message });
+let id = 0;
+
+export const notify = (level, message) => ({
+  type: NOTIFY,
+  id: (id += 1),
+  level,
+  message,
+});
+
 export const close = id => ({ type: CLOSE, id });
 
-let id = 0;
+export const notifyLogic = createLogic({
+  type: NOTIFY,
+
+  async process({ action }, dispatch, done) {
+    setTimeout(() => {
+      dispatch(close(action.id));
+      done();
+    }, 5000);
+  },
+});
 
 export const reducer = (state = { data: [] }, action) => {
   switch (action.type) {
     case NOTIFY:
-      id++;
       return {
         ...state,
         data: [
-          { id, level: action.level, message: action.message },
+          { id: action.id, level: action.level, message: action.message },
           ...state.data,
         ],
       };
@@ -26,3 +44,5 @@ export const reducer = (state = { data: [] }, action) => {
       return state;
   }
 };
+
+export const logic = [notifyLogic];

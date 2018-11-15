@@ -1,4 +1,4 @@
-import * as releases from "../read/releases";
+import * as releases from "../repo/releases";
 import db from "../db";
 
 beforeEach(async () => {
@@ -28,7 +28,7 @@ describe("releases", () => {
     const rel = await releases.get(id);
     expect(rel.worker).toEqual("worker-id");
 
-    releases.update(id, 'WORKING', {} as any);
+    releases.update(id, "WORKING", {} as any);
 
     const rel2 = await releases.get(id);
     expect(rel2.status).toEqual("WORKING");

@@ -18,7 +18,7 @@ const reducers = {
   notify: notify.reducer,
 };
 
-const logic = [...apps.logic, ...logs.logic];
+const logic = [...apps.logic, ...logs.logic, ...notify.logic];
 
 const store = createStore(
   combineReducers(reducers),

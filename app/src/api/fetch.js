@@ -29,19 +29,17 @@ export const post = (url, body) => request('POST', url, body);
 export const destroy = (url, body) => request('DELETE', url, body);
 
 export const poller = ({ interval, resource, onRefresh, onError }) => {
-  onRefresh();
-
   let latest = null;
   const id = setInterval(async () => {
     try {
-      const res = await get(`/api/v1/${resource}?key=true`);
+      const res = await get(`/api/v1/${resource}`);
       if (res.key === latest) {
         return;
       }
 
       console.log('refreshing', resource);
       latest = res.key;
-      onRefresh();
+      onRefresh(res.data);
 
       if (res.done) {
         console.log('done', resource);

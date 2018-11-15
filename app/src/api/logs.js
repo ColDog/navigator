@@ -4,11 +4,13 @@ import { notify } from '../notify';
 
 const q = '[logs]';
 
+export const LOGS_WATCHER = `${q}/LOGS_WATCHER`;
 export const LOGS_REQUEST = `${q}/LOGS_REQUEST`;
 export const LOGS_SUCCESS = `${q}/LOGS_SUCCESS`;
 export const LOGS_ABORTED = `${q}/LOGS_ABORTED`;
 export const LOGS_FAILURE = `${q}/LOGS_FAILURE`;
 
+export const logsWatcher = releaseId => ({ type: LOGS_WATCHER, releaseId });
 export const logsRequest = releaseId => ({ type: LOGS_REQUEST, releaseId });
 export const logsSuccess = (releaseId, logs) => ({
   type: LOGS_SUCCESS,
@@ -31,9 +33,36 @@ export const logsLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(logsFailure(e));
-      dispatch(notify('error', `Failed to get logs`))
+      dispatch(notify('error', `Failed to get logs`));
     }
     done();
+  },
+});
+
+export const logsWatcherLogic = createLogic({
+  type: LOGS_WATCHER,
+  cancelType: LOGS_ABORTED,
+  latest: true,
+
+  async process({ action, cancelled$ }, dispatch, done) {
+    dispatch(logsRequest(action.releaseId));
+
+    const cancel = fetch.poller({
+      interval: 3000,
+      resource: `/logs/${action.releaseId}`,
+      onError: err => {
+        console.error(err);
+        dispatch(logsFailure(err));
+        dispatch(notify('error', `Failed to get logs`));
+      },
+      onRefresh: data => {
+        dispatch(logsSuccess(action.releaseId, data));
+      },
+    });
+    cancelled$.subscribe(() => {
+      cancel();
+      done();
+    });
   },
 });
 
@@ -53,4 +82,4 @@ export const reducer = (state = { data: {}, error: null }, action) => {
   }
 };
 
-export const logic = [logsLogic];
+export const logic = [logsLogic, logsWatcherLogic];

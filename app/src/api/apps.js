@@ -26,17 +26,19 @@ export const appsLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appsFailure(e));
-      dispatch(notify('error', `Failed to get apps`))
+      dispatch(notify('error', `Failed to get apps`));
     }
     done();
   },
 });
 
+export const APP_WATCHER = `${q}/APP_WATCHER`;
 export const APP_REQUEST = `${q}/APP_REQUEST`;
 export const APP_SUCCESS = `${q}/APP_SUCCESS`;
 export const APP_ABORTED = `${q}/APP_ABORTED`;
 export const APP_FAILURE = `${q}/APP_FAILURE`;
 
+export const appWatcher = name => ({ type: APP_WATCHER, name });
 export const appRequest = name => ({ type: APP_REQUEST, name });
 export const appSuccess = app => ({ type: APP_SUCCESS, app });
 export const appAborted = () => ({ type: APP_ABORTED });
@@ -54,9 +56,36 @@ export const appLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appFailure(e));
-      dispatch(notify('error', `Failed to get app "${action.name}"`))
+      dispatch(notify('error', `Failed to get app "${action.name}"`));
     }
     done();
+  },
+});
+
+export const appWatcherLogic = createLogic({
+  type: APP_WATCHER,
+  cancelType: APP_ABORTED,
+  latest: true,
+
+  async process({ action, cancelled$ }, dispatch, done) {
+    dispatch(appsRequest(action.name));
+
+    const cancel = fetch.poller({
+      interval: 3000,
+      resource: `/apps/${action.name}/stages`,
+      onError: err => {
+        console.error(err);
+        dispatch(appFailure(err));
+        dispatch(notify('error', `Failed to get app "${action.name}"`));
+      },
+      onRefresh: data => {
+        dispatch(appSuccess(data));
+      },
+    });
+    cancelled$.subscribe(() => {
+      cancel();
+      done();
+    });
   },
 });
 
@@ -93,11 +122,13 @@ export const appReleaseLogic = createLogic({
       });
       dispatch(appReleaseSuccess());
       dispatch(appRequest(action.app));
-      dispatch(notify('info', `Release started to version "${action.version}"`))
+      dispatch(
+        notify('info', `Release started to version "${action.version}"`)
+      );
     } catch (e) {
       console.error(e);
       dispatch(appReleaseFailure(e));
-      dispatch(notify('error', `Failed to release build "${action.version}"`))
+      dispatch(notify('error', `Failed to release build "${action.version}"`));
     }
     done();
   },
@@ -138,11 +169,11 @@ export const appPromoteLogic = createLogic({
       });
       dispatch(appPromoteSuccess());
       dispatch(appRequest(action.app));
-      dispatch(notify('info', `Release "${action.version}" promoted`))
+      dispatch(notify('info', `Release "${action.version}" promoted`));
     } catch (e) {
       console.error(e);
       dispatch(appPromoteFailure(e));
-      dispatch(notify('error', `Failed to promote build "${action.version}"`))
+      dispatch(notify('error', `Failed to promote build "${action.version}"`));
     }
     done();
   },
@@ -181,11 +212,11 @@ export const appRemoveLogic = createLogic({
       });
       dispatch(appRemoveSuccess());
       dispatch(appRequest(action.app));
-      dispatch(notify('info', `Release "${action.version}" removed`))
+      dispatch(notify('info', `Release "${action.version}" removed`));
     } catch (e) {
       console.error(e);
       dispatch(appRemoveFailure(e));
-      dispatch(notify('error', `Failed to remove build "${action.version}"`))
+      dispatch(notify('error', `Failed to remove build "${action.version}"`));
     }
     done();
   },
@@ -221,7 +252,7 @@ export const appSaveLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appSaveFailure(e));
-      dispatch(notify('error', `Failed to save app "${action.app.name}"`))
+      dispatch(notify('error', `Failed to save app "${action.app.name}"`));
     }
     done();
   },
@@ -254,6 +285,7 @@ export const reducer = (state = { data: {}, notifications: [] }, action) => {
 export const logic = [
   appsLogic,
   appLogic,
+  appWatcherLogic,
   appReleaseLogic,
   appPromoteLogic,
   appRemoveLogic,

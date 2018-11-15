@@ -21,6 +21,7 @@ export interface WriteResults {
 
 export interface Updated {
   id: string;
+  app: string;
   status: string;
   results: WriteResults;
 }
@@ -50,15 +51,15 @@ export async function insert(release: any, removal?: boolean) {
   await emit("releases.created", payload);
 }
 
-export async function remove(release: any, removal?: boolean) {
-  await release(release, removal);
+export async function remove(release: any) {
+  await insert(release, true);
 }
 
 export async function update(
   id: string,
   status: string,
-  results?: WriteResults
+  results: WriteResults
 ) {
-  const payload: Updated = { id, status, results };
+  const payload: Updated = { id, status, results, app: results.app };
   await emit("releases.updated", payload);
 }

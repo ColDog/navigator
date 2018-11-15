@@ -23,7 +23,7 @@ export async function doRelease(releaseId: string) {
     results.app = app.name;
 
     if (!stage) {
-      await releases.update(release.id, "INVALID_STAGE");
+      await releases.update(release.id, "INVALID_STAGE", results);
       return;
     }
 

@@ -1,4 +1,4 @@
-import * as builds from "./builds";
+import * as builds from "../repo/builds";
 import db from "../db";
 
 beforeEach(async () => {

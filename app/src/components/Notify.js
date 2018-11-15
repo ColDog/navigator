@@ -1,7 +1,6 @@
 import React from 'react';
 import { Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { close, notify } from '../notify';
 
 const mapLevelToColor = level => {
   switch (level) {
@@ -24,20 +23,7 @@ const style = {
 
 class Notification extends React.Component {
   static mapper(state) {
-    return { message: state.notify.data[0] }
-  }
-
-  componentDidUpdate() {
-    this.triggerClose()
-  }
-
-  triggerClose() {
-    if (this.props.message) {
-      const id = this.props.message.id;
-      setTimeout(() => {
-        this.props.dispatch(close(id));
-      }, 5000);
-    }
+    return { message: state.notify.data[0] };
   }
 
   render() {

@@ -1,4 +1,4 @@
-import { QuerySet } from "../repo/repo";
+import { QuerySet } from "./repo";
 import { subscribe } from "../write";
 import * as Knex from "knex";
 import { Created, Updated } from "../write/releases";
@@ -95,6 +95,7 @@ export async function pop(worker: string) {
 async function insert(tx: Knex.Transaction, release: Created) {
   await tx.table("releases").insert({
     ...release,
+    results: "{}",
     modified: new Date().toISOString(),
     created: new Date().toISOString()
   });

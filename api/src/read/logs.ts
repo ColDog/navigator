@@ -1,29 +1,22 @@
 import db from "../db";
-import * as crypto from "crypto";
-import _ = require("lodash");
 
 export interface Log {
+  id: string;
   line: string;
   release: string;
   created: string;
 }
 
-export async function list(release: string): Promise<Log[]> {
-  return await db
-    .select(["line", "created"])
+export async function list(release?: string, limit?: number): Promise<Log[]> {
+  let query = db
+    .select(["id", "line", "created"])
     .from("logs")
-    .where("release", release)
     .orderBy("id", "asc");
-}
-
-export async function getKey(release: string): Promise<string> {
-  const key = await db
-    .table("logs")
-    .max({ id: "id" })
-    .where("release", release)
-    .first();
-  return crypto
-    .createHash("md5")
-    .update(`${_.get(key, "id", "-")}`)
-    .digest("hex");
+  if (limit) {
+    query = query.limit(limit);
+  }
+  if (release) {
+    query = query.where({ release });
+  }
+  return await query;
 }

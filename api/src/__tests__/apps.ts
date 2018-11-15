@@ -1,4 +1,4 @@
-import * as apps from "./apps";
+import * as apps from "../repo/apps";
 import db from "../db";
 
 beforeEach(async () => {

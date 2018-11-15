@@ -1,7 +1,7 @@
 import React from 'react';
 import { route } from '../router';
 import { connect } from 'react-redux';
-import { logsRequest } from '../api/logs';
+import { logsWatcher, logsAborted } from '../api/logs';
 import { appsRequest } from '../api/apps';
 import Heading from '../components/Header';
 import Main from '../components/Main';
@@ -9,7 +9,6 @@ import AppMenu, { Divider, Section } from '../components/AppMenu';
 import { Table, Container, Loader, Grid, Segment } from 'semantic-ui-react';
 import capitalize from 'lodash/capitalize';
 import Console from '../components/Console';
-import { poller } from '../api/fetch';
 
 class Logs extends React.Component {
   static route = '/logs/:id';
@@ -20,19 +19,13 @@ class Logs extends React.Component {
     };
   }
 
-  cancel = null;
-
   componentWillMount() {
     this.props.dispatch(appsRequest());
-    this.cancel = poller(1000, `/logs/${this.props.releaseId}`, () => {
-      this.props.dispatch(logsRequest(this.props.releaseId));
-    });
+    this.props.dispatch(logsWatcher(this.props.releaseId));
   }
 
   componentWillUnmount() {
-    if (this.cancel) {
-      this.cancel();
-    }
+    this.props.dispatch(logsAborted(this.props.releaseId));
   }
 
   render() {

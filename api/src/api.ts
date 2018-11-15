@@ -10,20 +10,15 @@ export const router = new Router({ prefix: "/api/v1" });
 
 router.get("/logs/:id", async ctx => {
   const release = await releases.get(ctx.params.id);
+  const log = await logs.list(ctx.params.id);
   ctx.body = {
     data: {
-      logs: await logs.list(ctx.params.id),
-      ...release
+      ...release,
+      logs: log,
+      done: release.status !== "PENDING" && !!release.status,
+      key: log[0] ? log[0].id : "_"
     }
   };
-});
-
-router.get("/events", async ctx => {
-  const data: any = { events: await events.list() };
-  if (ctx.query.logs) {
-    data.logs = logs.getKey(ctx.query.release);
-  }
-  ctx.body = { data };
 });
 
 router.get("/apps", async ctx => {
@@ -35,8 +30,15 @@ router.get("/apps/:name", async ctx => {
 });
 
 router.get("/apps/:name/stages", async ctx => {
-  const app = await apps.get(ctx.params.name);
-  ctx.body = { data: await appSerializer(app) };
+  const eventList = await events.listByApp(ctx.params.name);
+  const app = await appSerializer(await apps.get(ctx.params.name));
+  ctx.body = {
+    data: {
+      ...app,
+      key: eventList[0] ? eventList[0].id : "_",
+      events: eventList
+    }
+  };
 });
 
 router.post("/apps", async ctx => {
