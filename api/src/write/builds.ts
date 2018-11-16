@@ -37,3 +37,17 @@ export async function insert(build: any) {
   const payload: Created = { ...build };
   await emit("builds.created", payload);
 }
+
+export async function promote(build: any, stage: string) {
+  delete build.id;
+  build.stage = stage;
+
+  const result = validate(build || {}, schema, {
+    allowUnknownAttributes: false
+  });
+  if (result.errors.length > 0) {
+    throw new ValidationError("Build is invalid", result.errors);
+  }
+  const payload: Created = { ...build };
+  await emit("builds.created", payload);
+}

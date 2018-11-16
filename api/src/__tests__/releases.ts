@@ -28,7 +28,14 @@ describe("releases", () => {
     const rel = await releases.get(id);
     expect(rel.worker).toEqual("worker-id");
 
-    releases.update(id, "WORKING", {} as any);
+    releases.update({
+      id,
+      status: releases.Status.Pending,
+      stage: rel.stage,
+      app: rel.app,
+      version: rel.version,
+      cluster: null
+    });
 
     const rel2 = await releases.get(id);
     expect(rel2.status).toEqual("WORKING");

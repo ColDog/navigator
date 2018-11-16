@@ -47,6 +47,13 @@ router.post("/build", async ctx => {
   created(ctx);
 });
 
+router.post("/promote", async ctx => {
+  const { app, stage, version, to } = ctx.request.body as any;
+  const build = await builds.get(app, stage, version);
+  await builds.promote(build, to);
+  created(ctx);
+});
+
 router.post("/release", async ctx => {
   await releases.insert(ctx.request.body as any);
   created(ctx);

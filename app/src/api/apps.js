@@ -68,9 +68,27 @@ const handleEvent = (dispatch, event) => {
       dispatch(notify('info', `Release beginning "${event.id}"`));
       break;
     case 'releases.updated':
+      let level;
+      switch (event.payload.status) {
+        case 'ERRORED':
+          level = 'error';
+          break
+        case 'SUCCESS':
+          level = 'success';
+          break
+        default:
+          level = 'info';
+      }
       dispatch(
-        notify('info', `Release status updated to "${event.payload.status}"`)
+        notify(
+          level,
+          `Release "${event.payload.version}" status updated to "${
+            event.payload.status
+          }"`
+        )
       );
+      break;
+    default:
       break;
   }
 };
@@ -242,42 +260,6 @@ export const appRemoveLogic = createLogic({
   },
 });
 
-export const APP_SAVE_REQUEST = `${q}/APP_SAVE_REQUEST`;
-export const APP_SAVE_SUCCESS = `${q}/APP_SAVE_SUCCESS`;
-export const APP_SAVE_ABORTED = `${q}/APP_SAVE_ABORTED`;
-export const APP_SAVE_FAILURE = `${q}/APP_SAVE_FAILURE`;
-
-export const appSaveRequest = app => ({
-  type: APP_SAVE_REQUEST,
-  app,
-});
-export const appSaveSuccess = () => ({ type: APP_SAVE_SUCCESS });
-export const appSaveAborted = () => ({ type: APP_SAVE_ABORTED });
-export const appSaveFailure = error => ({
-  type: APP_SAVE_FAILURE,
-  error,
-});
-
-export const appSaveLogic = createLogic({
-  type: APP_SAVE_REQUEST,
-  cancelType: APP_SAVE_ABORTED,
-  latest: true,
-
-  async process({ action }, dispatch, done) {
-    try {
-      const url = `/api/v1/apps`;
-      await fetch.post(url, action.app);
-      dispatch(appSaveSuccess());
-      dispatch(appRequest(action.app.name));
-    } catch (e) {
-      console.error(e);
-      dispatch(appSaveFailure(e));
-      dispatch(notify('error', `Failed to save app "${action.app.name}"`));
-    }
-    done();
-  },
-});
-
 export const reducer = (state = { data: {}, notifications: [] }, action) => {
   switch (action.type) {
     // APP
@@ -309,5 +291,4 @@ export const logic = [
   appReleaseLogic,
   appPromoteLogic,
   appRemoveLogic,
-  appSaveLogic,
 ];

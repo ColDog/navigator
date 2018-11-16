@@ -13,7 +13,7 @@ export default ({
   onRemove,
   onRelease,
 }) => (
-  <Card fluid color={build.status === 'FAILED' ? 'red' : null}>
+  <Card fluid color={build.status === 'ERRORED' ? 'red' : null}>
     <Card.Content>
       <Card.Header>
         {build.released ? (

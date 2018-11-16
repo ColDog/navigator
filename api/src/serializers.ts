@@ -10,7 +10,6 @@ export interface Build {
   version: string;
   values: object;
   status: string;
-  results: releaseRepo.Results | null;
   released: boolean;
   removed: boolean;
   namespace: string | null;
@@ -45,7 +44,6 @@ export async function buildSerializer(
     stage: build.stage,
     version: build.version,
     values: build.values || {},
-    results: release ? release.results : null,
     released: !!release,
     removed: release ? !!release.removal : false,
     status: release ? release.status : "UNRELEASED",

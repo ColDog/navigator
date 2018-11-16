@@ -21,7 +21,7 @@ export const notifyLogic = createLogic({
     setTimeout(() => {
       dispatch(close(action.id));
       done();
-    }, 5000);
+    }, 10000);
   },
 });
 

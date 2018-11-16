@@ -84,7 +84,6 @@ export async function pop(worker: string) {
 async function insert(tx: Knex.Transaction, release: Created) {
   await tx.table("releases").insert({
     ...release,
-    results: "{}",
     modified: new Date().toISOString(),
     created: new Date().toISOString()
   });
