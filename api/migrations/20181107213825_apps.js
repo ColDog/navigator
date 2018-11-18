@@ -3,6 +3,7 @@ exports.up = function(knex) {
     table.increments("id").primary();
     table.string("name").unique();
     table.string("chart");
+    table.string("deploy");
     table.text("stages").notNullable();
     table.timestamp("modified").notNullable();
     table.timestamp("created").notNullable();

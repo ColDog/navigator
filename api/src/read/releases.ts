@@ -2,6 +2,7 @@ import { QuerySet } from "./repo";
 import { subscribe } from "../write";
 import * as Knex from "knex";
 import { Created, Updated, Status } from "../write/releases";
+import { NotFoundError } from "../errors";
 
 const db = new QuerySet(
   (data: any): Release => ({
@@ -15,6 +16,11 @@ export interface Release {
   app: string;
   stage: string;
   version: string;
+  // TODO: Add a canary field which changes these values.
+  // canary?: {
+  //   weight: string;
+  //   version: string;
+  // }
   removal: boolean;
   worker?: string;
   status?: string;
@@ -60,6 +66,14 @@ export async function getByApp(
       .orderBy("id", "DESC")
       .first()
   );
+}
+
+export async function previous(app: string, stage: string): Promise<Release> {
+  const list = await listByStage(app, stage, 2);
+  if (list.length !== 2) {
+    throw new NotFoundError(`Previous release not found ${app}/${stage}`)
+  }
+  return list[1]; // Preceding release.
 }
 
 export async function pop(worker: string) {

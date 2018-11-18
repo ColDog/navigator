@@ -66,6 +66,8 @@ export async function doRelease(releaseId: string) {
     log.exception("release failed", e);
     await logs.log(releaseId, "-- release failed --");
     await update(releases.Status.Errored);
+
+    // TODO: If configured, rollback if the release failed to deploy.
   }
 }
 

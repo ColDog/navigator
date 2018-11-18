@@ -17,6 +17,7 @@ interface Stage {
 }
 
 export interface Upserted {
+  app: string;
   name: string;
   chart?: string;
   deploy?: string;
@@ -31,6 +32,7 @@ const schema = {
   properties: {
     name: { type: "string" },
     chart: { type: "string" },
+    deploy: { type: "string" },
     stages: {
       type: "array",
       items: {
@@ -64,6 +66,6 @@ export async function insert(app: any) {
   if (result.errors.length > 0) {
     throw new ValidationError("App is invalid", result.errors);
   }
-  const payload: Upserted = { ...app };
+  const payload: Upserted = { ...app, app: app.name };
   await emit("apps.upserted", payload);
 }

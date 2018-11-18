@@ -7,7 +7,7 @@ export enum Status {
   Running = "RUNNING",
   Success = "SUCCESS",
   Errored = "ERRORED",
-  Invalid = "INVALID",
+  Invalid = "INVALID"
 }
 
 export interface Created {

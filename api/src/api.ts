@@ -59,6 +59,13 @@ router.post("/release", async ctx => {
   created(ctx);
 });
 
+router.post("/rollback", async ctx => {
+  const { app, stage } = ctx.request.body as any;
+  const previous = await releases.previous(app, stage); // Will throw NotFound.
+  await releases.insert({ app, stage, version: previous.version });
+  created(ctx);
+});
+
 router.delete("/release", async ctx => {
   await releases.remove(ctx.request.body as any);
   created(ctx);

@@ -57,6 +57,7 @@ async function upsert(tx: Knex.Transaction, app: Upserted) {
     await tx.table("apps").update({
       modified: new Date().toISOString(),
       chart: app.chart,
+      deploy: app.deploy,
       stages: JSON.stringify(app.stages)
     });
   } else {
@@ -64,6 +65,7 @@ async function upsert(tx: Knex.Transaction, app: Upserted) {
       stages: JSON.stringify(app.stages),
       chart: app.chart,
       name: app.name,
+      deploy: app.deploy,
       modified: new Date().toISOString(),
       created: new Date().toISOString()
     });
