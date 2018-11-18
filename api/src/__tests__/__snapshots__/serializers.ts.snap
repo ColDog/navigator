@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`serializers serializes a build 1`] = `
+Object {
+  "app": "test",
+  "created": "2013-10-23T07:00:00.000Z",
+  "id": 1,
+  "namespace": null,
+  "releaseId": null,
+  "released": false,
+  "removed": false,
+  "stage": "review",
+  "status": "UNRELEASED",
+  "values": Object {},
+  "version": "v1",
+}
+`;
+
+exports[`serializers serializes a release 1`] = `
+Object {
+  "app": "test",
+  "created": "2013-10-23T07:00:00.000Z",
+  "id": 2,
+  "namespace": null,
+  "releaseId": 1,
+  "released": true,
+  "removed": false,
+  "stage": "review",
+  "status": "PENDING",
+  "values": Object {},
+  "version": "v2",
+}
+`;
+
+exports[`serializers serializes an app 1`] = `
+Object {
+  "chart": "service",
+  "created": "2013-10-23T07:00:00.000Z",
+  "deploy": "./deployer-mock.sh",
+  "id": 1,
+  "manifest": Object {
+    "chart": "service",
+    "deploy": "./deployer-mock.sh",
+    "name": "test",
+    "stages": Array [
+      Object {
+        "clusters": Array [
+          Object {
+            "name": "test",
+            "namespace": "default",
+          },
+        ],
+        "name": "review",
+      },
+    ],
+  },
+  "modified": "2013-10-23T07:00:00.000Z",
+  "name": "test",
+  "stages": Array [
+    Object {
+      "builds": Array [
+        Object {
+          "app": "test",
+          "created": "2013-10-23T07:00:00.000Z",
+          "id": 3,
+          "namespace": null,
+          "releaseId": 2,
+          "released": true,
+          "removed": false,
+          "stage": "review",
+          "status": "PENDING",
+          "values": Object {},
+          "version": "v3",
+        },
+      ],
+      "clusters": Array [
+        Object {
+          "name": "test",
+          "namespace": "default",
+        },
+      ],
+      "current": Object {
+        "app": "test",
+        "created": "2013-10-23T07:00:00.000Z",
+        "id": 3,
+        "namespace": null,
+        "releaseId": 2,
+        "released": true,
+        "removed": false,
+        "stage": "review",
+        "status": "PENDING",
+        "values": Object {},
+        "version": "v3",
+      },
+      "name": "review",
+      "previous": Object {
+        "app": "test",
+        "created": "2013-10-23T07:00:00.000Z",
+        "id": 2,
+        "namespace": null,
+        "releaseId": 1,
+        "released": true,
+        "removed": false,
+        "stage": "review",
+        "status": "PENDING",
+        "values": Object {},
+        "version": "v2",
+      },
+      "released": Object {
+        "app": "test",
+        "created": "2013-10-23T07:00:00.000Z",
+        "id": 3,
+        "namespace": null,
+        "releaseId": 2,
+        "released": true,
+        "removed": false,
+        "stage": "review",
+        "status": "PENDING",
+        "values": Object {},
+        "version": "v3",
+      },
+    },
+  ],
+}
+`;

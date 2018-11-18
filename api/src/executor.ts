@@ -73,6 +73,11 @@ interface Deploy {
 }
 
 export function values(build: Build, cluster: Cluster, release: Release) {
+  const canary = release.canary && {
+    enabled: true,
+    tag: release.canary.version,
+    weight: release.canary.weight,
+  }
   return {
     ...cluster.values,
     ...build.values,
@@ -81,7 +86,8 @@ export function values(build: Build, cluster: Cluster, release: Release) {
       ..._.get(build, "values.image", {}),
       tag: build.version
     },
-    version: build.version
+    canary,
+    version: build.version,
   };
 }
 

@@ -3,16 +3,18 @@ import db from "../db";
 import { NotFoundError } from "../errors";
 
 export class QuerySet<T> {
+  name: string;
   load: (data: any) => T;
 
-  constructor(load: (data: any) => T) {
+  constructor(name: string, load: (data: any) => T) {
     this.load = load;
+    this.name = name;
   }
 
   public async find(cb: (db: knex) => knex.QueryBuilder): Promise<T> {
     const data = await cb(db);
     if (!data) {
-      throw new NotFoundError("Does not exist");
+      throw new NotFoundError(`${this.name} Does not exist`);
     }
     return this.load(data);
   }

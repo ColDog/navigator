@@ -44,7 +44,6 @@ echo "values:    $values"
 echo "namespace: $namespace"
 echo ""
 
-chart_dir=$(mktemp -d)
-go-getter $chart $chart_dir
+sleep 0.3
 
 echo "--> deploy complete"

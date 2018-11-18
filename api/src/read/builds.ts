@@ -4,6 +4,7 @@ import * as Knex from "knex";
 import { Created } from "../write/builds";
 
 const db = new QuerySet(
+  "Build",
   (data: any): Build => ({
     ...data,
     values: JSON.parse(data.values)

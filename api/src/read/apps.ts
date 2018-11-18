@@ -4,6 +4,7 @@ import { subscribe } from "../write";
 import * as Knex from "knex";
 
 const db = new QuerySet(
+  "App",
   (data: any): App => ({
     ...data,
     stages: JSON.parse(data.stages)

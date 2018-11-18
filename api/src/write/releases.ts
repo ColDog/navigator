@@ -16,6 +16,10 @@ export interface Created {
   version: string;
   removal: boolean;
   status: string;
+  canary?: {
+    weight: number;
+    version: string;
+  }
 }
 
 export interface Updated {
@@ -36,7 +40,14 @@ const schema = {
   properties: {
     app: { type: "string" },
     stage: { type: "string" },
-    version: { type: "string" }
+    version: { type: "string" },
+    canary: {
+      type: "object",
+      properties: {
+        weight: { type: "number" },
+        version: { type: "string" }
+      }
+    }
   }
 };
 

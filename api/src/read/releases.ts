@@ -5,8 +5,10 @@ import { Created, Updated, Status } from "../write/releases";
 import { NotFoundError } from "../errors";
 
 const db = new QuerySet(
+  "Release",
   (data: any): Release => ({
     ...data,
+    canary: data.canary && JSON.parse(data.canary),
     removal: !!data.removal
   })
 );
@@ -16,11 +18,10 @@ export interface Release {
   app: string;
   stage: string;
   version: string;
-  // TODO: Add a canary field which changes these values.
-  // canary?: {
-  //   weight: string;
-  //   version: string;
-  // }
+  canary?: {
+    weight: number;
+    version: string;
+  }
   removal: boolean;
   worker?: string;
   status?: string;
@@ -98,6 +99,7 @@ export async function pop(worker: string) {
 async function insert(tx: Knex.Transaction, release: Created) {
   await tx.table("releases").insert({
     ...release,
+    canary: JSON.stringify(release.canary),
     modified: new Date().toISOString(),
     created: new Date().toISOString()
   });

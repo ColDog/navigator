@@ -5,6 +5,7 @@ exports.up = function(knex) {
     table.string("app").notNullable();
     table.string("stage").notNullable();
     table.string("status").notNullable();
+    table.string("canary");
     table.string("worker");
     table.boolean("removal").notNullable();
     table.timestamp("modified").notNullable();

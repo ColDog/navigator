@@ -1,6 +1,6 @@
 import * as Koa from "koa";
 import { v4 as uuid } from "uuid";
-import * as log from './log';
+import * as log from "./log";
 
 export function logger(): Koa.Middleware {
   return async (ctx, next) => {
@@ -22,11 +22,13 @@ export function errors(): Koa.Middleware {
     try {
       await next();
     } catch (err) {
-      console.error(err);
-
       ctx.status = err.status || 500;
       if (ctx.status >= 500) {
         ctx.body = { message: "ServerError" };
+        log.exception(
+          `server error requestId=${ctx.response.headers["x-request-id"]}`,
+          err
+        );
       } else if (ctx.status >= 400) {
         ctx.body = {
           message: err.message,

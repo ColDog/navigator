@@ -33,7 +33,7 @@ export interface App extends appRepo.App {
   };
 }
 
-export async function buildSerializer(
+async function buildSerializer(
   build: buildRepo.Build,
   release?: releaseRepo.Release
 ): Promise<Build> {
@@ -52,7 +52,7 @@ export async function buildSerializer(
   };
 }
 
-async function serializeBuild(build?: buildRepo.Build): Promise<Build | null> {
+export async function serializeBuild(build?: buildRepo.Build): Promise<Build | null> {
   if (!build) {
     return null;
   }
@@ -65,7 +65,7 @@ async function serializeBuild(build?: buildRepo.Build): Promise<Build | null> {
   return buildSerializer(build, release);
 }
 
-async function serializeRelease(
+export async function serializeRelease(
   release?: releaseRepo.Release
 ): Promise<Build | null> {
   if (!release) {
