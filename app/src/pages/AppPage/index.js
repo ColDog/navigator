@@ -65,6 +65,10 @@ class AppPage extends React.Component {
           <Section style={{ float: 'right' }} href={`/apps/${name}/settings`}>
             Config
           </Section>
+          <Divider style={{float: 'right'}}>&nbsp;</Divider>
+          <Section style={{ float: 'right' }} href={`/apps/${name}/events`}>
+            Events
+          </Section>
           <Section href="/">Apps</Section>
           <Divider>/</Divider>
           <Section active>{capitalize(name)}</Section>
