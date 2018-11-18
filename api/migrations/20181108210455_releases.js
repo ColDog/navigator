@@ -7,7 +7,10 @@ exports.up = function(knex) {
     table.string("status").notNullable();
     table.string("canary");
     table.string("worker");
-    table.boolean("removal").notNullable();
+    table
+      .boolean("removal")
+      .notNullable()
+      .defaultTo(false);
     table.timestamp("modified").notNullable();
     table.timestamp("created").notNullable();
   });

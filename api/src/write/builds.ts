@@ -34,6 +34,7 @@ export async function insert(build: any) {
   if (result.errors.length > 0) {
     throw new ValidationError("Build is invalid", result.errors);
   }
+  if (!build.values) build.values = {};
   const payload: Created = { ...build };
   await emit("builds.created", payload);
 }

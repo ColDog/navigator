@@ -4,14 +4,13 @@ import * as Knex from "knex";
 import { Created, Updated, Status } from "../write/releases";
 import { NotFoundError } from "../errors";
 
-const db = new QuerySet(
-  "Release",
-  (data: any): Release => ({
-    ...data,
-    canary: data.canary && JSON.parse(data.canary),
-    removal: !!data.removal
-  })
-);
+const db = new QuerySet<Release>({
+  name: "Release",
+  created: true,
+  modified: true,
+  serialize: ["canary"],
+  booleans: ["removal"]
+});
 
 export interface Release {
   id: string;
@@ -21,7 +20,7 @@ export interface Release {
   canary?: {
     weight: number;
     version: string;
-  }
+  };
   removal: boolean;
   worker?: string;
   status?: string;
@@ -72,7 +71,7 @@ export async function getByApp(
 export async function previous(app: string, stage: string): Promise<Release> {
   const list = await listByStage(app, stage, 2);
   if (list.length !== 2) {
-    throw new NotFoundError(`Previous release not found ${app}/${stage}`)
+    throw new NotFoundError(`Previous release not found ${app}/${stage}`);
   }
   return list[1]; // Preceding release.
 }
@@ -97,32 +96,19 @@ export async function pop(worker: string) {
 }
 
 async function insert(tx: Knex.Transaction, release: Created) {
-  await tx.table("releases").insert({
-    ...release,
-    canary: JSON.stringify(release.canary),
-    modified: new Date().toISOString(),
-    created: new Date().toISOString()
-  });
+  await db.create(tx.table("releases"), release);
 }
 
 async function update(tx: Knex.Transaction, release: Updated) {
-  await tx
-    .table("releases")
-    .update({
-      status: release.status,
-      modified: new Date().toISOString()
-    })
-    .where("id", release.id);
+  await db.update(tx.table("releases").where("id", release.id), {
+    status: release.status
+  });
 }
 
 async function invalid(tx: Knex.Transaction, payload: { releaseId: string }) {
-  await tx
-    .table("releases")
-    .update({
-      status: Status.Invalid,
-      modified: new Date().toISOString()
-    })
-    .where("id", payload.releaseId);
+  await db.update(tx.table("releases").where("id", payload.releaseId), {
+    status: Status.Invalid
+  });
 }
 
 subscribe("releases.created", insert);

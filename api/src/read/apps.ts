@@ -3,13 +3,12 @@ import { Upserted } from "../write/apps";
 import { subscribe } from "../write";
 import * as Knex from "knex";
 
-const db = new QuerySet(
-  "App",
-  (data: any): App => ({
-    ...data,
-    stages: JSON.parse(data.stages)
-  })
-);
+const db = new QuerySet<App>({
+  name: "App",
+  created: true,
+  modified: true,
+  serialize: ["stages"]
+});
 
 export interface Cluster {
   name: string;
@@ -53,22 +52,19 @@ async function upsert(tx: Knex.Transaction, app: Upserted) {
   const row = await tx
     .select("name")
     .from("apps")
-    .where("name", app.name);
+    .where("name", app.app);
   if (row.length > 0) {
-    await tx.table("apps").update({
-      modified: new Date().toISOString(),
+    await db.update(tx.table("apps").where("name", app.app), {
       chart: app.chart,
       deploy: app.deploy,
-      stages: JSON.stringify(app.stages)
+      stages: app.stages
     });
   } else {
-    await tx.table("apps").insert({
-      stages: JSON.stringify(app.stages),
+    await db.create(tx.table("apps"), {
+      stages: app.stages,
       chart: app.chart,
-      name: app.name,
-      deploy: app.deploy,
-      modified: new Date().toISOString(),
-      created: new Date().toISOString()
+      name: app.app,
+      deploy: app.deploy
     });
   }
 }

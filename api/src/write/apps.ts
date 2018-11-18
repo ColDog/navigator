@@ -18,7 +18,6 @@ interface Stage {
 
 export interface Upserted {
   app: string;
-  name: string;
   chart?: string;
   deploy?: string;
   stages: Stage[];

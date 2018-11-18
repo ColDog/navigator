@@ -3,13 +3,11 @@ import { subscribe } from "../write";
 import * as Knex from "knex";
 import { Created } from "../write/builds";
 
-const db = new QuerySet(
-  "Build",
-  (data: any): Build => ({
-    ...data,
-    values: JSON.parse(data.values)
-  })
-);
+const db = new QuerySet<Build>({
+  name: "Build",
+  created: true,
+  serialize: ["values"]
+});
 
 export interface Build {
   id: string;
@@ -111,11 +109,7 @@ export async function last(app: string, stage: string, n: number = 25) {
 }
 
 async function insert(tx: Knex.Transaction, build: Created) {
-  await tx.table("builds").insert({
-    ...build,
-    values: JSON.stringify(build.values || {}),
-    created: new Date().toISOString()
-  });
+  await db.create(tx.table("builds"), build);
 }
 
 subscribe("builds.created", insert);
