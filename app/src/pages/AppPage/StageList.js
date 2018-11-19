@@ -51,6 +51,21 @@ export default ({ app, stages, callbacks }) => (
               {...callbacks}
             />
           ))}
+
+        {!stage.review &&
+          stage.released &&
+          stage.released.canary &&
+          stage.clusters.map(cluster => (
+            <BuildCard
+              build={stage.released}
+              stage={stage}
+              cluster={cluster}
+              app={app}
+              undeployed={false}
+              nextStage={stages[idx + 1]}
+              {...callbacks}
+            />
+          ))}
       </Grid.Column>
     ))}
   </Grid>

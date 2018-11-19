@@ -9,6 +9,7 @@ export default ({
   undeployed,
   nextStage,
   cluster,
+  canary,
   onPromote,
   onRemove,
   onRelease,
@@ -18,7 +19,7 @@ export default ({
       <Card.Header>
         {build.released ? (
           <a href={`/logs/${build.releaseId}`}>
-            <code>{build.version}</code>
+            <code>{canary ? canary.version : build.version}</code>
           </a>
         ) : (
           <code>{build.version}</code>
@@ -101,9 +102,14 @@ export default ({
         </Button>
       )}
 
-      {undeployed && (
+      {undeployed && stage.released && (
         <Button
-          onClick={() => onRelease(app.name, stage.name, build.version)}
+          onClick={() =>
+            onRelease(app.name, stage.name, stage.released.version, {
+              version: build.version,
+              weight: 50,
+            })
+          }
           basic={true}
         >
           Canary

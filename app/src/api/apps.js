@@ -72,10 +72,10 @@ const handleEvent = (dispatch, event) => {
       switch (event.payload.status) {
         case 'ERRORED':
           level = 'error';
-          break
+          break;
         case 'SUCCESS':
           level = 'success';
-          break
+          break;
         default:
           level = 'info';
       }
@@ -132,11 +132,12 @@ export const APP_RELEASE_SUCCESS = `${q}/APP_RELEASE_SUCCESS`;
 export const APP_RELEASE_ABORTED = `${q}/APP_RELEASE_ABORTED`;
 export const APP_RELEASE_FAILURE = `${q}/APP_RELEASE_FAILURE`;
 
-export const appReleaseRequest = (app, stage, version) => ({
+export const appReleaseRequest = (app, stage, version, canary) => ({
   type: APP_RELEASE_REQUEST,
   app,
   stage,
   version,
+  canary,
 });
 export const appReleaseSuccess = () => ({ type: APP_RELEASE_SUCCESS });
 export const appReleaseAborted = () => ({ type: APP_RELEASE_ABORTED });
@@ -157,6 +158,7 @@ export const appReleaseLogic = createLogic({
         app: action.app,
         stage: action.stage,
         version: action.version,
+        canary: action.canary,
       });
       dispatch(appReleaseSuccess());
       dispatch(appRequest(action.app));

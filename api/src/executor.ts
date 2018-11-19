@@ -52,13 +52,6 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
   });
 }
 
-function chomp(line: string): string {
-  const re = /\r?\n$/u;
-  const match = re.exec(line);
-  if (!match) return line;
-  return line.slice(0, match.index);
-}
-
 interface Deploy {
   executable: string;
   values: object;
@@ -76,8 +69,8 @@ export function values(build: Build, cluster: Cluster, release: Release) {
   const canary = release.canary && {
     enabled: true,
     tag: release.canary.version,
-    weight: release.canary.weight,
-  }
+    weight: release.canary.weight
+  };
   return {
     ...cluster.values,
     ...build.values,
@@ -87,7 +80,7 @@ export function values(build: Build, cluster: Cluster, release: Release) {
       tag: build.version
     },
     canary,
-    version: build.version,
+    version: build.version
   };
 }
 

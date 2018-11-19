@@ -9,7 +9,7 @@ const db = new QuerySet<Release>({
   created: true,
   modified: true,
   serialize: ["canary"],
-  booleans: ["removal"]
+  booleans: ["removal", "cancelled"]
 });
 
 export interface Release {
@@ -22,6 +22,7 @@ export interface Release {
     version: string;
   };
   removal: boolean;
+  cancelled: boolean;
   worker?: string;
   status?: string;
   modified: string;
