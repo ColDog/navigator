@@ -33,8 +33,8 @@ class AppPage extends React.Component {
     onPromote: (app, stage, version, to) => {
       this.props.dispatch(appPromoteRequest(app, stage, version, to));
     },
-    onRelease: (app, stage, version) => {
-      this.props.dispatch(appReleaseRequest(app, stage, version));
+    onRelease: (app, stage, version, canary) => {
+      this.props.dispatch(appReleaseRequest(app, stage, version, canary));
     },
   };
 

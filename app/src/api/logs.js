@@ -24,6 +24,7 @@ export const logsLogic = createLogic({
   type: LOGS_REQUEST,
   cancelType: LOGS_ABORTED,
   latest: true,
+  warnTimeout: 0,
 
   async process({ action }, dispatch, done) {
     try {

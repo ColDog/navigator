@@ -6,9 +6,17 @@ import { appsRequest } from '../api/apps';
 import Heading from '../components/Header';
 import Main from '../components/Main';
 import AppMenu, { Divider, Section } from '../components/AppMenu';
-import { Table, Container, Loader, Grid, Segment } from 'semantic-ui-react';
+import {
+  Table,
+  Container,
+  Loader,
+  Grid,
+  Segment,
+  Header,
+} from 'semantic-ui-react';
 import capitalize from 'lodash/capitalize';
 import Console from '../components/Console';
+import moment from 'moment';
 
 class Logs extends React.Component {
   static route = '/logs/:id';
@@ -79,10 +87,36 @@ class Logs extends React.Component {
 
                     <Table.Row>
                       <Table.Cell>Released:</Table.Cell>
-                      <Table.Cell>{release.created}</Table.Cell>
+                      <Table.Cell>
+                        {moment(release.created).fromNow()}
+                      </Table.Cell>
                     </Table.Row>
                   </Table.Body>
                 </Table>
+
+                <Header>Canary</Header>
+                {!release.canary && <p>Not enabled</p>}
+
+                {release.canary && (
+                  <Table>
+                    <Table.Body>
+                      <Table.Row>
+                        <Table.Cell>Enabled:</Table.Cell>
+                        <Table.Cell>
+                          {release.canary ? 'true' : 'false'}
+                        </Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>Weight:</Table.Cell>
+                        <Table.Cell>{release.canary.weight}</Table.Cell>
+                      </Table.Row>
+                      <Table.Row>
+                        <Table.Cell>Version:</Table.Cell>
+                        <Table.Cell>{release.canary.version}</Table.Cell>
+                      </Table.Row>
+                    </Table.Body>
+                  </Table>
+                )}
               </Grid.Column>
 
               <Grid.Column width={12}>

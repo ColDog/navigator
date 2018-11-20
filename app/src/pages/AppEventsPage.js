@@ -50,16 +50,21 @@ class AppEventsPage extends React.Component {
         <Container style={{ paddingTop: 20 }}>
           <Segment>
             <List celled size="large">
-              {events.map(event =>
+              {events.map(event => (
                 <List.Item>
                   <List.Content>
-                    <List.Header>{event.name}</List.Header>
-                    stage: {event.payload.stage},
-                    version: {event.payload.version},
-                    status: {event.payload.status}
+                    <List.Header>
+                      {event.name}
+                      <span style={{float: 'right'}}>{event.created}</span>
+                    </List.Header>
+                    <List.Description>
+                      <pre>
+                        <code>{JSON.stringify(event.payload, null, 2)}</code>
+                      </pre>
+                    </List.Description>
                   </List.Content>
                 </List.Item>
-              )}
+              ))}
             </List>
           </Segment>
         </Container>

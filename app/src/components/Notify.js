@@ -1,5 +1,5 @@
 import React from 'react';
-import { Message } from 'semantic-ui-react';
+import { Message, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { close } from '../notify';
 
@@ -10,7 +10,7 @@ const mapLevelToColor = level => {
     case 'error':
       return 'red';
     case 'success':
-      return 'green'
+      return 'green';
     default:
       return null;
   }
@@ -23,7 +23,9 @@ const styles = {
     bottom: 20,
     width: 300,
   },
-  message: {}
+  button: {
+    marginRight: 5,
+  },
 };
 
 class Notification extends React.Component {
@@ -45,8 +47,20 @@ class Notification extends React.Component {
             onDismiss={() => this.handleDismiss(message.id)}
             key={message.id}
             color={mapLevelToColor(message.level)}
-            content={message.message}
-          />
+          >
+            {(message.actions || []).map(action => (
+              <Button
+                href={action.href}
+                basic
+                style={styles.button}
+                size="tiny"
+                floated="right"
+              >
+                {action.message}
+              </Button>
+            ))}
+            {message.message}
+          </Message>
         ))}
       </div>
     );

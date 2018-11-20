@@ -14,6 +14,10 @@ export interface Build {
   removed: boolean;
   namespace: string | null;
   created: string;
+  canary?: {
+    weight: number;
+    version: string;
+  };
 }
 
 export interface Stage extends appRepo.Stage {
@@ -29,7 +33,7 @@ export interface App extends appRepo.App {
     name: string;
     chart: string;
     deploy: string;
-    stages: appRepo.Stage[]
+    stages: appRepo.Stage[];
   };
 }
 
@@ -48,11 +52,14 @@ async function buildSerializer(
     removed: release ? !!release.removal : false,
     status: release ? release.status : "UNRELEASED",
     namespace: build.namespace || null,
-    created: build.created!
+    created: build.created!,
+    canary: release && release.canary
   };
 }
 
-export async function serializeBuild(build?: buildRepo.Build): Promise<Build | null> {
+export async function serializeBuild(
+  build?: buildRepo.Build
+): Promise<Build | null> {
   if (!build) {
     return null;
   }
@@ -99,7 +106,9 @@ export async function stageSerializer(
   stage: appRepo.Stage
 ): Promise<Stage> {
   const releases = await releaseRepo.listByStage(app.name, stage.name, 2);
-  const builds = await buildRepo.lastByNamespace(app.name, stage.name, 50);
+  const builds = stage.review
+    ? await buildRepo.lastByNamespace(app.name, stage.name, 50)
+    : await buildRepo.last(app.name, stage.name, 50);
   const released = await serializeRelease(releases[0]); // Latest release.
   const previous = await serializeRelease(releases[1]); // Preceding release.
   const current = await serializeBuild(

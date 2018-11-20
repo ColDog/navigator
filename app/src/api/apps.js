@@ -64,9 +64,6 @@ export const appLogic = createLogic({
 
 const handleEvent = (dispatch, event) => {
   switch (event.name) {
-    case 'releases.created':
-      dispatch(notify('info', `Release beginning "${event.id}"`));
-      break;
     case 'releases.updated':
       let level;
       switch (event.payload.status) {
@@ -84,7 +81,8 @@ const handleEvent = (dispatch, event) => {
           level,
           `Release "${event.payload.version}" status updated to "${
             event.payload.status
-          }"`
+          }"`,
+          [{ message: 'View', href: `/logs/${event.payload.id}` }]
         )
       );
       break;
@@ -97,6 +95,7 @@ export const appWatcherLogic = createLogic({
   type: APP_WATCHER,
   cancelType: APP_ABORTED,
   latest: true,
+  warnTimeout: 0,
 
   async process({ action, cancelled$ }, dispatch, done) {
     let latest = new Date();
@@ -111,7 +110,7 @@ export const appWatcherLogic = createLogic({
       onRefresh: data => {
         dispatch(appSuccess(data));
 
-        data.events.forEach(event => {
+        data.events.reverse().forEach(event => {
           const ts = Date.parse(event.created);
           if (ts >= latest) {
             handleEvent(dispatch, event);
@@ -164,7 +163,7 @@ export const appReleaseLogic = createLogic({
       dispatch(appRequest(action.app));
       dispatch(
         notify('info', `Release started to version "${action.version}"`)
-      );
+      ); // TODO: Add action to view the release.
     } catch (e) {
       console.error(e);
       dispatch(appReleaseFailure(e));

@@ -3,11 +3,11 @@
 commit=$(git rev-parse --short HEAD)
 branch=$(git rev-parse --abbrev-ref HEAD)
 
-docker build -t coldog/nginx:$commit .
-docker push coldog/nginx:$commit
+# docker build -t coldog/nginx:$commit .
+# docker push coldog/nginx:$commit
 
 navctl build \
   -a example \
-  -n $branch \
+  -n pr1234 \
   -s review \
-  -v $commit
+  -v ${commit}3

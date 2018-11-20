@@ -32,10 +32,9 @@ class Apps extends React.Component {
         <List divided={true} relaxed={true}>
           {apps.map(app =>
             <List.Item key={app.id}>
-              <List.Icon name="circle" size="large" verticalAlign="middle"></List.Icon>
+              <List.Icon name="compass" size="large" verticalAlign="middle"></List.Icon>
               <List.Content>
                 <List.Header href={`/apps/${app.name}`}>{capitalize(app.name)}</List.Header>
-                <List.Description>Updated 10 minutes ago</List.Description>
               </List.Content>
             </List.Item>
           )}

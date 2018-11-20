@@ -32,6 +32,10 @@ export const poller = ({ interval, resource, onRefresh, onError }) => {
   let latest = null;
 
   const sync = async () => {
+    if (document.hidden) {
+      return // No document focus.
+    }
+
     try {
       const res = await get(`/api/v1/${resource}?key=true`);
       if (res.key === latest) {
@@ -55,6 +59,7 @@ export const poller = ({ interval, resource, onRefresh, onError }) => {
     } catch (e) {
       console.error('poller failed', e);
       onError(e);
+      // TODO: Add a backoff period.
     }
   };
 

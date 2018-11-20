@@ -12,7 +12,7 @@ export function logger(): Koa.Middleware {
     log.info(
       `${ctx.request.method} ${ctx.request.url} status=${
         ctx.response.status
-      } requestId=${id} (${t2 - t1}ms)`
+      } requestId=${id} (${t2 - t1}ms) body=${JSON.stringify(ctx.request.body)}`
     );
   };
 }

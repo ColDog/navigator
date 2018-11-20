@@ -5,11 +5,12 @@ export const CLOSE = '[notify]/CLOSE';
 
 let id = 0;
 
-export const notify = (level, message) => ({
+export const notify = (level, message, actions) => ({
   type: NOTIFY,
   id: (id += 1),
   level,
   message,
+  actions,
 });
 
 export const close = id => ({ type: CLOSE, id });
@@ -31,7 +32,12 @@ export const reducer = (state = { data: [] }, action) => {
       return {
         ...state,
         data: [
-          { id: action.id, level: action.level, message: action.message },
+          {
+            id: action.id,
+            level: action.level,
+            message: action.message,
+            actions: action.actions || [],
+          },
           ...state.data,
         ],
       };

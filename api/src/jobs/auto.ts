@@ -31,7 +31,7 @@ export async function run() {
     } catch (e) {
       log.exception("auto worker: failed to scan apps", e);
     }
-    await sleep(1000);
+    await sleep(10000);
   }
 }
 
