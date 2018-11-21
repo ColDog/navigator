@@ -32,8 +32,10 @@ describe("serializers", () => {
   it("serializes an app", async () => {
     await apps.insert({
       name: "test",
-      chart: "service",
-      deploy: "./deployer-mock.sh",
+      config: {
+        chart: "service",
+        deploy: "./deployer-mock.sh"
+      },
       stages: [
         { name: "review", clusters: [{ name: "test", namespace: "default" }] }
       ]

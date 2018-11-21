@@ -13,8 +13,10 @@ describe("jobs/auto", () => {
   it("triggers a release", async () => {
     await apps.insert({
       name: "test",
-      chart: "service",
-      deploy: "./deployer-mock.sh",
+      config: {
+        chart: "service",
+        deploy: "./deployer-mock.sh"
+      },
       stages: [
         {
           name: "review",
@@ -25,11 +27,11 @@ describe("jobs/auto", () => {
     });
     await builds.insert({ app: "test", version: "v3", stage: "review" });
 
-    let err
+    let err;
     try {
       await releases.getByApp("test", "review", "v3");
     } catch (e) {
-      err = e
+      err = e;
     }
     expect(err).toBeInstanceOf(NotFoundError);
 

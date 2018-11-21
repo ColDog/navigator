@@ -13,8 +13,10 @@ describe("jobs/releases", () => {
   it("does a release", async () => {
     await apps.insert({
       name: "test",
-      chart: "service",
-      deploy: "./deployer-mock.sh",
+      config: {
+        chart: "service",
+        deploy: "./deployer-mock.sh"
+      },
       stages: [
         { name: "review", clusters: [{ name: "test", namespace: "default" }] }
       ]

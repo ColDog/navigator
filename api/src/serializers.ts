@@ -31,8 +31,7 @@ export interface App extends appRepo.App {
   stages: Stage[];
   manifest: {
     name: string;
-    chart: string;
-    deploy: string;
+    config: appRepo.Config;
     stages: appRepo.Stage[];
   };
 }
@@ -94,9 +93,8 @@ export async function appSerializer(app: appRepo.App): Promise<App> {
     ),
     manifest: {
       name: app.name,
-      deploy: app.deploy,
-      stages: app.stages,
-      chart: app.chart
+      config: app.config,
+      stages: app.stages
     }
   };
 }

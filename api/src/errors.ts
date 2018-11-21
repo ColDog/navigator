@@ -6,8 +6,8 @@ export class ValidationError extends Error {
     message: string,
     errors?: Array<{ argument: string; message: string }>
   ) {
-    super(message);
-    this.errors = errors
+    super(`${message}: ${errors.map(e => e.message).join(", ")}`);
+    const errList = errors
       ? errors.map(msg => ({
           field: msg.argument,
           error: msg.message

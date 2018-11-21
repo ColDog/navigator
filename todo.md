@@ -1,0 +1,5 @@
+- [ ] show some sort of title for a build and commit metadata.
+- [ ] cancellation of a release.
+- [ ] build out auth systems.
+- [ ] packaging for deployment.
+- [ ] chart museum features.

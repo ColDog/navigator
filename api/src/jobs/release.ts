@@ -3,7 +3,7 @@ import * as apps from "../repo/apps";
 import * as releases from "../repo/releases";
 import * as logs from "../repo/logs";
 import * as builds from "../repo/builds";
-import { execute, values } from "../executor";
+import { execute } from "../executor";
 import * as log from "../log";
 
 export async function doRelease(releaseId: string) {
@@ -36,18 +36,7 @@ export async function doRelease(releaseId: string) {
       await update(releases.Status.Running, cluster.name);
 
       try {
-        await execute({
-          executable: app.deploy || "./deployer.sh",
-          values: values(build, cluster, release),
-          cluster: cluster.name,
-          stage: build.stage,
-          app: build.app,
-          chart: build.chart || app.chart,
-          release: releaseId,
-          version: build.version,
-          remove: !!release.removal,
-          namespace: build.namespace || cluster.namespace
-        });
+        await execute(apps.deploy(app, build, cluster, release));
       } catch (e) {
         log.exception("cluster release failed", e);
         await logs.log(

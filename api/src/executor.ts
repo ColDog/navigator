@@ -1,8 +1,5 @@
 import { spawn } from "child_process";
 import * as logs from "./repo/logs";
-import { Build } from "./repo/builds";
-import { Cluster } from "./repo/apps";
-import { Release } from "./read/releases";
 import * as log from "./log";
 import * as _ from "lodash";
 
@@ -52,7 +49,7 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
   });
 }
 
-interface Deploy {
+export interface Deploy {
   executable: string;
   values: object;
   cluster: string;
@@ -63,25 +60,6 @@ interface Deploy {
   release: string;
   remove: boolean;
   version: string;
-}
-
-export function values(build: Build, cluster: Cluster, release: Release) {
-  const canary = release.canary && {
-    enabled: true,
-    tag: release.canary.version,
-    weight: release.canary.weight
-  };
-  return {
-    ...cluster.values,
-    ...build.values,
-    image: {
-      ..._.get(cluster, "values.image", {}),
-      ..._.get(build, "values.image", {}),
-      tag: build.version
-    },
-    canary,
-    version: build.version
-  };
 }
 
 export async function execute(deploy: Deploy) {

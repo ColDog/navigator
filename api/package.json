@@ -21,8 +21,15 @@
     "lint": "tslint 'src/**/*.ts'"
   },
   "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "moduleFileExtensions": ["ts", "js"],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [ "**/__tests__/**/*.ts" ]
   },
   "devDependencies": {
     "@types/jest": "23.3.9",

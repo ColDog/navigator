@@ -3,6 +3,7 @@
 exports[`serializers serializes a build 1`] = `
 Object {
   "app": "test",
+  "canary": null,
   "created": "2013-10-23T07:00:00.000Z",
   "id": 1,
   "namespace": null,
@@ -19,6 +20,7 @@ Object {
 exports[`serializers serializes a release 1`] = `
 Object {
   "app": "test",
+  "canary": null,
   "created": "2013-10-23T07:00:00.000Z",
   "id": 2,
   "namespace": null,
@@ -34,13 +36,17 @@ Object {
 
 exports[`serializers serializes an app 1`] = `
 Object {
-  "chart": "service",
-  "created": "2013-10-23T07:00:00.000Z",
-  "deploy": "./deployer-mock.sh",
-  "id": 1,
-  "manifest": Object {
+  "config": Object {
     "chart": "service",
     "deploy": "./deployer-mock.sh",
+  },
+  "created": "2013-10-23T07:00:00.000Z",
+  "id": 1,
+  "manifest": Object {
+    "config": Object {
+      "chart": "service",
+      "deploy": "./deployer-mock.sh",
+    },
     "name": "test",
     "stages": Array [
       Object {
@@ -61,6 +67,7 @@ Object {
       "builds": Array [
         Object {
           "app": "test",
+          "canary": null,
           "created": "2013-10-23T07:00:00.000Z",
           "id": 3,
           "namespace": null,
@@ -72,6 +79,34 @@ Object {
           "values": Object {},
           "version": "v3",
         },
+        Object {
+          "app": "test",
+          "canary": null,
+          "created": "2013-10-23T07:00:00.000Z",
+          "id": 2,
+          "namespace": null,
+          "releaseId": 1,
+          "released": true,
+          "removed": false,
+          "stage": "review",
+          "status": "PENDING",
+          "values": Object {},
+          "version": "v2",
+        },
+        Object {
+          "app": "test",
+          "canary": null,
+          "created": "2013-10-23T07:00:00.000Z",
+          "id": 1,
+          "namespace": null,
+          "releaseId": null,
+          "released": false,
+          "removed": false,
+          "stage": "review",
+          "status": "UNRELEASED",
+          "values": Object {},
+          "version": "v1",
+        },
       ],
       "clusters": Array [
         Object {
@@ -81,6 +116,7 @@ Object {
       ],
       "current": Object {
         "app": "test",
+        "canary": null,
         "created": "2013-10-23T07:00:00.000Z",
         "id": 3,
         "namespace": null,
@@ -95,6 +131,7 @@ Object {
       "name": "review",
       "previous": Object {
         "app": "test",
+        "canary": null,
         "created": "2013-10-23T07:00:00.000Z",
         "id": 2,
         "namespace": null,
@@ -108,6 +145,7 @@ Object {
       },
       "released": Object {
         "app": "test",
+        "canary": null,
         "created": "2013-10-23T07:00:00.000Z",
         "id": 3,
         "namespace": null,
