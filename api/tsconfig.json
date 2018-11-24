@@ -1,22 +1,23 @@
 {
   "compilerOptions": {
     "lib": [
+      "dom",
       "es2015",
       "esnext"
     ],
-    // "downlevelIteration": true,
+    // "strictNullChecks": true,
     "target": "es2018",
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": false,
-    "allowJs": true,
+    "allowJs": false,
     "outDir": "dist",
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
+      "src/@types",
       "node_modules/@types",
-      "typings.d.ts"
     ]
   },
   "include": ["src"]

@@ -2,8 +2,8 @@
   "name": "api",
   "private": true,
   "dependencies": {
-    "jest": "^23.6.0",
     "jsonschema": "1.2.4",
+    "jsonwebtoken": "^8.4.0",
     "knex": "0.15.2",
     "koa": "2.6.1",
     "koa-bodyparser": "4.2.1",
@@ -17,7 +17,7 @@
     "start": "tsc && node dist/index.js",
     "migrate": "knex migrate:latest",
     "reset": "rm development.sqlite && knex migrate:latest",
-    "test": "LOG_LEVEL=6 NODE_ENV=test jest",
+    "test": "LOG_LEVEL=3 NODE_ENV=test jest",
     "lint": "tslint 'src/**/*.ts'"
   },
   "jest": {
@@ -25,13 +25,19 @@
     "testPathIgnorePatterns": [
       "/node_modules/"
     ],
-    "moduleFileExtensions": ["ts", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testMatch": [ "**/__tests__/**/*.ts" ]
+    "testMatch": [
+      "**/__tests__/**/*.ts"
+    ]
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.3.0",
     "@types/jest": "23.3.9",
     "@types/knex": "0.15.0",
     "@types/koa": "2.0.46",
@@ -40,8 +46,11 @@
     "@types/lodash": "4.14.118",
     "@types/mockdate": "^2.0.0",
     "@types/node": "10.12.5",
+    "@types/supertest": "^2.0.6",
     "@types/uuid": "3.4.4",
+    "jest": "^23.6.0",
     "mockdate": "^2.0.2",
+    "supertest": "^3.3.0",
     "ts-jest": "^23.10.4",
     "tslint": "5.11.0",
     "tslint-config-prettier": "1.15.0",

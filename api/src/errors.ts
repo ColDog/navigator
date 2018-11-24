@@ -17,11 +17,15 @@ export class ValidationError extends Error {
   }
 }
 
-export class NotFoundError extends Error {
-  status: number = 0;
+export class HTTPError extends Error {
+  status: number = 500;
+}
 
-  constructor(message: string) {
-    super(message);
-    this.status = 400;
-  }
+
+export class NotFoundError extends HTTPError {
+  status: number = 404;
+}
+
+export class UnauthorizedError extends HTTPError {
+  status: number = 401;
 }

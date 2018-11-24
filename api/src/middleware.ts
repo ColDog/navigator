@@ -38,3 +38,5 @@ export function errors(): Koa.Middleware {
     }
   };
 }
+
+export { auth } from "./auth";
