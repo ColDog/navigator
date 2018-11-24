@@ -50,7 +50,7 @@ go-getter $chart $chart_dir
 values_file=$(mktemp)
 echo $values > $values_file
 
-cd ../deployer/helm-deploy
+cd $DEPLOYER_ROOT
 
 # Execute the helm deploy script.
 export PYTHONUNBUFFERED=1

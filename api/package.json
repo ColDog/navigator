@@ -8,17 +8,10 @@
     "koa": "2.6.1",
     "koa-bodyparser": "4.2.1",
     "koa-router": "7.4.0",
+    "koa-static": "^5.0.0",
     "lodash": "4.17.11",
     "sqlite3": "4.0.3",
     "uuid": "3.3.2"
-  },
-  "scripts": {
-    "clean": "rm -r node_modules dist *.sqlite",
-    "start": "tsc && node dist/index.js",
-    "migrate": "knex migrate:latest",
-    "reset": "rm development.sqlite && knex migrate:latest",
-    "test": "LOG_LEVEL=3 NODE_ENV=test jest",
-    "lint": "tslint 'src/**/*.ts'"
   },
   "jest": {
     "testEnvironment": "node",
@@ -37,12 +30,13 @@
     ]
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.3.0",
     "@types/jest": "23.3.9",
+    "@types/jsonwebtoken": "^8.3.0",
     "@types/knex": "0.15.0",
     "@types/koa": "2.0.46",
     "@types/koa-bodyparser": "5.0.1",
     "@types/koa-router": "7.0.33",
+    "@types/koa-static": "^4.0.0",
     "@types/lodash": "4.14.118",
     "@types/mockdate": "^2.0.0",
     "@types/node": "10.12.5",

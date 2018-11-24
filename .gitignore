@@ -25,6 +25,7 @@ coverage
 
 # Production.
 build
+/rootapp
 
 # Misc.
 .DS_Store

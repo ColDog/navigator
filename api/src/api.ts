@@ -4,9 +4,12 @@ import * as builds from "./repo/builds";
 import * as logs from "./repo/logs";
 import * as releases from "./repo/releases";
 import * as events from "./repo/events";
+import { auth } from "./middleware";
 import { appSerializer } from "./serializers";
 
 export const router = new Router({ prefix: "/api/v1" });
+
+router.use(auth());
 
 router.get("/logs/:id", async ctx => {
   const release = await releases.get(ctx.params.id);

@@ -27,11 +27,3 @@ install/helm:
 
 install: install/istio install/kubectl install/helm
 .PHONY: install
-
-build:
-	docker build -t coldog/helm-deploy:latest .
-.PHONY: build
-
-deploy/example: build
-	./helm-deploy.sh apply example ./example
-.PHONY: deploy/example

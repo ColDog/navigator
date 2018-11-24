@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-const version = "0.0.1"
+var version = "unreleased"
 
 func request(c *cli.Context, method, path string, params interface{}) error {
 	baseURL := c.GlobalString("api-url")

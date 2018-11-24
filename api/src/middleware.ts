@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import * as log from "./log";
 
 export function logger(): Koa.Middleware {
-  return async (ctx, next) => {
+  return async (ctx: Koa.Context, next) => {
     const t1 = Date.now();
     const id = uuid();
     ctx.response.headers["x-request-id"] = id;
@@ -12,7 +12,9 @@ export function logger(): Koa.Middleware {
     log.info(
       `${ctx.request.method} ${ctx.request.url} status=${
         ctx.response.status
-      } requestId=${id} (${t2 - t1}ms) body=${JSON.stringify(ctx.request.body)}`
+      } requestId=${id} (${t2 - t1}ms) body=${JSON.stringify(
+        (ctx.request as any).body
+      )}`
     );
   };
 }

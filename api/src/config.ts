@@ -1,5 +1,7 @@
 import Knex from "knex";
 
+export const port = process.env.PORT || "4000";
+
 export const database: { [env: string]: Knex.Config } = {
   development: {
     client: "sqlite3",

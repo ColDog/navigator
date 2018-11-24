@@ -116,7 +116,7 @@ export function deploy(
   release: Release
 ): Deploy {
   return {
-    executable: app.config.deploy || "./deployer.sh",
+    executable: app.config.deploy || "./bin/deployer",
     values: values(app, build, cluster, release),
     cluster: cluster.name,
     stage: build.stage,
