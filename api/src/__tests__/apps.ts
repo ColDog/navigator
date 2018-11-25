@@ -7,20 +7,26 @@ beforeEach(async () => {
 
 describe("apps", () => {
   it("inserts an app", async () => {
-    await apps.insert({
-      name: "test",
-      stages: [],
-      config: {
-        chart: "service"
+    await apps.insert(
+      { email: "test" },
+      {
+        name: "test",
+        stages: [],
+        config: {
+          chart: "service"
+        }
       }
-    });
+    );
     const out = await apps.get("test");
     expect(out.stages).toEqual([]);
   });
 
   it("fails on an invalid app", async () => {
     try {
-      await apps.insert({ name: "test", stages: [{}] } as any);
+      await apps.insert({ email: "test" }, {
+        name: "test",
+        stages: [{}]
+      } as any);
     } catch (e) {
       expect(e.message).toMatch(/App is invalid/);
     }

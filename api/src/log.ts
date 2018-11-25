@@ -1,3 +1,5 @@
+/* tslint:disable:no-console */
+
 const LEVEL = parseInt(process.env.LOG_LEVEL || "1", 10);
 
 export function debug(...msg: any[]) {
@@ -24,8 +26,8 @@ export function error(...msg: any[]) {
   }
 }
 
-export function exception(msg: string, error: Error) {
+export function exception(msg: string, err: Error) {
   if (LEVEL <= 3) {
-    console.log("[ERRO]", new Date().toISOString(), msg, error);
+    console.log("[ERRO]", new Date().toISOString(), msg, err);
   }
 }

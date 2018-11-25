@@ -86,7 +86,7 @@ export async function lastByNamespace(
   app: string,
   stage: string,
   n: number = 25
-) {
+): Promise<Build[]> {
   const builds = await last(app, stage, n);
   const namespaces = builds
     .map(b => b.namespace)
@@ -94,7 +94,7 @@ export async function lastByNamespace(
   const byNamespace = namespaces
     .map(ns => builds.find(b => b.namespace === ns))
     .filter(b => b);
-  return byNamespace;
+  return byNamespace as Build[];
 }
 
 export async function last(app: string, stage: string, n: number = 25) {

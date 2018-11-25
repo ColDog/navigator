@@ -121,7 +121,7 @@ export function deploy(
     cluster: cluster.name,
     stage: build.stage,
     app: build.app,
-    chart: build.chart || app.config.chart,
+    chart: build.chart || app.config.chart || "./charts/service",
     release: release.id,
     version: build.version,
     remove: !!release.removal,

@@ -4,6 +4,12 @@ import * as jwt from "jsonwebtoken";
 import { UnauthorizedError } from "./errors";
 import * as crypto from "crypto";
 
+export interface AuthMixin {
+  user: User;
+}
+
+export interface AuthContext extends Koa.Context, AuthMixin {}
+
 export interface User {
   email: string;
 }
@@ -26,12 +32,12 @@ function apiAuth(ctx: Koa.Context): User | undefined {
     return;
   }
 
-  const auth = ctx.request.header["authorization"];
-  if (!auth) {
+  const head = ctx.request.header["authorization"];
+  if (!head) {
     return;
   }
 
-  const key = auth.split(" ")[1];
+  const key = head.split(" ")[1];
 
   if (key && cmp(key, config.auth.api.key)) {
     return { email: uaEmail(ctx) };
@@ -50,8 +56,8 @@ function proxyAuth(ctx: Koa.Context): User | undefined {
 }
 
 function jwtAuth(ctx: Koa.Context): User | undefined {
-  const auth = ctx.request.header["authorization"];
-  if (!auth) {
+  const head = ctx.request.header["authorization"];
+  if (!head) {
     return;
   }
 
@@ -59,7 +65,7 @@ function jwtAuth(ctx: Koa.Context): User | undefined {
     return;
   }
 
-  const key = auth.split(" ")[1];
+  const key = head.split(" ")[1];
   try {
     const decoded = jwt.verify(key, config.auth.jwt.secret);
     if (typeof decoded === "object") {
@@ -73,11 +79,11 @@ function jwtAuth(ctx: Koa.Context): User | undefined {
 
 const handlers: AuthFunc[] = [apiAuth, proxyAuth, jwtAuth, disabledAuth];
 
-function runAuth(ctx: Koa.Context): boolean {
+function runAuth(ctx: AuthContext): boolean {
   for (const handler of handlers) {
     const user = handler(ctx);
     if (user) {
-      (ctx as any).user = user;
+      ctx.user = user;
       return true;
     }
   }
@@ -90,7 +96,7 @@ function runAuth(ctx: Koa.Context): boolean {
  */
 export function auth(): Koa.Middleware {
   return async (ctx, next) => {
-    if (!runAuth(ctx)) {
+    if (!runAuth(ctx as AuthContext)) {
       throw new UnauthorizedError(`Unauthorized`);
     }
     await next();

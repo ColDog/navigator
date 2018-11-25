@@ -10,7 +10,7 @@ export async function doRelease(releaseId: string) {
   const release = await releases.get(releaseId);
   const app = await apps.get(release.app);
   const build = await builds.get(release.app, release.stage, release.version);
-  const stage = app.stages.find(stage => stage.name === release.stage);
+  const stage = app.stages.find(s => s.name === release.stage);
   if (!stage) {
     throw new Error(`Stage not found "${build.stage}"`);
   }
@@ -22,9 +22,12 @@ export async function doRelease(releaseId: string) {
       stage: build.stage,
       app: app.name,
       version: build.version,
-      cluster: null
+      cluster: undefined
     };
-    releases.update({ ...rel, status, cluster });
+    releases.update(
+      { email: "releaser@navigator.io" },
+      { ...rel, status, cluster }
+    );
   };
 
   try {
@@ -72,7 +75,7 @@ export async function run() {
           doRelease(releaseId);
         } catch (e) {
           log.exception("unexpected release error", e);
-          releases.invalid(releaseId);
+          releases.invalid({ email: "releaser@navigator.io" }, releaseId);
         }
         log.info("release complete", releaseId);
       }

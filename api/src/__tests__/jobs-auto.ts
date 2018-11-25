@@ -11,21 +11,27 @@ beforeEach(async () => {
 
 describe("jobs/auto", () => {
   it("triggers a release", async () => {
-    await apps.insert({
-      name: "test",
-      config: {
-        chart: "service",
-        deploy: "./deployer-mock.sh"
-      },
-      stages: [
-        {
-          name: "review",
-          auto: true,
-          clusters: [{ name: "test", namespace: "default" }]
-        }
-      ]
-    });
-    await builds.insert({ app: "test", version: "v3", stage: "review" });
+    await apps.insert(
+      { email: "test" },
+      {
+        name: "test",
+        config: {
+          chart: "service",
+          deploy: "./deployer-mock.sh"
+        },
+        stages: [
+          {
+            name: "review",
+            auto: true,
+            clusters: [{ name: "test", namespace: "default" }]
+          }
+        ]
+      }
+    );
+    await builds.insert(
+      { email: "test" },
+      { app: "test", version: "v3", stage: "review" }
+    );
 
     let err;
     try {

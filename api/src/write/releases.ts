@@ -1,6 +1,7 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { emit } from "./events";
+import { User } from "../auth";
 
 export enum Status {
   Pending = "PENDING",
@@ -52,7 +53,7 @@ const schema = {
   }
 };
 
-export async function insert(release: any, removal?: boolean) {
+export async function insert(user: User, release: any, removal?: boolean) {
   const result = validate(release, schema);
   if (result.errors.length > 0) {
     throw new ValidationError("Release is invalid", result.errors);
@@ -62,17 +63,17 @@ export async function insert(release: any, removal?: boolean) {
     removal: removal || false,
     status: "PENDING"
   };
-  await emit("releases.created", payload);
+  await emit(user, "releases.created", payload);
 }
 
 export async function remove(release: any) {
   await insert(release, true);
 }
 
-export async function update(update: Updated) {
-  await emit("releases.updated", update);
+export async function update(user: User, payload: Updated) {
+  await emit(user, "releases.updated", payload);
 }
 
-export async function invalid(releaseId: string) {
-  await emit("releases.invalid", { releaseId });
+export async function invalid(user: User, releaseId: string) {
+  await emit(user, "releases.invalid", { releaseId });
 }

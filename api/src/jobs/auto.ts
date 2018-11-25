@@ -5,18 +5,21 @@ import * as log from "../log";
 
 export async function scanApps() {
   const appList = await apps.list();
-  for (let appMeta of appList) {
+  for (const appMeta of appList) {
     const app = await apps.get(appMeta.name);
-    for (let stage of app.stages) {
+    for (const stage of app.stages) {
       if (stage.auto) {
         const unreleased = await builds.listUnreleased(app.name, stage.name);
-        for (let build of unreleased) {
+        for (const build of unreleased) {
           log.info("releasing build automatically", build);
-          releases.insert({
-            app: build.app,
-            stage: build.stage,
-            version: build.version
-          });
+          releases.insert(
+            { email: "auto-deploy@navigator.io" },
+            {
+              app: build.app,
+              stage: build.stage,
+              version: build.version
+            }
+          );
         }
       }
     }

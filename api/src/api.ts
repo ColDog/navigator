@@ -4,14 +4,19 @@ import * as builds from "./repo/builds";
 import * as logs from "./repo/logs";
 import * as releases from "./repo/releases";
 import * as events from "./repo/events";
-import { auth } from "./middleware";
+import { auth, AuthMixin, LoggerMixin } from "./middleware";
 import { appSerializer } from "./serializers";
 
 export const router = new Router({ prefix: "/api/v1" });
 
 router.use(auth());
 
-router.get("/logs/:id", async ctx => {
+/**
+ * Context includes all of the added values from middleware and auth.
+ */
+interface Context extends Router.IRouterContext, AuthMixin, LoggerMixin {}
+
+router.get("/logs/:id", async (ctx: Context) => {
   const release = await releases.get(ctx.params.id);
   const log = await logs.list(ctx.params.id);
   ctx.body = {
@@ -21,15 +26,15 @@ router.get("/logs/:id", async ctx => {
   };
 });
 
-router.get("/apps", async ctx => {
+router.get("/apps", async (ctx: Context) => {
   ctx.body = { data: await apps.list() };
 });
 
-router.get("/apps/:name", async ctx => {
+router.get("/apps/:name", async (ctx: Context) => {
   ctx.body = { data: await apps.get(ctx.params.name) };
 });
 
-router.get("/apps/:name/stages", async ctx => {
+router.get("/apps/:name/stages", async (ctx: Context) => {
   const eventList = await events.listByApp(ctx.params.name);
   const key = eventList[0] ? eventList[0].id : "_";
   if (ctx.query.key) {
@@ -40,36 +45,36 @@ router.get("/apps/:name/stages", async ctx => {
   ctx.body = { key, data: { ...data, events: eventList } };
 });
 
-router.post("/apps", async ctx => {
-  await apps.insert(ctx.request.body as any);
+router.post("/apps", async (ctx: Context) => {
+  await apps.insert(ctx.user, ctx.request.body as any);
   created(ctx);
 });
 
-router.post("/build", async ctx => {
-  await builds.insert(ctx.request.body as any);
+router.post("/build", async (ctx: Context) => {
+  await builds.insert(ctx.user, ctx.request.body as any);
   created(ctx);
 });
 
-router.post("/promote", async ctx => {
+router.post("/promote", async (ctx: Context) => {
   const { app, stage, version, to } = ctx.request.body as any;
   const build = await builds.get(app, stage, version);
-  await builds.promote(build, to);
+  await builds.promote(ctx.user, build, to);
   created(ctx);
 });
 
-router.post("/release", async ctx => {
-  await releases.insert(ctx.request.body as any);
+router.post("/release", async (ctx: Context) => {
+  await releases.insert(ctx.user, ctx.request.body as any);
   created(ctx);
 });
 
-router.post("/rollback", async ctx => {
+router.post("/rollback", async (ctx: Context) => {
   const { app, stage } = ctx.request.body as any;
   const previous = await releases.previous(app, stage); // Will throw NotFound.
-  await releases.insert({ app, stage, version: previous.version });
+  await releases.insert(ctx.user, { app, stage, version: previous.version });
   created(ctx);
 });
 
-router.delete("/release", async ctx => {
+router.delete("/release", async (ctx: Context) => {
   await releases.remove(ctx.request.body as any);
   created(ctx);
 });

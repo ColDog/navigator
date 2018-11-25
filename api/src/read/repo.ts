@@ -38,7 +38,7 @@ export class QuerySet<T> extends QuerySetOpts<T> {
 
   public update(q: knex.QueryBuilder, obj: any): knex.QueryBuilder {
     if (this.modified) obj.modified = new Date().toISOString();
-    for (let field of this.serialize) {
+    for (const field of this.serialize || []) {
       if (obj[field]) obj[field] = JSON.stringify(obj[field]);
     }
     return q.update(obj);
@@ -47,7 +47,7 @@ export class QuerySet<T> extends QuerySetOpts<T> {
   public create(q: knex.QueryBuilder, obj: any): knex.QueryBuilder {
     if (this.modified) obj.modified = new Date().toISOString();
     if (this.created) obj.created = new Date().toISOString();
-    for (let field of this.serialize) {
+    for (const field of this.serialize || []) {
       if (obj[field]) obj[field] = JSON.stringify(obj[field]);
     }
     return q.insert(obj);
@@ -58,10 +58,10 @@ export class QuerySet<T> extends QuerySetOpts<T> {
   }
 
   private loader = (data: any): T => {
-    for (let field of this.serialize) {
+    for (const field of this.serialize || []) {
       if (data[field]) data[field] = JSON.parse(data[field]);
     }
-    for (let field of this.booleans) {
+    for (const field of this.booleans || []) {
       data[field] = !!data[field];
     }
     if (!this.load) {

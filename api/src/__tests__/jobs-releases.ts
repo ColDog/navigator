@@ -11,7 +11,8 @@ beforeEach(async () => {
 
 describe("jobs/releases", () => {
   it("does a release", async () => {
-    await apps.insert({
+    const u = { email: "test" };
+    await apps.insert(u, {
       name: "test",
       config: {
         chart: "service",
@@ -21,12 +22,12 @@ describe("jobs/releases", () => {
         { name: "review", clusters: [{ name: "test", namespace: "default" }] }
       ]
     });
-    await builds.insert({ app: "test", version: "v3", stage: "review" });
-    await releases.insert({ app: "test", version: "v3", stage: "review" });
+    await builds.insert(u, { app: "test", version: "v3", stage: "review" });
+    await releases.insert(u, { app: "test", version: "v3", stage: "review" });
     const id = await releases.pop("worker-id");
-    await worker.doRelease(id);
+    await worker.doRelease(id!);
 
-    const logList = await logs.list(id);
+    const logList = await logs.list(id!);
     expect(logList[logList.length - 1].line).toEqual("-- release completed --");
   });
 });

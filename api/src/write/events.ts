@@ -1,5 +1,6 @@
 import db from "../db";
 import * as Knex from "knex";
+import { User } from "../auth";
 
 type Subscription = (tx: Knex.Transaction, payload: object) => Promise<any>;
 
@@ -16,7 +17,7 @@ export function subscribe(name: string, sub: Subscription) {
   subscriptions[name].push(sub);
 }
 
-export async function emit(name: string, payload: any) {
+export async function emit(user: User, name: string, payload: any) {
   db.transaction(async tx => {
     await tx
       .insert({
@@ -28,7 +29,7 @@ export async function emit(name: string, payload: any) {
       })
       .into("events");
 
-    for (let fn of subscriptions[name]) {
+    for (const fn of subscriptions[name]) {
       await fn(tx, payload);
     }
   });

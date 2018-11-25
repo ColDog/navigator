@@ -2,10 +2,17 @@ import * as Koa from "koa";
 import { v4 as uuid } from "uuid";
 import * as log from "./log";
 
+export interface LoggerMixin {
+  requestId?: string;
+}
+
+export interface LoggerContext extends Koa.Context, LoggerMixin {}
+
 export function logger(): Koa.Middleware {
-  return async (ctx: Koa.Context, next) => {
+  return async (ctx: LoggerContext, next) => {
     const t1 = Date.now();
     const id = uuid();
+    ctx.requestId = id;
     ctx.response.headers["x-request-id"] = id;
     await next();
     const t2 = Date.now();
@@ -41,4 +48,4 @@ export function errors(): Koa.Middleware {
   };
 }
 
-export { auth } from "./auth";
+export { auth, AuthMixin } from "./auth";

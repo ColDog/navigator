@@ -6,8 +6,8 @@ export class ValidationError extends Error {
     message: string,
     errors?: Array<{ argument: string; message: string }>
   ) {
-    super(`${message}: ${errors.map(e => e.message).join(", ")}`);
-    const errList = errors
+    super(message);
+    this.errors = errors
       ? errors.map(msg => ({
           field: msg.argument,
           error: msg.message
@@ -20,7 +20,6 @@ export class ValidationError extends Error {
 export class HTTPError extends Error {
   status: number = 500;
 }
-
 
 export class NotFoundError extends HTTPError {
   status: number = 404;

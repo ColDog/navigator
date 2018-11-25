@@ -1,6 +1,7 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { emit } from "./events";
+import { User } from "../auth";
 
 export interface Created {
   app: string;
@@ -27,7 +28,7 @@ const schema = {
   }
 };
 
-export async function insert(build: any) {
+export async function insert(user: User, build: any) {
   const result = validate(build || {}, schema, {
     allowUnknownAttributes: false
   });
@@ -36,10 +37,10 @@ export async function insert(build: any) {
   }
   if (!build.values) build.values = {};
   const payload: Created = { ...build };
-  await emit("builds.created", payload);
+  await emit(user, "builds.created", payload);
 }
 
-export async function promote(build: any, stage: string) {
+export async function promote(user: User, build: any, stage: string) {
   delete build.id;
   build.stage = stage;
 
@@ -50,5 +51,5 @@ export async function promote(build: any, stage: string) {
     throw new ValidationError("Build is invalid", result.errors);
   }
   const payload: Created = { ...build };
-  await emit("builds.created", payload);
+  await emit(user, "builds.created", payload);
 }

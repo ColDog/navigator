@@ -3,7 +3,7 @@ import * as logs from "./repo/logs";
 import * as log from "./log";
 import * as _ from "lodash";
 
-export function sh(root: string, args: string[], log: (line: string) => void) {
+export function sh(root: string, args: string[], logCb: (line: string) => void) {
   return new Promise((resolve, reject) => {
     const cmd = spawn(root, args);
     const logger = () => {
@@ -14,11 +14,11 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
         let eolIndex;
         while ((eolIndex = buffer.indexOf("\n")) >= 0) {
           const line = buffer.slice(0, eolIndex + 1); // Include EOL.
-          log(line);
+          logCb(line);
           buffer = buffer.slice(eolIndex + 1); // Reset the buffer.
         }
         if (buffer.length > 0) {
-          log(buffer);
+          logCb(buffer);
         }
       };
     };
@@ -26,7 +26,7 @@ export function sh(root: string, args: string[], log: (line: string) => void) {
     // Give up after 15 seconds.
     const timeout = setTimeout(() => {
       cmd.kill();
-      log("deploy timed out\n");
+      logCb("deploy timed out\n");
       reject(new Error(`deploy timed out after 120s`));
     }, 120000);
 

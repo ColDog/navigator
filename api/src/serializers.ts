@@ -49,7 +49,7 @@ async function buildSerializer(
     values: build.values || {},
     released: !!release,
     removed: release ? !!release.removal : false,
-    status: release ? release.status : "UNRELEASED",
+    status: release && release.status ? release.status : "UNRELEASED",
     namespace: build.namespace || null,
     created: build.created!,
     canary: release && release.canary
@@ -62,7 +62,7 @@ export async function serializeBuild(
   if (!build) {
     return null;
   }
-  let release: releaseRepo.Release | null = null;
+  let release: releaseRepo.Release | undefined = undefined;
   try {
     release = await releaseRepo.getByApp(build.app, build.stage, build.version);
   } catch (e) {
@@ -115,7 +115,9 @@ export async function stageSerializer(
 
   return {
     ...stage,
-    builds: await Promise.all(builds.map(async b => await serializeBuild(b))),
+    builds: (await Promise.all(
+      builds.map(async b => await serializeBuild(b))
+    )).filter(b => b !== null) as Build[],
     released,
     previous,
     current

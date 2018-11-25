@@ -31,6 +31,7 @@ package:
 
 	mkdir -p rootapp
 	mkdir -p rootapp/bin
+	mkdir -p rootapp/charts
 
 	cp Dockerfile rootapp/
 
@@ -43,6 +44,8 @@ package:
 
 	cp -r deployer/src rootapp/deployer
 	cp -r deployer/bin/* rootapp/bin
+
+	cp -r charts/* rootapp/charts/
 
 	cp navctl/bin/navctl-$(VERSION)-linux-amd64 rootapp/bin/navctl
 

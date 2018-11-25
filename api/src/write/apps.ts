@@ -1,6 +1,7 @@
 import { validate } from "jsonschema";
 import { ValidationError } from "../errors";
 import { emit } from "./events";
+import { User } from "../auth";
 
 export interface Upserted {
   app: string;
@@ -77,11 +78,11 @@ export const schema = {
   }
 };
 
-export async function insert(app: any) {
+export async function insert(user: User, app: any) {
   const result = validate(app, schema);
   if (result.errors.length > 0) {
     throw new ValidationError("App is invalid", result.errors);
   }
   const payload: Upserted = { ...app, app: app.name };
-  await emit("apps.upserted", payload);
+  await emit(user, "apps.upserted", payload);
 }

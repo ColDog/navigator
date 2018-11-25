@@ -5,6 +5,7 @@
       "es2015",
       "esnext"
     ],
+    "strictNullChecks": true,
     "target": "es2018",
     "module": "commonjs",
     "noImplicitAny": true,
