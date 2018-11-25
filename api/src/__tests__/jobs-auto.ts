@@ -17,7 +17,7 @@ describe("jobs/auto", () => {
         name: "test",
         config: {
           chart: "service",
-          deploy: "./deployer-mock.sh"
+          deploy: "nav-mock-deploy"
         },
         stages: [
           {

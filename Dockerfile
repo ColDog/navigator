@@ -9,8 +9,9 @@ RUN apk add --no-cache --update \
   pip3 install --upgrade pip setuptools && \
   pip --no-cache-dir install pyyaml ansicolors
 
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/src/app/bin
-ENV DEPLOYER_ROOT=/usr/src/app/deployer
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/src/app/bin \
+  DEPLOYER_ROOT=/usr/src/app/deployer \
+  APP_ROOT=/usr/src/app \
 
 WORKDIR /usr/src/app
 COPY . /usr/src/app

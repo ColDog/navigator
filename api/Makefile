@@ -1,13 +1,13 @@
-export PATH := $(PATH):node_modules/.bin/
+export APP_ROOT := $(shell dirname $(shell pwd))
+export PATH := $(PATH):node_modules/.bin/:$(APP_ROOT)/deployer/bin
+
+start:
+	nodemon tsc node dist/index.js
+.PHONY: start
 
 install:
 	yarn install
 .PHONY: install
-
-start:
-	tsc
-	node dist/index.js
-.PHONY: start
 
 build:
 	tsc

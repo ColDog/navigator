@@ -30,7 +30,12 @@ install/go-getter:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/go-getter github.com/hashicorp/go-getter/cmd/go-getter
 .PHONY: install/go-getter
 
-install: install/istio install/kubectl install/helm install/go-getter
+install/scripts:
+	cp nav-deploy bin/
+	cp nav-mock-deploy bin/
+.PHONY: install/scripts
+
+install: install/istio install/kubectl install/helm install/go-getter install/scripts
 .PHONY: install
 
 clean:

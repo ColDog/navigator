@@ -1,12 +1,12 @@
 export PATH := $(PATH):node_modules/.bin/
 
-install:
-	yarn install
-.PHONY: install
-
 start:
 	react-scripts start
 .PHONY: start
+
+install:
+	yarn install
+.PHONY: install
 
 build:
 	react-scripts build
