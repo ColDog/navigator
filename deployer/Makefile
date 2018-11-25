@@ -27,3 +27,7 @@ install/helm:
 
 install: install/istio install/kubectl install/helm
 .PHONY: install
+
+clean:
+	rm -r bin/ || true
+.PHONY: clean

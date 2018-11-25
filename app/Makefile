@@ -17,5 +17,5 @@ test:
 .PHONY: test
 
 clean:
-	rm -rf node_modules build
+	rm -rf node_modules build || true
 .PHONY: clean

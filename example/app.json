@@ -1,7 +1,9 @@
 {
   "name": "example",
-  "chart": "github.com/ColDog/navigator.git//deployer/charts/service",
-  "deploy": "./bin/deployer-mock",
+  "config": {
+    "chart": "github.com/ColDog/navigator.git//deployer/charts/service",
+    "deploy": "./bin/deployer-mock"
+  },
   "stages": [
     {
       "name": "review",

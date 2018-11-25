@@ -18,29 +18,29 @@ app.use(logger());
 app.use(api.router.routes()).use(api.router.allowedMethods());
 app.use(serve("public"));
 
-log.info("starting app on port", config.port);
-const server = app.listen(config.port, async () => {
+(async () => {
   log.info("migrating database");
   await db.migrate.latest();
-});
 
-function shutdown() {
-  log.warn("starting shutdown...");
+  log.info("starting app on port", config.port);
+  const server = app.listen(config.port);
 
-  server.close(() => {
+  log.info("starting workers");
+  releaseJob.run();
+  autoJob.run();
+
+  async function shutdown() {
+    log.warn("starting shutdown...");
+
+    await (() => new Promise(resolve => server.close(() => resolve())));
     log.warn("server stopped");
-    db.destroy(() => {
-      log.warn("database stopped");
 
-      log.warn("application stopping");
-      process.exit(0);
-    });
-  });
-}
+    await db.destroy();
+    log.warn("database closed");
 
-process.on("SIGTERM", shutdown);
-process.on("SIGINT", shutdown);
+    process.exit(0);
+  }
 
-log.info("starting workers");
-releaseJob.run();
-autoJob.run();
+  process.on("SIGTERM", shutdown);
+  process.on("SIGINT", shutdown);
+})();

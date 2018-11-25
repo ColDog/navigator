@@ -6,8 +6,7 @@ RUN apk add --no-cache --update \
     bash \
   && \
   pip3 install --upgrade pip setuptools && \
-  pip --no-cache-dir install pyyaml ansicolors && \
-  go get github.com/hashicorp/go-getter
+  pip --no-cache-dir install pyyaml ansicolors
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/src/app/bin
 ENV DEPLOYER_ROOT=/usr/src/app/deployer

@@ -24,3 +24,7 @@ test:
 lint:
 	tslint 'src/**/*.ts'
 .PHONY: lint
+
+clean:
+	rm -r dist node_modules || true
+.PHONY: clean

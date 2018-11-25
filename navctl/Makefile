@@ -1,5 +1,9 @@
 VERSION := $(shell cat ../version)
 
+clean:
+	rm -r bin/ || true
+.PHONY: clean
+
 install:
 .PHONY: install
 
