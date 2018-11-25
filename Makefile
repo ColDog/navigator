@@ -44,6 +44,8 @@ package:
 	cp -r deployer/src rootapp/deployer
 	cp -r deployer/bin/* rootapp/bin
 
+	cp navctl/bin/navctl-$(VERSION)-linux-amd64 rootapp/bin/navctl
+
 	docker build -t coldog/navigator:$(VERSION) rootapp
 .PHONY: package
 
@@ -55,9 +57,9 @@ run:
 		coldog/navigator:$(VERSION)
 .PHONY: run
 
-release: build package
+release:
 	docker push coldog/navigator:$(VERSION)
-	ghr $(VERSION) bin/
+	ghr $(VERSION) navctl/bin/
 .PHONY: release
 
 clean:
