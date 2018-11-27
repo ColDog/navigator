@@ -18,7 +18,7 @@ export const database: { [env: string]: Knex.Config } = {
     useNullAsDefault: true
   },
   production: {
-    client: "pg",
+    client: process.env.DATABASE_DRIVER,
     connection: process.env.DATABASE_URL,
     useNullAsDefault: true
   }

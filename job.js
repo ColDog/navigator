@@ -1,16 +1,4 @@
-import { validate } from "jsonschema";
-import { ValidationError } from "../errors";
-import { emit } from "./events";
-import { User } from "../auth";
-
-export interface Upserted {
-  app: string;
-  config: object;
-  stages: object[];
-}
-
-// NOTE: Keep in sync with ../schema/app.json
-export const schema = {
+const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   description: "Application Schema",
   type: "object",
@@ -79,11 +67,4 @@ export const schema = {
   }
 };
 
-export async function insert(user: User, app: any) {
-  const result = validate(app, schema);
-  if (result.errors.length > 0) {
-    throw new ValidationError("App is invalid", result.errors);
-  }
-  const payload: Upserted = { ...app, app: app.name };
-  await emit(user, "apps.upserted", payload);
-}
+console.log(JSON.stringify(schema, null, 4))
