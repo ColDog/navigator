@@ -1,9 +1,4 @@
 import * as apps from "../repo/apps";
-import db from "../db";
-
-beforeEach(async () => {
-  await db.migrate.latest();
-});
 
 describe("apps", () => {
   it("inserts an app", async () => {

@@ -8,14 +8,22 @@ export const database: { [env: string]: Knex.Config } = {
     connection: {
       filename: "./development.sqlite"
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    pool: {
+      min: 5,
+      max: 10,
+    }
   },
   test: {
     client: "sqlite3",
     connection: {
-      filename: ":memory:"
+      filename: "./test.sqlite"
     },
-    useNullAsDefault: true
+    useNullAsDefault: true,
+    pool: {
+      min: 5,
+      max: 50,
+    }
   },
   production: {
     client: process.env.DATABASE_DRIVER,

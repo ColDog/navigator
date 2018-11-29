@@ -1,9 +1,4 @@
 import * as builds from "../repo/builds";
-import db from "../db";
-
-beforeEach(async () => {
-  await db.migrate.latest();
-});
 
 describe("builds", () => {
   it("inserts a build", async () => {

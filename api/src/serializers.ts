@@ -62,7 +62,7 @@ export async function serializeBuild(
   if (!build) {
     return null;
   }
-  let release: releaseRepo.Release | undefined = undefined;
+  let release: releaseRepo.Release | undefined;
   try {
     release = await releaseRepo.getByApp(build.app, build.stage, build.version);
   } catch (e) {

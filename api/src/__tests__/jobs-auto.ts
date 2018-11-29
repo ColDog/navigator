@@ -2,12 +2,7 @@ import * as builds from "../repo/builds";
 import * as apps from "../repo/apps";
 import * as releases from "../repo/releases";
 import * as worker from "../jobs/auto";
-import db from "../db";
 import { NotFoundError } from "../errors";
-
-beforeEach(async () => {
-  await db.migrate.latest();
-});
 
 describe("jobs/auto", () => {
   it("triggers a release", async () => {

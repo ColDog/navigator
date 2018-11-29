@@ -1,12 +1,13 @@
 import * as Koa from "koa";
 import { v4 as uuid } from "uuid";
 import * as log from "./log";
+import { AuthMixin } from "./auth";
 
 export interface LoggerMixin {
   requestId?: string;
 }
 
-export interface LoggerContext extends Koa.Context, LoggerMixin {}
+export interface LoggerContext extends Koa.Context, LoggerMixin, AuthMixin {}
 
 export function logger(): Koa.Middleware {
   return async (ctx: LoggerContext, next) => {
@@ -21,7 +22,7 @@ export function logger(): Koa.Middleware {
         ctx.response.status
       } requestId=${id} (${t2 - t1}ms) body=${JSON.stringify(
         (ctx.request as any).body
-      )}`
+      )} user=${JSON.stringify(ctx.user)}`
     );
   };
 }

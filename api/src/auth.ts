@@ -11,6 +11,7 @@ export interface AuthMixin {
 export interface AuthContext extends Koa.Context, AuthMixin {}
 
 export interface User {
+  type?: string; // Authentication mechanism.
   email: string;
 }
 
@@ -23,7 +24,7 @@ function uaEmail(ctx: Koa.Context): string {
 
 function disabledAuth(ctx: Koa.Context): User | undefined {
   if (config.auth.disabled) {
-    return { email: uaEmail(ctx) };
+    return { email: uaEmail(ctx), type: "disabled" };
   }
 }
 
@@ -40,7 +41,7 @@ function apiAuth(ctx: Koa.Context): User | undefined {
   const key = head.split(" ")[1];
 
   if (key && cmp(key, config.auth.api.key)) {
-    return { email: uaEmail(ctx) };
+    return { email: uaEmail(ctx), type: "api" };
   }
 }
 
@@ -51,7 +52,7 @@ function proxyAuth(ctx: Koa.Context): User | undefined {
 
   const email = ctx.request.header[config.auth.proxy.header];
   if (email) {
-    return { email };
+    return { email, type: "proxy" };
   }
 }
 
@@ -71,7 +72,7 @@ function jwtAuth(ctx: Koa.Context): User | undefined {
     if (typeof decoded === "object") {
       const email = (decoded as any).email;
       if (email) {
-        return { email };
+        return { email, type: "jwt" };
       }
     }
   } catch (e) {}

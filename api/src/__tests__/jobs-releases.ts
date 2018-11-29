@@ -3,11 +3,6 @@ import * as builds from "../repo/builds";
 import * as releases from "../repo/releases";
 import * as worker from "../jobs/release";
 import * as logs from "../repo/logs";
-import db from "../db";
-
-beforeEach(async () => {
-  await db.migrate.latest();
-});
 
 describe("jobs/releases", () => {
   it("does a release", async () => {

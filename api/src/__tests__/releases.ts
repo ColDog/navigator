@@ -1,11 +1,6 @@
 import * as releases from "../repo/releases";
-import db from "../db";
 
 const u = { email: "test" };
-
-beforeEach(async () => {
-  await db.migrate.latest();
-});
 
 describe("releases", () => {
   it("inserts a release", async () => {

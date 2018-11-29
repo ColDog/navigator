@@ -17,8 +17,10 @@ migrate:
 	knex migrate:latest
 .PHONY: build
 
-test:
-	LOG_LEVEL=3 NODE_ENV=test jest
+test: build
+	rm test.sqlite || true
+	NODE_ENV=test node dist/migrate.js
+	LOG_LEVEL=3 NODE_ENV=test jest $(t)
 .PHONY: test
 
 lint:

@@ -18,7 +18,7 @@ app.use(logger());
 app.use(api.router.routes()).use(api.router.allowedMethods());
 app.use(serve("public"));
 
-(async () => {
+async function main() {
   log.info("migrating database");
   await db.migrate.latest();
 
@@ -43,4 +43,6 @@ app.use(serve("public"));
 
   process.on("SIGTERM", shutdown);
   process.on("SIGINT", shutdown);
-})();
+}
+
+if (require.main === module) main();

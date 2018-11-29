@@ -7,13 +7,11 @@ import {
   serializeRelease,
   appSerializer
 } from "../serializers";
-import db from "../db";
 
 const u = { email: "test" };
 
 beforeEach(async () => {
   MockDate.set(new Date(2013, 9, 23));
-  await db.migrate.latest();
 });
 
 describe("serializers", () => {
