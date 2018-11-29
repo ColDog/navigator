@@ -1,7 +1,8 @@
 {
   "name": "example",
   "config": {
-    "deploy": "nav-deploy-mock"
+    "deploy": "nav-deploy-mock",
+    "values": { "image": true }
   },
   "stages": [
     {

@@ -13,8 +13,11 @@ build:
 .PHONY: build
 
 test:
-	react-scripts build
+	react-scripts test
 .PHONY: test
+
+lint:
+.PHONY: lint
 
 clean:
 	rm -rf node_modules build || true
