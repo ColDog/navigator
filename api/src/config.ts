@@ -9,10 +9,6 @@ export const database: { [env: string]: Knex.Config } = {
       filename: "./development.sqlite",
     },
     useNullAsDefault: true,
-    pool: {
-      min: 5,
-      max: 10,
-    },
   },
   test: {
     client: "sqlite3",
