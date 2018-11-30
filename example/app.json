@@ -1,7 +1,7 @@
 {
   "name": "example",
   "config": {
-    "deploy": "nav-deploy-mock",
+    "deploy": "nav-mock-deploy",
     "values": { "image": true }
   },
   "stages": [
@@ -42,7 +42,25 @@
       "auto": false,
       "clusters": [
         {
-          "name": "minikube",
+          "name": "minikube-1",
+          "namespace": "default",
+          "values": {
+            "image": {
+              "repository": "coldog/nginx"
+            }
+          }
+        },
+        {
+          "name": "minikube-2",
+          "namespace": "default",
+          "values": {
+            "image": {
+              "repository": "coldog/nginx"
+            }
+          }
+        },
+        {
+          "name": "minikube-3",
           "namespace": "default",
           "values": {
             "image": {
