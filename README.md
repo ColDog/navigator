@@ -264,3 +264,13 @@ GLOBAL OPTIONS:
    --help, -h                 show help
    --version, -v              print the version
 ```
+
+## Releasing
+
+Releasing a new version:
+
+1. CI must be green.
+2. Update version:
+  - [./charts/navigator/Chart.yaml]([./charts/navigator/Chart.yaml])
+  - [./version]([./version])
+3. Run `make release` or `make prerelease`.

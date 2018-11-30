@@ -11,7 +11,7 @@ RUN apk add --no-cache --update \
 
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/src/app/bin \
   DEPLOYER_ROOT=/usr/src/app/deployer \
-  APP_ROOT=/usr/src/app \
+  APP_ROOT=/usr/src/app
 
 WORKDIR /usr/src/app
 COPY . /usr/src/app

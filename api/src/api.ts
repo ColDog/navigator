@@ -75,7 +75,7 @@ router.post("/rollback", async (ctx: Context) => {
 });
 
 router.delete("/release", async (ctx: Context) => {
-  await releases.remove(ctx.request.body as any);
+  await releases.remove(ctx.user, ctx.request.body as any);
   created(ctx);
 });
 

@@ -50,6 +50,7 @@ package:
 	cp navctl/bin/navctl-$(VERSION)-linux-amd64 rootapp/bin/navctl
 
 	docker build -t coldog/navigator:$(VERSION) rootapp
+	docker tag coldog/navigator:$(VERSION) coldog/navigator:latest
 .PHONY: package
 
 run:
@@ -60,8 +61,14 @@ run:
 		coldog/navigator:$(VERSION)
 .PHONY: run
 
+prerelease:
+	docker push coldog/navigator:$(VERSION)
+	ghr -prerelease $(VERSION) navctl/bin/
+.PHONY: release
+
 release:
 	docker push coldog/navigator:$(VERSION)
+	docker push coldog/navigator:latest
 	ghr $(VERSION) navctl/bin/
 .PHONY: release
 
@@ -72,5 +79,5 @@ clean:
 	rm -r rootapp || true
 .PHONY: clean
 
-ci: clean install lint test build package
+ci: install lint test build package
 .PHONY: ci

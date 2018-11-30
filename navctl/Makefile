@@ -22,3 +22,7 @@ build:
 	$(call gobuild,windows,amd64)
 	cd bin; shasum -a 256 ./* > $(VERSION)-SHA256SUM
 .PHONY: build
+
+
+test:
+.PHONY: test
