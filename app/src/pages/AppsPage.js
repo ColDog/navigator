@@ -1,14 +1,14 @@
-import React from 'react';
-import { route } from '../router';
-import { connect } from 'react-redux';
-import { appsRequest } from '../api/apps';
-import Header from '../components/Header';
-import Main from '../components/Main';
-import { List, Container, Segment } from 'semantic-ui-react';
-import capitalize from 'lodash/capitalize';
+import React from "react";
+import { route } from "../router";
+import { connect } from "react-redux";
+import { appsRequest } from "../api/apps";
+import Header from "../components/Header";
+import Main from "../components/Main";
+import { List, Container, Segment } from "semantic-ui-react";
+import capitalize from "lodash/capitalize";
 
 class Apps extends React.Component {
-  static route = '/';
+  static route = "/";
 
   static mapStateToProps(state) {
     return {
@@ -23,23 +23,29 @@ class Apps extends React.Component {
   }
 
   render() {
-    const { apps } = this.props
+    const { apps } = this.props;
     return (
       <Main>
         <Header />
-        <Container style={{paddingTop: 20}}>
+        <Container style={{ paddingTop: 20 }}>
           <Segment>
-        <List divided={true} relaxed={true}>
-          {apps.map(app =>
-            <List.Item key={app.id}>
-              <List.Icon name="compass" size="large" verticalAlign="middle"></List.Icon>
-              <List.Content>
-                <List.Header href={`/apps/${app.name}`}>{capitalize(app.name)}</List.Header>
-              </List.Content>
-            </List.Item>
-          )}
-        </List>
-        </Segment>
+            <List divided={true} relaxed={true}>
+              {apps.map(app => (
+                <List.Item key={app.id}>
+                  <List.Icon
+                    name="compass"
+                    size="large"
+                    verticalAlign="middle"
+                  />
+                  <List.Content>
+                    <List.Header href={`/apps/${app.name}`}>
+                      {capitalize(app.name)}
+                    </List.Header>
+                  </List.Content>
+                </List.Item>
+              ))}
+            </List>
+          </Segment>
         </Container>
       </Main>
     );

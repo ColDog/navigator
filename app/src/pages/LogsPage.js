@@ -1,11 +1,11 @@
-import React from 'react';
-import { route } from '../router';
-import { connect } from 'react-redux';
-import { logsWatcher, logsAborted } from '../api/logs';
-import { appsRequest } from '../api/apps';
-import Heading from '../components/Header';
-import Main from '../components/Main';
-import AppMenu, { Divider, Section } from '../components/AppMenu';
+import React from "react";
+import { route } from "../router";
+import { connect } from "react-redux";
+import { logsWatcher, logsAborted } from "../api/logs";
+import { appsRequest } from "../api/apps";
+import Heading from "../components/Header";
+import Main from "../components/Main";
+import AppMenu, { Divider, Section } from "../components/AppMenu";
 import {
   Table,
   Container,
@@ -13,13 +13,13 @@ import {
   Grid,
   Segment,
   Header,
-} from 'semantic-ui-react';
-import capitalize from 'lodash/capitalize';
-import Console from '../components/Console';
-import moment from 'moment';
+} from "semantic-ui-react";
+import capitalize from "lodash/capitalize";
+import Console from "../components/Console";
+import moment from "moment";
 
 class Logs extends React.Component {
-  static route = '/logs/:id';
+  static route = "/logs/:id";
   static mapStateToProps(state) {
     return {
       releaseId: state.router.params.id,
@@ -103,7 +103,7 @@ class Logs extends React.Component {
                       <Table.Row>
                         <Table.Cell>Enabled:</Table.Cell>
                         <Table.Cell>
-                          {release.canary ? 'true' : 'false'}
+                          {release.canary ? "true" : "false"}
                         </Table.Cell>
                       </Table.Row>
                       <Table.Row>
@@ -120,7 +120,7 @@ class Logs extends React.Component {
               </Grid.Column>
 
               <Grid.Column width={12}>
-                {release.status === 'FAILED' && (
+                {release.status === "FAILED" && (
                   <Segment color="red" inverted>
                     Release Failed
                   </Segment>

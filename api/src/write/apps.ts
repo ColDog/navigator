@@ -22,11 +22,11 @@ export const schema = {
       properties: {
         chart: {
           type: "string",
-          description: "Chart url to download a helm chart from"
+          description: "Chart url to download a helm chart from",
         },
         deploy: {
           type: "string",
-          description: "Script used for the deployment"
+          description: "Script used for the deployment",
         },
         values: {
           type: "object",
@@ -34,22 +34,22 @@ export const schema = {
             image: {
               type: "boolean",
               description:
-                "Insert the version as the image.tag field, a common use case"
+                "Insert the version as the image.tag field, a common use case",
             },
             template: {
               type: "string",
               description:
-                "Evaluate a template to provide the values for the deployment"
-            }
-          }
+                "Evaluate a template to provide the values for the deployment",
+            },
+          },
         },
         rollback: {
           type: "object",
           properties: {
-            onFailure: { type: "boolean" }
-          }
-        }
-      }
+            onFailure: { type: "boolean" },
+          },
+        },
+      },
     },
     stages: {
       type: "array",
@@ -69,14 +69,14 @@ export const schema = {
               properties: {
                 namespace: { type: "string" },
                 name: { type: "string" },
-                values: { type: "object" }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+                values: { type: "object" },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 export async function insert(user: User, app: any) {

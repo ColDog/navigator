@@ -1,12 +1,10 @@
-import React from 'react';
-import { Modal, List, Button } from 'semantic-ui-react';
-import moment from 'moment';
+import React from "react";
+import { Modal, List, Button } from "semantic-ui-react";
+import moment from "moment";
 
 export default ({ onClose, onRollback, open, name, builds }) => (
   <Modal size="small" open={open} onClose={onClose}>
-    <Modal.Header>
-      Releases {name}
-    </Modal.Header>
+    <Modal.Header>Releases {name}</Modal.Header>
     <Modal.Content>
       <List divided ordered>
         {builds.map(build => (

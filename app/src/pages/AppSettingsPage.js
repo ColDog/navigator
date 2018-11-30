@@ -1,16 +1,16 @@
-import React from 'react';
-import { route } from '../router';
-import { connect } from 'react-redux';
-import Heading from '../components/Header';
-import Main from '../components/Main';
-import { appRequest } from '../api/apps';
-import { Loader } from 'semantic-ui-react';
-import AppMenu, { Section, Divider } from '../components/AppMenu';
-import { Container, Segment } from 'semantic-ui-react';
-import capitalize from 'lodash/capitalize';
+import React from "react";
+import { route } from "../router";
+import { connect } from "react-redux";
+import Heading from "../components/Header";
+import Main from "../components/Main";
+import { appRequest } from "../api/apps";
+import { Loader } from "semantic-ui-react";
+import AppMenu, { Section, Divider } from "../components/AppMenu";
+import { Container, Segment } from "semantic-ui-react";
+import capitalize from "lodash/capitalize";
 
 class AppSettingsPage extends React.Component {
-  static route = '/apps/:id/settings';
+  static route = "/apps/:id/settings";
   state = { value: null };
 
   static mapStateToProps(state) {
@@ -61,5 +61,5 @@ class AppSettingsPage extends React.Component {
 
 export default route(
   AppSettingsPage.route,
-  connect(AppSettingsPage.mapStateToProps)(AppSettingsPage)
+  connect(AppSettingsPage.mapStateToProps)(AppSettingsPage),
 );

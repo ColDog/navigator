@@ -1,8 +1,8 @@
-import React from 'react';
-import { Button } from 'semantic-ui-react';
+import React from "react";
+import { Button } from "semantic-ui-react";
 
 const styles = {
-  container: { position: 'fixed', right: 20, bottom: 20 },
+  container: { position: "fixed", right: 20, bottom: 20 },
 };
 
 export default props => (

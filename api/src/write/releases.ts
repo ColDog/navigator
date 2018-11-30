@@ -9,7 +9,7 @@ export enum Status {
   Success = "SUCCESS",
   Errored = "ERRORED",
   Invalid = "INVALID",
-  Aborted = "ABORTED"
+  Aborted = "ABORTED",
 }
 
 export interface Created {
@@ -21,7 +21,7 @@ export interface Created {
   canary?: {
     weight: number;
     version: string;
-  }
+  };
 }
 
 export interface Updated {
@@ -47,10 +47,10 @@ const schema = {
       type: "object",
       properties: {
         weight: { type: "number" },
-        version: { type: "string" }
-      }
-    }
-  }
+        version: { type: "string" },
+      },
+    },
+  },
 };
 
 export async function insert(user: User, release: any, removal?: boolean) {
@@ -61,13 +61,13 @@ export async function insert(user: User, release: any, removal?: boolean) {
   const payload: Created = {
     ...release,
     removal: removal || false,
-    status: "PENDING"
+    status: "PENDING",
   };
   await emit(user, "releases.created", payload);
 }
 
-export async function remove(release: any) {
-  await insert(release, true);
+export async function remove(user: User, release: any) {
+  await insert(user, release, true);
 }
 
 export async function update(user: User, payload: Updated) {

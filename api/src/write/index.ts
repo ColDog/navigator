@@ -1,1 +1,1 @@
-export { subscribe } from './events'
+export { subscribe } from "./events";

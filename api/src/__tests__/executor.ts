@@ -1,5 +1,10 @@
 import { sh, execute } from "../executor";
 import * as logs from "../repo/logs";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 describe("executor", () => {
   it("runs a command", async () => {
@@ -21,12 +26,12 @@ describe("executor", () => {
       app: "app-name",
       release: "releaseId",
       version: "build-version",
-      remove: false
+      remove: false,
     });
     const lines = await logs.list("releaseId");
     expect(lines.length).toBeGreaterThanOrEqual(1);
     expect(lines[0].line).toEqual(
-      `-r releaseId -b test -c cluster-name -n default -s stage-name -a app-name -v build-version -q {"name":"test"}`
+      `-r releaseId -b test -c cluster-name -n default -s stage-name -a app-name -v build-version -q {"name":"test"}`,
     );
   });
 });

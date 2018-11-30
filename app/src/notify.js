@@ -1,7 +1,7 @@
-import { createLogic } from 'redux-logic';
+import { createLogic } from "redux-logic";
 
-export const NOTIFY = '[notify]/NOTIFY';
-export const CLOSE = '[notify]/CLOSE';
+export const NOTIFY = "[notify]/NOTIFY";
+export const CLOSE = "[notify]/CLOSE";
 
 let id = 0;
 

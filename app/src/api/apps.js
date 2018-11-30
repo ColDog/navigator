@@ -1,8 +1,8 @@
-import { createLogic } from 'redux-logic';
-import * as fetch from './fetch';
-import { notify } from '../notify';
+import { createLogic } from "redux-logic";
+import * as fetch from "./fetch";
+import { notify } from "../notify";
 
-const q = '[app]';
+const q = "[app]";
 
 export const APPS_REQUEST = `${q}/APPS_REQUEST`;
 export const APPS_SUCCESS = `${q}/APPS_SUCCESS`;
@@ -21,12 +21,12 @@ export const appsLogic = createLogic({
 
   async process(_, dispatch, done) {
     try {
-      const res = await fetch.get('/api/v1/apps');
-      dispatch(appsSuccess(fetch.toMap(res.data, 'name', { loaded: false })));
+      const res = await fetch.get("/api/v1/apps");
+      dispatch(appsSuccess(fetch.toMap(res.data, "name", { loaded: false })));
     } catch (e) {
       console.error(e);
       dispatch(appsFailure(e));
-      dispatch(notify('error', `Failed to get apps`));
+      dispatch(notify("error", `Failed to get apps`));
     }
     done();
   },
@@ -56,7 +56,7 @@ export const appLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(appFailure(e));
-      dispatch(notify('error', `Failed to get app "${action.name}"`));
+      dispatch(notify("error", `Failed to get app "${action.name}"`));
     }
     done();
   },
@@ -64,17 +64,17 @@ export const appLogic = createLogic({
 
 const handleEvent = (dispatch, event) => {
   switch (event.name) {
-    case 'releases.updated':
+    case "releases.updated":
       let level;
       switch (event.payload.status) {
-        case 'ERRORED':
-          level = 'error';
+        case "ERRORED":
+          level = "error";
           break;
-        case 'SUCCESS':
-          level = 'success';
+        case "SUCCESS":
+          level = "success";
           break;
         default:
-          level = 'info';
+          level = "info";
       }
       dispatch(
         notify(
@@ -82,8 +82,8 @@ const handleEvent = (dispatch, event) => {
           `Release "${event.payload.version}" status updated to "${
             event.payload.status
           }"`,
-          [{ message: 'View', href: `/logs/${event.payload.id}` }]
-        )
+          [{ message: "View", href: `/logs/${event.payload.id}` }],
+        ),
       );
       break;
     default:
@@ -105,7 +105,7 @@ export const appWatcherLogic = createLogic({
       onError: err => {
         console.error(err);
         dispatch(appFailure(err));
-        dispatch(notify('error', `Failed to get app "${action.name}"`));
+        dispatch(notify("error", `Failed to get app "${action.name}"`));
       },
       onRefresh: data => {
         dispatch(appSuccess(data));
@@ -162,12 +162,12 @@ export const appReleaseLogic = createLogic({
       dispatch(appReleaseSuccess());
       dispatch(appRequest(action.app));
       dispatch(
-        notify('info', `Release started to version "${action.version}"`)
+        notify("info", `Release started to version "${action.version}"`),
       ); // TODO: Add action to view the release.
     } catch (e) {
       console.error(e);
       dispatch(appReleaseFailure(e));
-      dispatch(notify('error', `Failed to release build "${action.version}"`));
+      dispatch(notify("error", `Failed to release build "${action.version}"`));
     }
     done();
   },
@@ -208,11 +208,11 @@ export const appPromoteLogic = createLogic({
       });
       dispatch(appPromoteSuccess());
       dispatch(appRequest(action.app));
-      dispatch(notify('info', `Release "${action.version}" promoted`));
+      dispatch(notify("info", `Release "${action.version}" promoted`));
     } catch (e) {
       console.error(e);
       dispatch(appPromoteFailure(e));
-      dispatch(notify('error', `Failed to promote build "${action.version}"`));
+      dispatch(notify("error", `Failed to promote build "${action.version}"`));
     }
     done();
   },
@@ -251,11 +251,11 @@ export const appRemoveLogic = createLogic({
       });
       dispatch(appRemoveSuccess());
       dispatch(appRequest(action.app));
-      dispatch(notify('info', `Release "${action.version}" removed`));
+      dispatch(notify("info", `Release "${action.version}" removed`));
     } catch (e) {
       console.error(e);
       dispatch(appRemoveFailure(e));
-      dispatch(notify('error', `Failed to remove build "${action.version}"`));
+      dispatch(notify("error", `Failed to remove build "${action.version}"`));
     }
     done();
   },

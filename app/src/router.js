@@ -1,8 +1,8 @@
-import React from 'react';
-import page from 'page';
-import { connect } from 'react-redux';
+import React from "react";
+import page from "page";
+import { connect } from "react-redux";
 
-const NAVIGATE = 'ROUTER/NAVIGATE';
+const NAVIGATE = "ROUTER/NAVIGATE";
 
 const navigate = (route, params) => ({ type: NAVIGATE, route, params });
 

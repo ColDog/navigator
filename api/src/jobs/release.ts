@@ -22,11 +22,11 @@ export async function doRelease(releaseId: string) {
       stage: build.stage,
       app: app.name,
       version: build.version,
-      cluster: undefined
+      cluster: undefined,
     };
     releases.update(
       { email: "releaser@navigator.io" },
-      { ...rel, status, cluster }
+      { ...rel, status, cluster },
     );
   };
 
@@ -44,7 +44,7 @@ export async function doRelease(releaseId: string) {
         log.exception("cluster release failed", e);
         await logs.log(
           releaseId,
-          `cluster ${cluster.name} failed: "${e.message}"`
+          `cluster ${cluster.name} failed: "${e.message}"`,
         );
 
         await update(releases.Status.Errored, cluster.name);

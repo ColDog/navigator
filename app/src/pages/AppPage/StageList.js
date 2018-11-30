@@ -1,10 +1,10 @@
-import React from 'react';
-import { Grid, Header, Button } from 'semantic-ui-react';
-import BuildCard from './BuildCard';
-import BuildsModal from './BuildsModal';
-import get from 'lodash/get';
-import capitalize from 'lodash/capitalize';
-import words from 'lodash/words';
+import React from "react";
+import { Grid, Header, Button } from "semantic-ui-react";
+import BuildCard from "./BuildCard";
+import BuildsModal from "./BuildsModal";
+import get from "lodash/get";
+import capitalize from "lodash/capitalize";
+import words from "lodash/words";
 
 export default class StageList extends React.Component {
   state = { deployModal: null };
@@ -30,7 +30,7 @@ export default class StageList extends React.Component {
               >
                 Builds
               </Button>
-              {capitalize(words(stage.name).join(' '))}
+              {capitalize(words(stage.name).join(" "))}
             </Header>
 
             {stage.review &&
@@ -49,8 +49,8 @@ export default class StageList extends React.Component {
                 ))}
 
             {!stage.review &&
-              get(stage, 'current.version') !==
-                get(stage, 'released.version') && (
+              get(stage, "current.version") !==
+                get(stage, "released.version") && (
                 <BuildCard
                   build={stage.current}
                   stage={stage}
@@ -95,7 +95,7 @@ export default class StageList extends React.Component {
               onRollback={callbacks.onRelease}
               open={deployModal === stage.name}
               onClose={() => this.setDeployModal()}
-              name={capitalize(words(stage.name).join(' '))}
+              name={capitalize(words(stage.name).join(" "))}
               builds={stage.builds}
             />
           </Grid.Column>

@@ -1,5 +1,5 @@
-import React from 'react';
-import Notify from './Notify';
+import React from "react";
+import Notify from "./Notify";
 
 export default ({ children }) => (
   <main style={{ paddingTop: 40 }}>

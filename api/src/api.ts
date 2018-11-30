@@ -22,7 +22,7 @@ router.get("/logs/:id", async (ctx: Context) => {
   ctx.body = {
     key: log[log.length - 1] ? log[log.length - 1].id : "_",
     done: release.status !== "PENDING" && !!release.status,
-    data: { ...release, logs: log }
+    data: { ...release, logs: log },
   };
 });
 

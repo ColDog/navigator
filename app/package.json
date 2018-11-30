@@ -15,7 +15,8 @@
     "redux": "^4.0.1",
     "redux-logic": "^2.0.2",
     "semantic-ui-css": "2.4.1",
-    "semantic-ui-react": "0.82.5"
+    "semantic-ui-react": "0.82.5",
+    "prettier": "^1.15.3"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -28,8 +29,8 @@
   ],
   "prettier": {
     "semi": true,
-    "singleQuote": true,
-    "trailingComma": "es5",
+    "singleQuote": false,
+    "trailingComma": "all",
     "printWidth": 80
   }
 }

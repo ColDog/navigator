@@ -7,11 +7,11 @@ export const toMap = (data, param, extra) => {
 };
 
 export const request = async (method, url, body) => {
-  console.log('req', method, url, body);
+  console.log("req", method, url, body);
   const req = { method };
   if (body) {
     req.body = JSON.stringify(body);
-    req.headers = { 'content-type': 'application/json' };
+    req.headers = { "content-type": "application/json" };
   }
   const res = await fetch(url, req);
   if (res.status < 200 || res.status >= 300) {
@@ -24,16 +24,16 @@ export const request = async (method, url, body) => {
   return null;
 };
 
-export const get = url => request('GET', url, null);
-export const post = (url, body) => request('POST', url, body);
-export const destroy = (url, body) => request('DELETE', url, body);
+export const get = url => request("GET", url, null);
+export const post = (url, body) => request("POST", url, body);
+export const destroy = (url, body) => request("DELETE", url, body);
 
 export const poller = ({ interval, resource, onRefresh, onError }) => {
   let latest = null;
 
   const sync = async () => {
     if (document.hidden) {
-      return // No document focus.
+      return; // No document focus.
     }
 
     try {
@@ -42,7 +42,7 @@ export const poller = ({ interval, resource, onRefresh, onError }) => {
         return;
       }
 
-      console.log('refreshing', resource);
+      console.log("refreshing", resource);
       latest = res.key;
 
       if (res.data) {
@@ -53,11 +53,11 @@ export const poller = ({ interval, resource, onRefresh, onError }) => {
       }
 
       if (res.done) {
-        console.log('done', resource);
+        console.log("done", resource);
         clearInterval(id);
       }
     } catch (e) {
-      console.error('poller failed', e);
+      console.error("poller failed", e);
       onError(e);
       // TODO: Add a backoff period.
     }

@@ -3,7 +3,11 @@ import * as logs from "./repo/logs";
 import * as log from "./log";
 import * as _ from "lodash";
 
-export function sh(root: string, args: string[], logCb: (line: string) => void) {
+export function sh(
+  root: string,
+  args: string[],
+  logCb: (line: string) => void,
+) {
   return new Promise((resolve, reject) => {
     const cmd = spawn(root, args);
     const logger = () => {
@@ -79,7 +83,7 @@ export async function execute(deploy: Deploy) {
     "-v",
     deploy.version,
     "-q",
-    `${JSON.stringify(deploy.values)}`
+    `${JSON.stringify(deploy.values)}`,
   ];
   if (deploy.remove) {
     args.push("-d", "true");

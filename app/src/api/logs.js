@@ -1,8 +1,8 @@
-import { createLogic } from 'redux-logic';
-import * as fetch from './fetch';
-import { notify } from '../notify';
+import { createLogic } from "redux-logic";
+import * as fetch from "./fetch";
+import { notify } from "../notify";
 
-const q = '[logs]';
+const q = "[logs]";
 
 export const LOGS_WATCHER = `${q}/LOGS_WATCHER`;
 export const LOGS_REQUEST = `${q}/LOGS_REQUEST`;
@@ -34,7 +34,7 @@ export const logsLogic = createLogic({
     } catch (e) {
       console.error(e);
       dispatch(logsFailure(e));
-      dispatch(notify('error', `Failed to get logs`));
+      dispatch(notify("error", `Failed to get logs`));
     }
     done();
   },
@@ -52,7 +52,7 @@ export const logsWatcherLogic = createLogic({
       onError: err => {
         console.error(err);
         dispatch(logsFailure(err));
-        dispatch(notify('error', `Failed to get logs`));
+        dispatch(notify("error", `Failed to get logs`));
       },
       onRefresh: data => {
         dispatch(logsSuccess(action.releaseId, data));

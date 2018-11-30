@@ -25,7 +25,7 @@ export async function emit(user: User, name: string, payload: any) {
         app: payload.app || null,
         subject: payload.subject || null,
         payload: JSON.stringify(payload),
-        created: new Date().toISOString()
+        created: new Date().toISOString(),
       })
       .into("events");
 

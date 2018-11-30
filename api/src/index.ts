@@ -32,7 +32,7 @@ async function main() {
   async function shutdown() {
     log.warn("starting shutdown...");
 
-    await (() => new Promise(resolve => server.close(() => resolve())));
+    // await (() => new Promise(resolve => server.close(() => resolve())));
     log.warn("server stopped");
 
     await db.destroy();

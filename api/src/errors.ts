@@ -4,13 +4,13 @@ export class ValidationError extends Error {
 
   constructor(
     message: string,
-    errors?: Array<{ argument: string; message: string }>
+    errors?: Array<{ argument: string; message: string }>,
   ) {
     super(message);
     this.errors = errors
       ? errors.map(msg => ({
           field: msg.argument,
-          error: msg.message
+          error: msg.message,
         }))
       : [];
     this.status = 400;

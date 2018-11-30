@@ -1,17 +1,17 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import store from './store';
-import * as router from './router';
+import React from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+import * as router from "./router";
 import {
   AppPage,
   AppsPage,
   AppSettingsPage,
   AppEventsPage,
   LogsPage,
-} from './pages';
+} from "./pages";
 
-import 'semantic-ui-css/semantic.min.css';
+import "semantic-ui-css/semantic.min.css";
 
 const App = () => (
   <Provider store={store}>
@@ -25,6 +25,6 @@ const App = () => (
   </Provider>
 );
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById("root"));
 
 router.start(store);

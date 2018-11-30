@@ -11,7 +11,7 @@ const db = new QuerySet<App>({
   name: "App",
   created: true,
   modified: true,
-  serialize: ["stages", "config"]
+  serialize: ["stages", "config"],
 });
 
 export interface Config {
@@ -59,7 +59,7 @@ export async function get(name: string): Promise<App> {
       .select("*")
       .from("apps")
       .where("name", name)
-      .first()
+      .first(),
   );
 }
 
@@ -71,13 +71,13 @@ async function upsert(tx: Knex.Transaction, app: Upserted) {
   if (row.length > 0) {
     await db.update(tx.table("apps").where("name", app.app), {
       stages: app.stages,
-      config: app.config || {}
+      config: app.config || {},
     });
   } else {
     await db.create(tx.table("apps"), {
       stages: app.stages,
       name: app.app,
-      config: app.config || {}
+      config: app.config || {},
     });
   }
 }
@@ -88,24 +88,24 @@ export function values(
   app: App,
   build: Build,
   cluster: Cluster,
-  release: Release
+  release: Release,
 ) {
   const canary = release.canary && {
     enabled: true,
     tag: release.canary.version,
-    weight: release.canary.weight
+    weight: release.canary.weight,
   };
   const image = _.get(app, "config.values.image", undefined) && {
     ..._.get(cluster, "values.image", {}),
     ..._.get(build, "values.image", {}),
-    tag: build.version
+    tag: build.version,
   };
   return {
     ...cluster.values,
     ...build.values,
     image,
     canary,
-    version: build.version
+    version: build.version,
   };
 }
 
@@ -113,7 +113,7 @@ export function deploy(
   app: App,
   build: Build,
   cluster: Cluster,
-  release: Release
+  release: Release,
 ): Deploy {
   return {
     executable: app.config.deploy || "./bin/deployer",
@@ -125,6 +125,6 @@ export function deploy(
     release: release.id,
     version: build.version,
     remove: !!release.removal,
-    namespace: build.namespace || cluster.namespace
+    namespace: build.namespace || cluster.namespace,
   };
 }

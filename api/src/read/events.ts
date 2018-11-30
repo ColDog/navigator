@@ -18,6 +18,6 @@ export async function listByApp(app: string): Promise<Event[]> {
   }
   return await q.map((evt: any) => ({
     ...evt,
-    payload: JSON.parse(evt.payload)
+    payload: JSON.parse(evt.payload),
   }));
 }

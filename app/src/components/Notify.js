@@ -1,16 +1,16 @@
-import React from 'react';
-import { Message, Button } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { close } from '../notify';
+import React from "react";
+import { Message, Button } from "semantic-ui-react";
+import { connect } from "react-redux";
+import { close } from "../notify";
 
 const mapLevelToColor = level => {
   switch (level) {
-    case 'warning':
-      return 'yellow';
-    case 'error':
-      return 'red';
-    case 'success':
-      return 'green';
+    case "warning":
+      return "yellow";
+    case "error":
+      return "red";
+    case "success":
+      return "green";
     default:
       return null;
   }
@@ -18,7 +18,7 @@ const mapLevelToColor = level => {
 
 const styles = {
   container: {
-    position: 'fixed',
+    position: "fixed",
     left: 20,
     bottom: 20,
     width: 300,

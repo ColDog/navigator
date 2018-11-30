@@ -9,7 +9,7 @@ const db = new QuerySet<Release>({
   created: true,
   modified: true,
   serialize: ["canary"],
-  booleans: ["removal", "cancelled"]
+  booleans: ["removal", "cancelled"],
 });
 
 export interface Release {
@@ -35,14 +35,14 @@ export async function get(id: string): Promise<Release> {
       .select("*")
       .from("releases")
       .where({ id })
-      .first()
+      .first(),
   );
 }
 
 export async function listByStage(
   app: string,
   stage: string,
-  n: number = 25
+  n: number = 25,
 ): Promise<Release[]> {
   return await db.query(t =>
     t
@@ -50,14 +50,14 @@ export async function listByStage(
       .from("releases")
       .where({ app, stage })
       .orderBy("id", "DESC")
-      .limit(n)
+      .limit(n),
   );
 }
 
 export async function getByApp(
   app: string,
   stage: string,
-  version: string
+  version: string,
 ): Promise<Release> {
   return await db.find(t =>
     t
@@ -65,7 +65,7 @@ export async function getByApp(
       .from("releases")
       .where({ app, stage, version })
       .orderBy("id", "DESC")
-      .first()
+      .first(),
   );
 }
 
@@ -102,13 +102,13 @@ async function insert(tx: Knex.Transaction, release: Created) {
 
 async function update(tx: Knex.Transaction, release: Updated) {
   await db.update(tx.table("releases").where("id", release.id), {
-    status: release.status
+    status: release.status,
   });
 }
 
 async function invalid(tx: Knex.Transaction, payload: { releaseId: string }) {
   await db.update(tx.table("releases").where("id", payload.releaseId), {
-    status: Status.Invalid
+    status: Status.Invalid,
   });
 }
 

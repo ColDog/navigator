@@ -1,6 +1,6 @@
-import React from 'react';
-import { Container, Dropdown, Menu } from 'semantic-ui-react';
-import { connect } from 'react-redux';
+import React from "react";
+import { Container, Dropdown, Menu } from "semantic-ui-react";
+import { connect } from "react-redux";
 
 const Heading = ({ apps }) => (
   <Menu fixed="top" inverted>

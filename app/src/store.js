@@ -1,13 +1,13 @@
-import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
-import { createLogicMiddleware } from 'redux-logic';
+import { compose, createStore, combineReducers, applyMiddleware } from "redux";
+import { createLogicMiddleware } from "redux-logic";
 
-import * as router from './router';
-import * as notify from './notify';
-import * as apps from './api/apps';
-import * as logs from './api/logs';
+import * as router from "./router";
+import * as notify from "./notify";
+import * as apps from "./api/apps";
+import * as logs from "./api/logs";
 
 const devtools =
-  typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined'
+  typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
     ? window.__REDUX_DEVTOOLS_EXTENSION__()
     : f => f;
 
@@ -25,8 +25,8 @@ const store = createStore(
   {},
   compose(
     applyMiddleware(createLogicMiddleware(logic)),
-    devtools
-  )
+    devtools,
+  ),
 );
 
 export default store;

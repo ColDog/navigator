@@ -1,4 +1,9 @@
 import * as apps from "../repo/apps";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 describe("apps", () => {
   it("inserts an app", async () => {
@@ -8,9 +13,9 @@ describe("apps", () => {
         name: "test",
         stages: [],
         config: {
-          chart: "service"
-        }
-      }
+          chart: "service",
+        },
+      },
     );
     const out = await apps.get("test");
     expect(out.stages).toEqual([]);
@@ -20,7 +25,7 @@ describe("apps", () => {
     try {
       await apps.insert({ email: "test" }, {
         name: "test",
-        stages: [{}]
+        stages: [{}],
       } as any);
     } catch (e) {
       expect(e.message).toMatch(/App is invalid/);

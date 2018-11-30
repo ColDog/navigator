@@ -17,8 +17,8 @@ export async function scanApps() {
             {
               app: build.app,
               stage: build.stage,
-              version: build.version
-            }
+              version: build.version,
+            },
           );
         }
       }

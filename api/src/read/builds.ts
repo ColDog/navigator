@@ -6,7 +6,7 @@ import { Created } from "../write/builds";
 const db = new QuerySet<Build>({
   name: "Build",
   created: true,
-  serialize: ["values"]
+  serialize: ["values"],
 });
 
 export interface Build {
@@ -25,13 +25,13 @@ export async function list(app: string): Promise<Build[]> {
     t
       .select("*")
       .from("builds")
-      .where("app", app)
+      .where("app", app),
   );
 }
 
 export async function listUnreleased(
   app: string,
-  stage: string
+  stage: string,
 ): Promise<Build[]> {
   return await db.query(t =>
     t
@@ -44,7 +44,7 @@ export async function listUnreleased(
         this.on("builds.version", "=", "releases.version")
           .andOn("builds.stage", "=", "releases.stage")
           .andOn("builds.app", "=", "releases.app");
-      })
+      }),
   );
 }
 
@@ -54,7 +54,7 @@ export async function exists(app: string, stage: string, version: string) {
       .select("id")
       .from("builds")
       .where({ app, stage, version })
-      .first()
+      .first(),
   );
 }
 
@@ -64,20 +64,20 @@ export async function get(app: string, stage: string, version: string) {
       .select("*")
       .from("builds")
       .where({ app, stage, version })
-      .first()
+      .first(),
   );
 }
 
 export async function latest(
   app: string,
-  stage: string
+  stage: string,
 ): Promise<Build | undefined> {
   const bs = await db.query(t =>
     t
       .select("*")
       .from("builds")
       .where({ app, stage })
-      .orderBy("id", "desc")
+      .orderBy("id", "desc"),
   );
   return bs[0];
 }
@@ -85,7 +85,7 @@ export async function latest(
 export async function lastByNamespace(
   app: string,
   stage: string,
-  n: number = 25
+  n: number = 25,
 ): Promise<Build[]> {
   const builds = await last(app, stage, n);
   const namespaces = builds
@@ -104,7 +104,7 @@ export async function last(app: string, stage: string, n: number = 25) {
       .from("builds")
       .where({ app, stage })
       .orderBy("id", "desc")
-      .limit(n)
+      .limit(n),
   );
 }
 

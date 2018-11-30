@@ -1,16 +1,16 @@
-import React from 'react';
-import { route } from '../router';
-import { connect } from 'react-redux';
-import Heading from '../components/Header';
-import Main from '../components/Main';
-import { appRequest } from '../api/apps';
-import { Loader } from 'semantic-ui-react';
-import AppMenu, { Section, Divider } from '../components/AppMenu';
-import { Container, Segment, List } from 'semantic-ui-react';
-import capitalize from 'lodash/capitalize';
+import React from "react";
+import { route } from "../router";
+import { connect } from "react-redux";
+import Heading from "../components/Header";
+import Main from "../components/Main";
+import { appRequest } from "../api/apps";
+import { Loader } from "semantic-ui-react";
+import AppMenu, { Section, Divider } from "../components/AppMenu";
+import { Container, Segment, List } from "semantic-ui-react";
+import capitalize from "lodash/capitalize";
 
 class AppEventsPage extends React.Component {
-  static route = '/apps/:id/events';
+  static route = "/apps/:id/events";
   state = { value: null };
 
   static mapStateToProps(state) {
@@ -55,7 +55,7 @@ class AppEventsPage extends React.Component {
                   <List.Content>
                     <List.Header>
                       {event.name}
-                      <span style={{float: 'right'}}>{event.created}</span>
+                      <span style={{ float: "right" }}>{event.created}</span>
                     </List.Header>
                     <List.Description>
                       <pre>
@@ -75,5 +75,5 @@ class AppEventsPage extends React.Component {
 
 export default route(
   AppEventsPage.route,
-  connect(AppEventsPage.mapStateToProps)(AppEventsPage)
+  connect(AppEventsPage.mapStateToProps)(AppEventsPage),
 );

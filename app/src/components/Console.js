@@ -1,26 +1,26 @@
-import React from 'react';
-import { Segment } from 'semantic-ui-react';
-import Convert from 'ansi-to-html';
+import React from "react";
+import { Segment } from "semantic-ui-react";
+import Convert from "ansi-to-html";
 
 const convert = new Convert();
 
 const format = line =>
-  line === ''
-    ? { __html: '<br />' }
+  line === ""
+    ? { __html: "<br />" }
     : {
         __html: convert.toHtml(
-          line.replace(' ', '&nbsp;').replace('\n', '<br />')
+          line.replace(" ", "&nbsp;").replace("\n", "<br />"),
         ),
       };
 
 const styles = {
   container: {
-    backgroundColor: 'black',
-    color: 'white',
-    fontFamily: 'monospace',
-    overflow: 'scroll',
+    backgroundColor: "black",
+    color: "white",
+    fontFamily: "monospace",
+    overflow: "scroll",
   },
-  line: { display: 'block', whiteSpace: 'nowrap' },
+  line: { display: "block", whiteSpace: "nowrap" },
 };
 
 export default ({ logs }) => (

@@ -21,8 +21,8 @@ export function logger(): Koa.Middleware {
       `${ctx.request.method} ${ctx.request.url} status=${
         ctx.response.status
       } requestId=${id} (${t2 - t1}ms) body=${JSON.stringify(
-        (ctx.request as any).body
-      )} user=${JSON.stringify(ctx.user)}`
+        (ctx.request as any).body,
+      )} user=${JSON.stringify(ctx.user)}`,
     );
   };
 }
@@ -37,12 +37,12 @@ export function errors(): Koa.Middleware {
         ctx.body = { message: "ServerError" };
         log.exception(
           `server error requestId=${ctx.response.headers["x-request-id"]}`,
-          err
+          err,
         );
       } else if (ctx.status >= 400) {
         ctx.body = {
           message: err.message,
-          errors: err.errors
+          errors: err.errors,
         };
       }
     }

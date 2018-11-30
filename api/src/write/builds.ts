@@ -23,14 +23,14 @@ const schema = {
     chart: { type: "string" },
     values: {
       type: "object",
-      additionalProperties: true
-    }
-  }
+      additionalProperties: true,
+    },
+  },
 };
 
 export async function insert(user: User, build: any) {
   const result = validate(build || {}, schema, {
-    allowUnknownAttributes: false
+    allowUnknownAttributes: false,
   });
   if (result.errors.length > 0) {
     throw new ValidationError("Build is invalid", result.errors);
@@ -45,7 +45,7 @@ export async function promote(user: User, build: any, stage: string) {
   build.stage = stage;
 
   const result = validate(build || {}, schema, {
-    allowUnknownAttributes: false
+    allowUnknownAttributes: false,
   });
   if (result.errors.length > 0) {
     throw new ValidationError("Build is invalid", result.errors);

@@ -1,22 +1,22 @@
-import React from 'react';
-import { route } from '../../router';
-import { connect } from 'react-redux';
-import Heading from '../../components/Header';
-import Main from '../../components/Main';
+import React from "react";
+import { route } from "../../router";
+import { connect } from "react-redux";
+import Heading from "../../components/Header";
+import Main from "../../components/Main";
 import {
   appWatcher,
   appAborted,
   appReleaseRequest,
   appRemoveRequest,
   appPromoteRequest,
-} from '../../api/apps';
-import StageList from './StageList';
-import { Loader } from 'semantic-ui-react';
-import AppMenu, { Divider, Section } from '../../components/AppMenu';
-import capitalize from 'lodash/capitalize';
+} from "../../api/apps";
+import StageList from "./StageList";
+import { Loader } from "semantic-ui-react";
+import AppMenu, { Divider, Section } from "../../components/AppMenu";
+import capitalize from "lodash/capitalize";
 
 class AppPage extends React.Component {
-  static route = '/apps/:id';
+  static route = "/apps/:id";
 
   static mapStateToProps(state) {
     return {
@@ -62,11 +62,11 @@ class AppPage extends React.Component {
       <Main>
         <Heading />
         <AppMenu>
-          <Section style={{ float: 'right' }} href={`/apps/${name}/settings`}>
+          <Section style={{ float: "right" }} href={`/apps/${name}/settings`}>
             Config
           </Section>
-          <Divider style={{float: 'right'}}>&nbsp;</Divider>
-          <Section style={{ float: 'right' }} href={`/apps/${name}/events`}>
+          <Divider style={{ float: "right" }}>&nbsp;</Divider>
+          <Section style={{ float: "right" }} href={`/apps/${name}/events`}>
             Events
           </Section>
           <Section href="/">Apps</Section>

@@ -1,20 +1,20 @@
-import React from 'react';
-import { Card, Button, Icon } from 'semantic-ui-react';
-import get from 'lodash/get';
-import moment from 'moment';
+import React from "react";
+import { Card, Button, Icon } from "semantic-ui-react";
+import get from "lodash/get";
+import moment from "moment";
 
 const color = (build, canary, undeployed) => {
   if (undeployed) {
-    return 'grey';
+    return "grey";
   }
   if (canary) {
-    return 'yellow';
+    return "yellow";
   }
   switch (build.status) {
-    case 'ERRORED':
-      return 'red';
-    case 'SUCCESS':
-      return 'green';
+    case "ERRORED":
+      return "red";
+    case "SUCCESS":
+      return "green";
     default:
       return null;
   }
@@ -80,7 +80,7 @@ export default class BuildCard extends React.PureComponent {
           {stage.promote &&
             nextStage &&
             !undeployed &&
-            build.version === get(stage, 'released.version') && (
+            build.version === get(stage, "released.version") && (
               <Button
                 onClick={() =>
                   onPromote(app.name, stage.name, build.version, nextStage.name)

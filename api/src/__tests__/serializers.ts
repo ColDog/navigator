@@ -5,8 +5,13 @@ import * as MockDate from "mockdate";
 import {
   serializeBuild,
   serializeRelease,
-  appSerializer
+  appSerializer,
 } from "../serializers";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 const u = { email: "test" };
 
@@ -34,11 +39,11 @@ describe("serializers", () => {
       name: "test",
       config: {
         chart: "service",
-        deploy: "nav-mock-deploy"
+        deploy: "nav-mock-deploy",
       },
       stages: [
-        { name: "review", clusters: [{ name: "test", namespace: "default" }] }
-      ]
+        { name: "review", clusters: [{ name: "test", namespace: "default" }] },
+      ],
     });
     await builds.insert(u, { app: "test", version: "v3", stage: "review" });
     await releases.insert(u, { app: "test", version: "v3", stage: "review" });

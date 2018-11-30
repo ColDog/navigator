@@ -3,6 +3,11 @@ import * as apps from "../repo/apps";
 import * as releases from "../repo/releases";
 import * as worker from "../jobs/auto";
 import { NotFoundError } from "../errors";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 describe("jobs/auto", () => {
   it("triggers a release", async () => {
@@ -12,20 +17,20 @@ describe("jobs/auto", () => {
         name: "test",
         config: {
           chart: "service",
-          deploy: "nav-mock-deploy"
+          deploy: "nav-mock-deploy",
         },
         stages: [
           {
             name: "review",
             auto: true,
-            clusters: [{ name: "test", namespace: "default" }]
-          }
-        ]
-      }
+            clusters: [{ name: "test", namespace: "default" }],
+          },
+        ],
+      },
     );
     await builds.insert(
       { email: "test" },
-      { app: "test", version: "v3", stage: "review" }
+      { app: "test", version: "v3", stage: "review" },
     );
 
     let err;

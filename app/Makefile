@@ -17,7 +17,12 @@ test:
 .PHONY: test
 
 lint:
+	prettier 'src/**/*.js' --list-different
 .PHONY: lint
+
+format:
+	prettier 'src/**/*.js' --write
+.PHONY: format
 
 clean:
 	rm -rf node_modules build || true

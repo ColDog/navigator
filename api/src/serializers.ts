@@ -38,7 +38,7 @@ export interface App extends appRepo.App {
 
 async function buildSerializer(
   build: buildRepo.Build,
-  release?: releaseRepo.Release
+  release?: releaseRepo.Release,
 ): Promise<Build> {
   return {
     id: build.id!,
@@ -52,12 +52,12 @@ async function buildSerializer(
     status: release && release.status ? release.status : "UNRELEASED",
     namespace: build.namespace || null,
     created: build.created!,
-    canary: release && release.canary
+    canary: release && release.canary,
   };
 }
 
 export async function serializeBuild(
-  build?: buildRepo.Build
+  build?: buildRepo.Build,
 ): Promise<Build | null> {
   if (!build) {
     return null;
@@ -72,7 +72,7 @@ export async function serializeBuild(
 }
 
 export async function serializeRelease(
-  release?: releaseRepo.Release
+  release?: releaseRepo.Release,
 ): Promise<Build | null> {
   if (!release) {
     return null;
@@ -80,7 +80,7 @@ export async function serializeRelease(
   const build = await buildRepo.get(
     release.app,
     release.stage,
-    release.version
+    release.version,
   );
   return buildSerializer(build, release);
 }
@@ -89,19 +89,19 @@ export async function appSerializer(app: appRepo.App): Promise<App> {
   return {
     ...app,
     stages: await Promise.all(
-      app.stages.map(async stage => await stageSerializer(app, stage))
+      app.stages.map(async stage => await stageSerializer(app, stage)),
     ),
     manifest: {
       name: app.name,
       config: app.config,
-      stages: app.stages
-    }
+      stages: app.stages,
+    },
   };
 }
 
 export async function stageSerializer(
   app: appRepo.App,
-  stage: appRepo.Stage
+  stage: appRepo.Stage,
 ): Promise<Stage> {
   const releases = await releaseRepo.listByStage(app.name, stage.name, 2);
   const builds = stage.review
@@ -110,16 +110,16 @@ export async function stageSerializer(
   const released = await serializeRelease(releases[0]); // Latest release.
   const previous = await serializeRelease(releases[1]); // Preceding release.
   const current = await serializeBuild(
-    await buildRepo.latest(app.name, stage.name)
+    await buildRepo.latest(app.name, stage.name),
   );
 
   return {
     ...stage,
     builds: (await Promise.all(
-      builds.map(async b => await serializeBuild(b))
+      builds.map(async b => await serializeBuild(b)),
     )).filter(b => b !== null) as Build[],
     released,
     previous,
-    current
+    current,
   };
 }

@@ -1,6 +1,11 @@
 import * as request from "supertest";
 import { app } from "../index";
 import * as config from "../config";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 describe("auth", () => {
   it("allows for disabled auth", async () => {

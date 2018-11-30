@@ -108,5 +108,5 @@ function cmp(a: string, b: string): boolean {
   if (a.length !== b.length) {
     return false;
   }
-  return crypto.timingSafeEqual(new Buffer(a), new Buffer(b));
+  return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
 }

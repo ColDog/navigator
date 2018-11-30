@@ -1,4 +1,9 @@
 import * as releases from "../repo/releases";
+import db from "../db";
+
+beforeEach(async () => {
+  await db.migrate.latest();
+});
 
 const u = { email: "test" };
 
@@ -17,8 +22,8 @@ describe("releases", () => {
       stage: "review",
       canary: {
         weight: 100,
-        version: "v2"
-      }
+        version: "v2",
+      },
     });
     const rel = await releases.getByApp("test", "review", "v1");
     expect(rel.status).toEqual("PENDING");
@@ -27,7 +32,7 @@ describe("releases", () => {
 
   it("inserts a removal release", async () => {
     await releases.insert(u, { app: "test", version: "v3", stage: "review" });
-    await releases.remove({ app: "test", version: "v3", stage: "review" });
+    await releases.remove(u, { app: "test", version: "v3", stage: "review" });
     const rel = await releases.getByApp("test", "review", "v3");
     expect(rel.status).toEqual("PENDING");
     expect(rel.removal).toEqual(true);
