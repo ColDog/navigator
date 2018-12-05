@@ -90,11 +90,13 @@ export function values(
   cluster: Cluster,
   release: Release,
 ) {
-  const canary = release.canary ? {
-    enabled: true,
-    tag: release.canary.version,
-    weight: release.canary.weight,
-  } : {};
+  const canary = release.canary
+    ? {
+        enabled: true,
+        tag: release.canary.version,
+        weight: release.canary.weight,
+      }
+    : {};
   const image = _.get(app, "config.values.image", undefined) && {
     ..._.get(cluster, "values.image", {}),
     ..._.get(build, "values.image", {}),
