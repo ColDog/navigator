@@ -227,7 +227,22 @@ cluster.
 
 ### Charts
 
-The default release chart is
+The default release chart is at [charts/service](charts/service).
+
+### Checks
+
+Checks can be submitted for a given release that will be displayed in the UI to
+give information on a given release and how it's performing. These involve a
+simple name and status subscribed to a check. No action is taken by default on
+the check status, but rather, left up to other tools to take action on.
+
+### Rollbacks
+
+Rollback configuration allows for rolling back on failure of a release, if a
+release fails to successfully roll out across any cluster, or if checks posted
+for a given release are failing.
+
+TODO: Add rollback configurations.
 
 ## API
 

@@ -18,6 +18,8 @@ spec:
       labels:
         app: {{ template "navigator.name" . }}
         release: {{ .Release.Name }}
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -39,6 +41,10 @@ spec:
           env:
 {{ toYaml . | indent 12 }}
         {{- end }}
+          volumeMounts:
+          - name: kubeconfigs
+            mountPath: "/etc/kubeconfig"
+            readOnly: true
         {{- with .Values.resources }}
           resources:
 {{ toYaml . | indent 12 }}
@@ -55,3 +61,7 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+      volumes:
+      - name: kubeconfigs
+        secret:
+          secretName: {{ template "navigator.fullname" . }}

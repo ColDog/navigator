@@ -22,7 +22,6 @@ export interface Release {
     version: string;
   };
   removal: boolean;
-  cancelled: boolean;
   worker?: string;
   status?: string;
   modified: string;

@@ -46,5 +46,8 @@ affinity: {}
 
 # Application environment variables.
 env:
-  name: PORT
-  value: "4000"
+  - name: PORT
+    value: "4000"
+
+# Kubeconfig files.
+kubeconfig: {}

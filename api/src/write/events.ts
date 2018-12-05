@@ -23,7 +23,7 @@ export async function emit(user: User, name: string, payload: any) {
       .insert({
         name,
         app: payload.app || null,
-        subject: payload.subject || null,
+        subject: user.email,
         payload: JSON.stringify(payload),
         created: new Date().toISOString(),
       })
