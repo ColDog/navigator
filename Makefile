@@ -81,8 +81,7 @@ prerelease:
 release:
 	docker push coldog/navigator:$(VERSION)
 	docker push coldog/navigator:latest
-	git tag -a $(VERSION) -m "Release version $(VERSION)"
-	ghr $(VERSION) navctl/bin/
+	ghr $(VERSION) .dist -b "$(git log -1 --pretty=%B)"
 .PHONY: release
 
 clean:
