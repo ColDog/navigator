@@ -10,7 +10,7 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
 
 ingress:
@@ -48,6 +48,12 @@ affinity: {}
 env:
   - name: PORT
     value: "4000"
+  # Should be changed for production use:
+  - name: AUTH_DISABLED
+    value: "true"
+  # Use the service account applied to navigator:
+  - name: DEFAULT_SERVICE_ACCOUNT
+    value: "true"
 
 # Kubeconfig files.
 kubeconfig: {}

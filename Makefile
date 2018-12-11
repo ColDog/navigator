@@ -26,31 +26,43 @@ lint:
 	make -C app lint
 .PHONY: lint
 
-package:
-	rm -r rootapp || true
+package/build:
+	rm -r .build || true
 
-	mkdir -p rootapp
-	mkdir -p rootapp/bin
-	mkdir -p rootapp/charts
+	mkdir -p .build
+	mkdir -p .build/bin
+	mkdir -p .build/charts
 
-	cp Dockerfile rootapp/
+	cp Dockerfile .build/
 
-	cp api/package.json api/yarn.lock rootapp/
-	cp -r api/bin/* rootapp/bin/
-	cp -r api/migrations rootapp/
-	cp -r api/dist/* rootapp/
+	cp api/package.json api/yarn.lock .build/
+	cp -r api/bin/* .build/bin/
+	cp -r api/migrations .build/
+	cp -r api/dist/* .build/
 
-	cp -r app/build rootapp/public
+	cp -r app/build .build/public
 
-	cp -r deployer/src rootapp/deployer
-	cp -r deployer/bin/* rootapp/bin
+	cp -r deployer/src .build/deployer
+	cp -r deployer/bin/* .build/bin
 
-	cp -r charts/* rootapp/charts/
+	cp -r charts/* .build/charts/
 
-	cp navctl/bin/navctl-$(VERSION)-linux-amd64 rootapp/bin/navctl
+	cp navctl/bin/navctl-$(VERSION)-linux-amd64 .build/bin/navctl
 
-	docker build -t coldog/navigator:$(VERSION) rootapp
+	docker build -t coldog/navigator:$(VERSION) .build
 	docker tag coldog/navigator:$(VERSION) coldog/navigator:latest
+.PHONY: package/build
+
+package/dist:
+	rm -r .dist || true
+	mkdir .dist
+	cp -r navctl/bin/* .dist/
+	helm package ./charts/navigator -d .dist
+	helm package ./charts/service -d .dist
+	(cd .dist; shasum -a 256 ./* > $(VERSION)-SHA256SUM)
+.PHONY: package/dist
+
+package: package/build package/dist
 .PHONY: package
 
 run:
@@ -69,6 +81,7 @@ prerelease:
 release:
 	docker push coldog/navigator:$(VERSION)
 	docker push coldog/navigator:latest
+	git tag -a $(VERSION) -m "Release version $(VERSION)"
 	ghr $(VERSION) navctl/bin/
 .PHONY: release
 
@@ -76,7 +89,8 @@ clean:
 	make -C api clean
 	make -C app clean
 	make -C navctl clean
-	rm -r rootapp || true
+	rm -r .build || true
+	rm -r .dist || true
 .PHONY: clean
 
 ci: install lint test build package

@@ -37,10 +37,10 @@ spec:
             httpGet:
               path: /
               port: http
-        {{- with .Values.env }}
           env:
-{{ toYaml . | indent 12 }}
-        {{- end }}
+            - name: KUBECONFIG
+              value: "{{ range $key, $val := .Values.kubeconfigs }}/etc/kubeconfig/{{ $key }}:{{ end }}/etc/kubeconfig/config"
+{{ toYaml .Values.env | indent 12 }}
           volumeMounts:
           - name: kubeconfigs
             mountPath: "/etc/kubeconfig"

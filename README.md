@@ -26,7 +26,7 @@ Run navigator on port 4000 locally:
 
 Install the navctl CLI locally.
 
-    TODO
+    curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
 
 We need to setup an example application. Copy the configuration [here] to a
 local file on disk. Now let's apply the configuration:
@@ -52,18 +52,18 @@ to emulate a deploy. This short guide has hopefully given you a short intro to
 navigator.
 
 To move this into your release workflow you can manage the releases through your
-CI provider. The [example application](./example) can provide a basic release
+CI provider. The [example application](example) can provide a basic release
 example for a CI workflow.
 
 ## Installation
 
 ### Local
 
-Install the cli tool locally to `./navctl`.
+Install the cli tool locally:
 
-    TODO
+    curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
 
-Run the navigator server locally on port 4000.
+Run the navigator server locally on port 4000:
 
     docker run \
       -e AUTH_DISABLED=true \
@@ -73,20 +73,40 @@ Run the navigator server locally on port 4000.
 
 ### Kubernetes
 
-TODO
+Install the helm cli tool:
 
-### Cluster Access
+    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
-Kubernetes cluster access is configured by mounting Kubeconfig files inside the
-deployment container. If the name of the cluster is the same as the name of the
-cluster inside the application manifest then the deploy will release to that
-cluster.
+Install the cli tool locally:
+
+    curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
+
+Install the navigator server using helm. Note, the default service configuration
+for the navigator server is to provision a load balancer. This will provision a
+cloud load balancer and return you the IP.
+
+    helm install https://github.com/ColDog/navigator/releases/download/v0.0.2/navigator-v0.0.2.tgz
+
+You should be able to follow the instructions from the helm output on how to
+reach the navigator server, once you have access to this you can load it up in
+your browser. The default configuration is insecure and will allow all users
+access.
 
 ## Server Configuration
 
 The server is configured with environment variables.
 
 - `PORT`: Port configures the port for the main application (default `4000`).
+
+### Kubernetes
+
+Configure access to Kubernetes clusters:
+
+- `KUBECONFIG`: Used by kubectl to find the kubeconfig files.
+- `DEFAULT_SERVICE_ACCOUNT`: Name the current cluster default and allow
+  deployments to this cluster (default: `false`).
+
+Kubeconfig files: TODO
 
 ### Database
 
@@ -131,7 +151,7 @@ authorization header: `authorization: bearer <key>`.
 
 ## Application Configuration
 
-[JSON Schema](./schema/app.json)
+[JSON Schema](schema/app.json)
 
 Example:
 
@@ -200,12 +220,12 @@ canary:
   weight: ${canary.weight}
 ```
 
-The default [service helm chart](./charts/service) combines these features along
+The default [service helm chart](charts/service) combines these features along
 with support for istio if desired.
 
 ### Helm Releaser
 
-Read more about the [default release script](./deployer).
+Read more about the [default release script](deployer).
 
 ### Deploy Scripts
 
@@ -286,6 +306,7 @@ Releasing a new version:
 
 1. CI must be green.
 2. Update version:
-  - [./charts/navigator/Chart.yaml]([./charts/navigator/Chart.yaml])
-  - [./version]([./version])
+  - [charts/navigator/Chart.yaml]([charts/navigator/Chart.yaml])
+  - [charts/service/Chart.yaml]([charts/service/Chart.yaml])
+  - [version]([version])
 3. Run `make release` or `make prerelease`.

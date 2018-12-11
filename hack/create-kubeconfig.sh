@@ -1,5 +1,5 @@
 #!/bin/bash
-# Create a kubeconfig file.
+# Create a kubeconfig file with a service account named navigator.
 
 NAME="${1:-staging}"
 echo "Name:       ${NAME}"
