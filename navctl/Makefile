@@ -13,14 +13,15 @@ define gobuild
 		-o bin/navctl-$(VERSION)-$(1)-$(2) .
 endef
 
-build:
+build: clean
 	$(call gobuild,darwin,386)
 	$(call gobuild,darwin,amd64)
 	$(call gobuild,linux,386)
 	$(call gobuild,linux,amd64)
+	$(call gobuild,linux,arm)
+	$(call gobuild,linux,arm64)
 	$(call gobuild,windows,386)
 	$(call gobuild,windows,amd64)
-	cd bin; shasum -a 256 ./* > $(VERSION)-SHA256SUM
 .PHONY: build
 
 
