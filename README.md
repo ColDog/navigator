@@ -302,7 +302,7 @@ GLOBAL OPTIONS:
 
 ## Releasing
 
-Releasing a new version:
+Releasing a new version, follow: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
 1. CI must be green.
 2. Update version:
