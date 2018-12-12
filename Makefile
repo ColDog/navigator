@@ -57,8 +57,8 @@ package/dist:
 	rm -r .dist || true
 	mkdir .dist
 	cp -r navctl/bin/* .dist/
-	helm package ./charts/navigator -d .dist
-	helm package ./charts/service -d .dist
+	helm package --version $(VERSION) ./charts/navigator -d .dist
+	helm package --version $(VERSION) ./charts/service -d .dist
 	(cd .dist; shasum -a 256 ./* > $(VERSION)-SHA256SUM)
 .PHONY: package/dist
 
@@ -81,8 +81,7 @@ prerelease:
 release:
 	docker push coldog/navigator:$(VERSION)
 	docker push coldog/navigator:latest
-	git tag -a $(VERSION) -m "Release version $(VERSION)"
-	ghr $(VERSION) navctl/bin/
+	ghr $(VERSION) navctl/bin/ -body "$(git log -1 --pretty=%B)"
 .PHONY: release
 
 clean:
