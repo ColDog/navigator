@@ -57,8 +57,8 @@ package/dist:
 	rm -r .dist || true
 	mkdir .dist
 	cp -r navctl/bin/* .dist/
-	helm package ./charts/navigator -d .dist
-	helm package ./charts/service -d .dist
+	helm package --version $(VERSION) ./charts/navigator -d .dist
+	helm package --version $(VERSION) ./charts/service -d .dist
 	(cd .dist; shasum -a 256 ./* > $(VERSION)-SHA256SUM)
 .PHONY: package/dist
 
@@ -94,3 +94,9 @@ clean:
 
 ci: install lint test build package
 .PHONY: ci
+
+
+# Usage "make bump v=v0.0.3"
+bump:
+	echo -n $$v > version
+.PHONY: bump

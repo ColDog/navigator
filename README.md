@@ -85,7 +85,8 @@ Install the navigator server using helm. Note, the default service configuration
 for the navigator server is to provision a load balancer. This will provision a
 cloud load balancer and return you the IP.
 
-    helm install https://github.com/ColDog/navigator/releases/download/v0.0.2/navigator-v0.0.2.tgz
+    version=$(curl https://raw.githubusercontent.com/ColDog/navigator/master/version)
+    helm install https://github.com/ColDog/navigator/releases/download/${version}/navigator-${version}.tgz
 
 You should be able to follow the instructions from the helm output on how to
 reach the navigator server, once you have access to this you can load it up in
