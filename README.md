@@ -152,7 +152,7 @@ authorization header: `authorization: bearer <key>`.
 
 ## Application Configuration
 
-[JSON Schema](schema/app.json)
+[JSON Schema](docs/schema/app.json)
 
 Example:
 

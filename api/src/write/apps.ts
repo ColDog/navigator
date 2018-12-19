@@ -9,7 +9,7 @@ export interface Upserted {
   stages: object[];
 }
 
-// NOTE: Keep in sync with ../schema/app.json
+// NOTE: Keep in sync with ../docs/schema/app.json
 export const schema = {
   $schema: "http://json-schema.org/draft-07/schema#",
   description: "Application Schema",
