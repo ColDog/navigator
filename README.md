@@ -161,8 +161,8 @@ Example:
   // Application name.
   "name": "example",
   "config": {
-    // Deploy script to execute for the deployment, usually `nav-deploy`.
-    "deploy": "nav-deploy-mock",
+    // Deploy script to execute for the deployment, usually `deploy`.
+    "deploy": "mock-deploy",
     // Chart url, uses go-getter syntax.
     "chart": "github.com/ColDog/navigator.git//charts/service"
   },

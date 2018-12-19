@@ -2,7 +2,7 @@
   "name": "example",
   "config": {
     "chart": "github.com/ColDog/navigator//charts/service",
-    "deploy": "nav-deploy",
+    "deploy": "deploy",
     "values": { "image": true }
   },
   "stages": [

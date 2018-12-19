@@ -6,7 +6,6 @@ install:
 	make -C api install
 	make -C app install
 	make -C navctl install
-	make -C deployer install
 .PHONY: install
 
 build:
@@ -41,9 +40,6 @@ package/build:
 	cp -r api/dist/* .build/
 
 	cp -r app/build .build/public
-
-	cp -r deployer/src .build/deployer
-	cp -r deployer/bin/* .build/bin
 
 	cp -r charts/* .build/charts/
 

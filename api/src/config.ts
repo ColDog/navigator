@@ -47,4 +47,4 @@ export const APP_ROOT = process.env.APP_ROOT || __dirname;
 export const DEFAULT_CHART =
   process.env.DEFAULT_CHART || "github.com/ColDog/navigator//charts/service";
 
-export const DEFAULT_DEPLOY = "nav-deploy";
+export const DEFAULT_DEPLOY = "deploy";

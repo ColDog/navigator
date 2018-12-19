@@ -38,14 +38,14 @@ exports[`serializers serializes an app 1`] = `
 Object {
   "config": Object {
     "chart": "service",
-    "deploy": "nav-mock-deploy",
+    "deploy": "mock-deploy",
   },
   "created": "2013-10-23T07:00:00.000Z",
   "id": 1,
   "manifest": Object {
     "config": Object {
       "chart": "service",
-      "deploy": "nav-mock-deploy",
+      "deploy": "mock-deploy",
     },
     "name": "test",
     "stages": Array [

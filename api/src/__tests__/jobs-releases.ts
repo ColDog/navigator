@@ -16,7 +16,7 @@ describe("jobs/releases", () => {
       name: "test",
       config: {
         chart: "service",
-        deploy: "nav-mock-deploy",
+        deploy: "mock-deploy",
       },
       stages: [
         { name: "review", clusters: [{ name: "test", namespace: "default" }] },

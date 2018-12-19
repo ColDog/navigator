@@ -23,7 +23,7 @@ async function main() {
   await db.migrate.latest();
 
   log.info("starting app on port", config.port);
-  const server = app.listen(config.port);
+  const srv = app.listen(config.port);
 
   log.info("starting workers");
   releaseJob.run();
@@ -32,7 +32,7 @@ async function main() {
   async function shutdown() {
     log.warn("starting shutdown...");
 
-    server.close();
+    srv.close();
     log.warn("server stopped");
 
     await db.destroy();
