@@ -28,6 +28,7 @@ build
 /rootapp
 /.build
 /.dist
+/api/public
 
 # Misc.
 .DS_Store

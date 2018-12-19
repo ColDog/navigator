@@ -2,7 +2,7 @@ export APP_ROOT := $(shell dirname $(shell pwd))
 export PATH := $(PATH):node_modules/.bin/:$(APP_ROOT)/deployer/bin
 
 start:
-	AUTH_DISABLED=true nodemon tsc node dist/index.js
+	AUTH_DISABLED=true nodemon -w ./src -x 'tsc && node dist/index.js'
 .PHONY: start
 
 install:

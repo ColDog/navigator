@@ -1,7 +1,7 @@
 import * as Koa from "koa";
 import * as parser from "koa-bodyparser";
 import * as api from "./api";
-import * as serve from "koa-static";
+import { server } from "./static";
 import { errors, logger } from "./middleware";
 import * as autoJob from "./jobs/auto";
 import * as releaseJob from "./jobs/release";
@@ -14,9 +14,9 @@ export const app = new Koa();
 app.use(parser());
 app.use(errors());
 app.use(logger());
+app.use(server("public"));
 
 app.use(api.router.routes()).use(api.router.allowedMethods());
-app.use(serve("public"));
 
 async function main() {
   log.info("migrating database");
@@ -32,7 +32,7 @@ async function main() {
   async function shutdown() {
     log.warn("starting shutdown...");
 
-    // await (() => new Promise(resolve => server.close(() => resolve())));
+    server.close();
     log.warn("server stopped");
 
     await db.destroy();
