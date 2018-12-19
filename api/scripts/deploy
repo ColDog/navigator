@@ -48,6 +48,7 @@ values_file=$(mktemp)
 echo $values > $values_file
 
 helm upgrade --install \
+  --kube-context $cluster \
   -f $values_file \
   --namespace $namespace \
   $app $chart
