@@ -68,5 +68,5 @@ clean:
 	rm -r dist node_modules || true
 	rm -r bin/ || true
 	rm -r public || true
-	rm development.sqlite
+	rm development.sqlite || true
 .PHONY: clean
