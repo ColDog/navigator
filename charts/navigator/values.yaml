@@ -19,8 +19,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   path: /
-  hosts:
-    - chart-example.local
+  hosts: []
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
@@ -44,16 +43,37 @@ tolerations: []
 
 affinity: {}
 
-# Application environment variables.
-env:
-  - name: PORT
-    value: "4000"
-  # Should be changed for production use:
-  - name: AUTH_DISABLED
-    value: "true"
-  # Use the service account applied to navigator:
-  - name: DEFAULT_SERVICE_ACCOUNT
-    value: "true"
+# Database configuration.
+db:
+  secret: "navigator-db"
+  driver: "postgres"
+  host: "navigator-postgresql"
+  user: "navigator"
+
+# Application auth configuration.
+auth:
+  disabled: true
+
+  proxy:
+    enabled: false
+    header: ""
+
+  api:
+    enabled: false
+    key: ""
+
+  jwt:
+    enabled: false
+    secret: ""
+
+# Git credentials.
+gitCredentials: ""
 
 # Kubeconfig files.
+defaultServiceAccount: true
 kubeconfig: {}
+
+postgresql:
+  existingSecret: "navigator-db"
+  postgresqlUsername: "navigator"
+  postgresqlDatabase: "navigator"

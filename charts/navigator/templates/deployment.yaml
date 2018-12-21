@@ -40,7 +40,35 @@ spec:
           env:
             - name: KUBECONFIG
               value: "{{ range $key, $val := .Values.kubeconfigs }}/etc/kubeconfig/{{ $key }}:{{ end }}/etc/kubeconfig/config"
-{{ toYaml .Values.env | indent 12 }}
+            - name: PORT
+              value: "4000"
+            - name: DATABASE_DRIVER
+              value: {{ .Values.db.driver | quote }}
+            - name: DATABASE_USER
+              value: {{ .Values.db.url | quote }}
+            - name: DATABASE_HOST
+              value: {{ .Values.db.host | quote }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.db.secret | quote }}
+                  key: postgresql-password
+            - name: DEFAULT_SERVICE_ACCOUNT
+              value: {{ .Values.defaultServiceAccount | quote }}
+            - name: AUTH_DISABLED
+              value: {{ .Values.auth.disabled | quote }}
+            - name: PROXY_AUTH
+              value: {{ .Values.auth.proxy.enabled | quote }}
+            - name: PROXY_AUTH_HEADER
+              value: {{ .Values.auth.proxy.header | quote }}
+            - name: API_AUTH
+              value: {{ .Values.auth.api.enabled | quote }}
+            - name: API_KEY
+              value: {{ .Values.auth.api.key | quote }}
+            - name: JWT_AUTH
+              value: {{ .Values.auth.jwt.enabled | quote }}
+            - name: JWT_SECRET
+              value: {{ .Values.auth.jwt.secret | quote }}
           volumeMounts:
           - name: kubeconfigs
             mountPath: "/etc/kubeconfig"

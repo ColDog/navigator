@@ -13,7 +13,7 @@ canary:
   # set to true. This will then configure the VirtualService resource to weight
   # requests to different subsets.
   enabled: false
-  tag: canary
+  tag: null
   weight: 10
 
 service:
