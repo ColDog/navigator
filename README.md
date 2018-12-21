@@ -6,8 +6,8 @@ Pipeline based deployment management for Kubernetes and more.
 
 - [Getting Started](#getting-started)
 - [Installation](#installation)
-- [Server Configuration](#server-configuration)
 - [Application Configuration](#application-configuration)
+- [Recipes](docs/recipes)
 - [Releases](#releases)
 - [API](#api)
 - [CLI](#cli)
@@ -28,11 +28,10 @@ Install the navctl CLI locally.
 
     curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
 
-We need to setup an example application. Copy the configuration [here] to a
-local file on disk. Now let's apply the configuration:
+We need to setup an example application. Copy the configuration to a
+local file on disk and then we can apply the configuration to the local server.
 
-[here]: ../example/app.json
-
+    curl https://raw.githubusercontent.com/ColDog/navigator/master/example/app.json > app.json
     navctl apply app.json
 
 Once this is applied, you should be able to open up https://localhost:4000 and
@@ -57,8 +56,6 @@ example for a CI workflow.
 
 ## Installation
 
-### Local
-
 Install the cli tool locally:
 
     curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
@@ -71,88 +68,14 @@ Run the navigator server locally on port 4000:
       --rm -it \
       coldog/navigator:latest
 
-### Kubernetes
-
-Install the helm cli tool:
-
-    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
-
-Install the cli tool locally:
-
-    curl https://raw.githubusercontent.com/ColDog/navigator/master/hack/install.sh | sudo bash
-
-Install the navigator server using helm. Note, the default service configuration
-for the navigator server is to provision a load balancer. This will provision a
-cloud load balancer and return you the IP.
-
-    version=$(curl https://raw.githubusercontent.com/ColDog/navigator/master/version)
-    helm install https://github.com/ColDog/navigator/releases/download/${version}/navigator-${version}.tgz
-
-You should be able to follow the instructions from the helm output on how to
-reach the navigator server, once you have access to this you can load it up in
-your browser. The default configuration is insecure and will allow all users
-access.
-
-## Server Configuration
-
-The server is configured with environment variables.
-
-- `PORT`: Port configures the port for the main application (default `4000`).
-
-### Kubernetes
-
-Configure access to Kubernetes clusters:
-
-- `KUBECONFIG`: Used by kubectl to find the kubeconfig files.
-- `DEFAULT_SERVICE_ACCOUNT`: Name the current cluster default and allow
-  deployments to this cluster (default: `false`).
-
-Kubeconfig files: TODO
-
-### Database
-
-Configure the SQL database to connect to. Supports
-
-- `DATABASE_DRIVER`: Driver name one of (`sqlite3`, `pg`, `mysql`).
-- `DATABASE_URL`: Connection string database url.
-
-### Authentication
-
-To disable auth set the following environment variable:
-
-- `AUTH_DISABLED`: Allow all requests as authenticated (default: `false`).
-
-#### Proxy Authentication
-
-Proxy authentication assumes some proxy server is routing all traffic to the
-application, the users email will be pulled out of the configured header.
-
-__WARNING: When using proxy authentication ensure that the server is not exposed
-as well without the proxy. It will allow users to write their own auth header.__
-
-- `PROXY_AUTH`: Enable proxy authentication (default: `false`).
-- `PROXY_AUTH_HEADER`: Set the email header (default: `x-forwarded-email`).
-
-#### API Key Authentication
-
-API key authentication validates against a single static api key. The api key
-should be passed in the authorization header: `authorization: bearer <key>`.
-
-- `API_AUTH`: Enable api key authentication. (default: `false`).
-- `API_KEY`: API key to validate against (default: null).
-
-#### JWT Authentication
-
-JWT authentication validates against json web tokens. It will use the `email`
-parameter inside the jwt to identify the user. The token should be passed in the
-authorization header: `authorization: bearer <key>`.
-
-- `JWT_AUTH`: Enable json web token authentication. (default: `false`).
-- `JWT_SECRET`: JWT secret to validate keys against (default: null).
+Kubernetes installation is done using the navigator helm chart, view
+configuration options and installation instructions in the
+[chart directory](charts/navigator).
 
 ## Application Configuration
 
-[JSON Schema](docs/schema/app.json)
+The application configuration is described by a
+[json schema](docs/schema/app.json) format for the application.
 
 Example:
 
@@ -164,7 +87,11 @@ Example:
     // Deploy script to execute for the deployment, usually `deploy`.
     "deploy": "mock-deploy",
     // Chart url, uses go-getter syntax.
-    "chart": "github.com/ColDog/navigator.git//charts/service"
+    "chart": "github.com/ColDog/navigator.git//charts/service?ref=123",
+    "values": {
+      // Set the image.tag value to the current build version.
+      "image": true
+    }
   },
   // A stage represents often an environment or set of configuration in your
   // release pipeline, usually 'staging' and 'production' are stages.
@@ -194,8 +121,7 @@ Example:
 
 Releases can be whatever fits into a script that can accept command line
 arguments. By default, navigator comes with the ability to deploy to Kubernetes
-using a custom built script for rendering helm charts and applying them to the
-cluster.
+using helm.
 
 ### Values
 
@@ -250,21 +176,6 @@ cluster.
 
 The default release chart is at [charts/service](charts/service).
 
-### Checks
-
-Checks can be submitted for a given release that will be displayed in the UI to
-give information on a given release and how it's performing. These involve a
-simple name and status subscribed to a check. No action is taken by default on
-the check status, but rather, left up to other tools to take action on.
-
-### Rollbacks
-
-Rollback configuration allows for rolling back on failure of a release, if a
-release fails to successfully roll out across any cluster, or if checks posted
-for a given release are failing.
-
-TODO: Add rollback configurations.
-
 ## API
 
 The API is available at `/api/v1/` from where you are running it. See the main
@@ -300,14 +211,3 @@ GLOBAL OPTIONS:
    --help, -h                 show help
    --version, -v              print the version
 ```
-
-## Releasing
-
-Releasing a new version, follow: https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
-
-1. CI must be green.
-2. Update version:
-  - [charts/navigator/Chart.yaml]([charts/navigator/Chart.yaml])
-  - [charts/service/Chart.yaml]([charts/service/Chart.yaml])
-  - [version]([version])
-3. Run `make release` or `make prerelease`.
