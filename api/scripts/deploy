@@ -47,8 +47,13 @@ echo ""
 values_file=$(mktemp)
 echo $values > $values_file
 
+echo "downloading chart..."
+chart_file=$(mktemp)
+go-getter $chart $chart_file
+
+echo "deploying with helm..."
 helm upgrade --install \
   --kube-context $cluster \
   -f $values_file \
   --namespace $namespace \
-  $app $chart
+  $app $chart_file

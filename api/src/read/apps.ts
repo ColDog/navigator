@@ -19,10 +19,6 @@ export interface Config {
   deploy?: string;
   values?: {
     image?: boolean;
-    template?: string;
-  };
-  rollback?: {
-    onFailure?: boolean;
   };
 }
 

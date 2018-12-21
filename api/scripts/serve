@@ -28,5 +28,14 @@ EOF
 
 fi
 
+# Setup git credentials.
+if [ "$GIT_CREDENTIALS" != "" ]; then
+cat > $HOME/.gitconfig <<EOF
+[credential]
+	helper = store
+EOF
+echo $GIT_CREDENTIALS > $HOME/.git-credentials
+fi
+
 export NODE_ENV=production
 exec node index.js
