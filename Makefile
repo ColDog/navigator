@@ -69,6 +69,15 @@ run:
 		coldog/navigator:$(VERSION)
 .PHONY: run
 
+shell:
+	docker run \
+		-e AUTH_DISABLED=true \
+		-p 4000:4000 \
+		--rm -it \
+		--entrypoint=bash \
+		coldog/navigator:$(VERSION)
+.PHONY: shell
+
 prerelease:
 	docker push coldog/navigator:$(VERSION)
 	ghr -prerelease -b "$(shell git log -1 --pretty=%B)" $(VERSION) .dist/
