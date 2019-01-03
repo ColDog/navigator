@@ -3,6 +3,7 @@ import * as config from "./config";
 import * as jwt from "jsonwebtoken";
 import { UnauthorizedError } from "./errors";
 import * as crypto from "crypto";
+import * as log from "./log";
 
 export interface AuthMixin {
   user: User;
@@ -28,6 +29,33 @@ function disabledAuth(ctx: Koa.Context): User | undefined {
   }
 }
 
+function basicAuth(ctx: Koa.Context): User | undefined {
+  if (!config.auth.basic.enabled) {
+    return;
+  }
+
+  const head = ctx.request.header["authorization"];
+  if (!head) {
+    return;
+  }
+  const parts = head.split(" ");
+  if (parts[0] !== "Basic") {
+    return;
+  }
+
+  const header = b64Decode(parts[1]).split(":");
+  const password = header[1];
+  const email = header[0];
+
+  if (
+    password &&
+    config.auth.basic.password &&
+    cmp(password, config.auth.basic.password)
+  ) {
+    return { email, type: "basic" };
+  }
+}
+
 function apiAuth(ctx: Koa.Context): User | undefined {
   if (!config.auth.api.enabled) {
     return;
@@ -37,8 +65,11 @@ function apiAuth(ctx: Koa.Context): User | undefined {
   if (!head) {
     return;
   }
-
-  const key = head.split(" ")[1];
+  const parts = head.split(" ");
+  if (parts[0] !== "Bearer") {
+    return;
+  }
+  const key = parts[1];
 
   if (key && cmp(key, config.auth.api.key)) {
     return { email: uaEmail(ctx), type: "api" };
@@ -78,7 +109,13 @@ function jwtAuth(ctx: Koa.Context): User | undefined {
   } catch (e) {}
 }
 
-const handlers: AuthFunc[] = [apiAuth, proxyAuth, jwtAuth, disabledAuth];
+const handlers: AuthFunc[] = [
+  apiAuth,
+  basicAuth,
+  proxyAuth,
+  jwtAuth,
+  disabledAuth,
+];
 
 function runAuth(ctx: AuthContext): boolean {
   for (const handler of handlers) {
@@ -96,6 +133,16 @@ function runAuth(ctx: AuthContext): boolean {
  * through a set of authenticators to see if any match.
  */
 export function auth(): Koa.Middleware {
+  // Log all auth methods for debugging purposes.
+  if (config.auth.disabled) {
+    log.warn("authentication disabled");
+  } else {
+    log.info(`authentication api enabled=${config.auth.api.enabled}`);
+    log.info(`authentication basic enabled=${config.auth.basic.enabled}`);
+    log.info(`authentication proxy enabled=${config.auth.proxy.enabled}`);
+    log.info(`authentication jwt enabled=${config.auth.jwt.enabled}`);
+  }
+
   return async (ctx, next) => {
     if (!runAuth(ctx as AuthContext)) {
       throw new UnauthorizedError(`Unauthorized`);
@@ -109,4 +156,11 @@ function cmp(a: string, b: string): boolean {
     return false;
   }
   return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+}
+
+function b64Decode(data?: string) {
+  if (!data) {
+    return "";
+  }
+  return Buffer.from(data, "base64").toString("utf8");
 }

@@ -20,7 +20,7 @@ describe("auth", () => {
     config.auth.api.key = "secret";
     const response = await request(app.callback())
       .get("/api/v1/apps")
-      .set("authorization", "bearer secret");
+      .set("authorization", "Bearer secret");
     expect(response.status).toEqual(200);
     config.auth.api.enabled = false;
   });
@@ -30,7 +30,7 @@ describe("auth", () => {
     config.auth.api.key = "secret";
     const response = await request(app.callback())
       .get("/api/v1/apps")
-      .set("authorization", "bearer false");
+      .set("authorization", "Bearer false");
     expect(response.status).toEqual(401);
     config.auth.api.enabled = false;
   });
@@ -53,7 +53,7 @@ describe("auth", () => {
     config.auth.jwt.secret = "secret";
     const response = await request(app.callback())
       .get("/api/v1/apps")
-      .set("authorization", "bearer " + jwt);
+      .set("authorization", "Bearer " + jwt);
     expect(response.status).toEqual(200);
     config.auth.jwt.enabled = false;
   });
@@ -67,7 +67,7 @@ describe("auth", () => {
     config.auth.jwt.secret = "secret";
     const response = await request(app.callback())
       .get("/api/v1/apps")
-      .set("authorization", "bearer " + jwt);
+      .set("authorization", "Bearer " + jwt);
     expect(response.status).toEqual(401);
     config.auth.jwt.enabled = false;
   });

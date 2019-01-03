@@ -50,6 +50,10 @@ export const auth = {
     enabled: !!process.env.JWT_AUTH,
     secret: process.env.JWT_SECRET,
   },
+  basic: {
+    enabled: !!process.env.ADMIN_AUTH,
+    password: process.env.ADMIN_PASSWORD,
+  },
 };
 
 export const APP_ROOT = process.env.APP_ROOT || __dirname;
