@@ -7,6 +7,7 @@ import {
   AppSettingsPage,
   AppEventsPage,
   LogsPage,
+  LoginPage,
 } from "./pages";
 
 const App = () => (
@@ -17,6 +18,7 @@ const App = () => (
       <AppSettingsPage />
       <AppEventsPage />
       <LogsPage />
+      <LoginPage />
     </div>
   </Provider>
 );

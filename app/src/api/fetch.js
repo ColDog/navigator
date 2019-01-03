@@ -8,10 +8,14 @@ export const toMap = (data, param, extra) => {
 
 export const request = async (method, url, body) => {
   console.log("req", method, url, body);
-  const req = { method };
+  const req = { method, headers: {} };
   if (body) {
     req.body = JSON.stringify(body);
-    req.headers = { "content-type": "application/json" };
+    req.headers["content-type"] = "application/json";
+  }
+  const auth = localStorage.getItem("authorization");
+  if (auth) {
+    req.headers["authorization"] = auth;
   }
   const res = await fetch(url, req);
   if (res.status < 200 || res.status >= 300) {
