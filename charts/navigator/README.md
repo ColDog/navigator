@@ -8,11 +8,6 @@ Install the helm cli tool if you already haven't.
 
     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | bash
 
-First create a secret outside of helm which will serve as the database password.
-
-    kubectl create secret generic navigator-db \
-      --from-literal=postgresql-password=$(date | md5sum | awk '{print $1}' | base64)
-
 Now we can install the navigator helm chart. Note, the default service
 configuration for the navigator server is to provision a load balancer.
 

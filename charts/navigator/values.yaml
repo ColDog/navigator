@@ -45,7 +45,7 @@ affinity: {}
 
 # Database configuration.
 db:
-  secret: "navigator-db"
+  secret: "navigator-postgresql"
   driver: "postgres"
   host: "navigator-postgresql"
   user: "navigator"
@@ -74,6 +74,5 @@ defaultServiceAccount: true
 kubeconfig: {}
 
 postgresql:
-  existingSecret: "navigator-db"
   postgresqlUsername: "navigator"
   postgresqlDatabase: "navigator"
