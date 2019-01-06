@@ -19,7 +19,8 @@ spec:
         app: {{ template "navigator.name" . }}
         release: {{ .Release.Name }}
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/kubeconfig-secret: {{ include (print $.Template.BasePath "/kubeconfigssecret.yaml") . | sha256sum }}
+        checksum/creds-secret: {{ include (print $.Template.BasePath "/credssecret.yaml") . | sha256sum }}
     spec:
       containers:
         - name: {{ .Chart.Name }}
@@ -33,11 +34,14 @@ spec:
             httpGet:
               path: /
               port: http
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /
               port: http
           env:
+            - name: NODE_ENV
+              value: production
             - name: KUBECONFIG
               value: "{{ range $key, $val := .Values.kubeconfigs }}/etc/kubeconfig/{{ $key }}:{{ end }}/etc/kubeconfig/config"
             - name: PORT
@@ -45,7 +49,7 @@ spec:
             - name: DATABASE_DRIVER
               value: {{ .Values.db.driver | quote }}
             - name: DATABASE_USER
-              value: {{ .Values.db.url | quote }}
+              value: {{ .Values.db.user | quote }}
             - name: DATABASE_HOST
               value: {{ .Values.db.host | quote }}
             - name: DATABASE_PASSWORD
@@ -64,14 +68,27 @@ spec:
             - name: API_AUTH
               value: {{ .Values.auth.api.enabled | quote }}
             - name: API_KEY
-              value: {{ .Values.auth.api.key | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "navigator.fullname" . }}-creds
+                  key: apiKey
             - name: JWT_AUTH
               value: {{ .Values.auth.jwt.enabled | quote }}
             - name: JWT_SECRET
-              value: {{ .Values.auth.jwt.secret | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "navigator.fullname" . }}-creds
+                  key: jwtSecret
+            - name: BASIC_AUTH
+              value: {{ .Values.auth.basic.enabled | quote }}
+            - name: BASIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "navigator.fullname" . }}-creds
+                  key: basicPassword
           volumeMounts:
           - name: kubeconfigs
-            mountPath: "/etc/kubeconfig"
+            mountPath: "/etc/ro/kubeconfig"
             readOnly: true
         {{- with .Values.resources }}
           resources:
@@ -92,4 +109,4 @@ spec:
       volumes:
       - name: kubeconfigs
         secret:
-          secretName: {{ template "navigator.fullname" . }}
+          secretName: {{ template "navigator.fullname" . }}-kubeconfigs

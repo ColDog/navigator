@@ -41,7 +41,7 @@ Parameter | Description | Default
 `kubeconfig` | Kubeconfig files base64 encoded as a map | `{}`
 `defaultServiceAccount` | Use the service account applied to the pod | `{}`
 `gitCredentials` | Credentials for pulling from private git repos | `""`
-`db.secret` | Database secret resource with password | `navigator-db`
+`db.secret` | Database secret resource with password | `navigator-postgresql`
 `db.driver` | Database driver name | `postgresql`
 `db.host` | Database driver name | `navigator-postgresql`
 `db.user` | Database username | `navigator`
@@ -49,9 +49,11 @@ Parameter | Description | Default
 `auth.proxy.enabled` | Enable proxy authentication | `false`
 `auth.proxy.header` | Proxy authentication user header | `x-forwarded-user`
 `auth.api.enabled` | Enable api authentication | `false`
-`auth.api.key` | Api key | `""`
+`auth.api.key` | Api key | `<random-string>`
 `auth.jwt.enabled` | Enable JWT authentication | `false`
-`auth.jwt.key` | JWT secret | `""`
+`auth.jwt.key` | JWT secret | `<random-string>`
+`auth.basic.enabled` | Enable basic authentication | `false`
+`auth.basic.password` | Basic password | `<random-string>`
 `postgresql.existingSecret` | Postgres chart secret resource | `navigator-db`
 `postgresql.postgresqlUsername` | Postgres chart username | `navigator`
 `postgresql.postgresqlDatabase` | Postgres chart username | `navigator`

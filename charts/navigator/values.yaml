@@ -52,19 +52,23 @@ db:
 
 # Application auth configuration.
 auth:
-  disabled: true
+  disabled: false
 
   proxy:
     enabled: false
     header: ""
 
   api:
-    enabled: false
-    key: ""
+    enabled: true
+    key: null
+
+  basic:
+    enabled: true
+    password: null
 
   jwt:
     enabled: false
-    secret: ""
+    secret: null
 
 # Git credentials.
 gitCredentials: ""
