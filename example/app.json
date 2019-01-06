@@ -12,7 +12,7 @@
       "auto": true,
       "clusters": [
         {
-          "name": "minikube",
+          "name": "default",
           "namespace": "default",
           "values": {
             "image": {
@@ -28,7 +28,7 @@
       "auto": true,
       "clusters": [
         {
-          "name": "staging",
+          "name": "default",
           "namespace": "default",
           "values": {
             "image": {
@@ -43,25 +43,7 @@
       "auto": false,
       "clusters": [
         {
-          "name": "minikube-1",
-          "namespace": "default",
-          "values": {
-            "image": {
-              "repository": "coldog/nginx"
-            }
-          }
-        },
-        {
-          "name": "minikube-2",
-          "namespace": "default",
-          "values": {
-            "image": {
-              "repository": "coldog/nginx"
-            }
-          }
-        },
-        {
-          "name": "minikube-3",
+          "name": "default",
           "namespace": "default",
           "values": {
             "image": {
