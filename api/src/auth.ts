@@ -39,7 +39,7 @@ function basicAuth(ctx: Koa.Context): User | undefined {
     return;
   }
   const parts = head.split(" ");
-  if (parts[0] !== "Basic") {
+  if (parts[0].toLowerCase() !== "basic") {
     return;
   }
 
@@ -66,7 +66,7 @@ function apiAuth(ctx: Koa.Context): User | undefined {
     return;
   }
   const parts = head.split(" ");
-  if (parts[0] !== "Bearer") {
+  if (parts[0].toLowerCase() !== "bearer") {
     return;
   }
   const key = parts[1];
