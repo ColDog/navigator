@@ -35,3 +35,5 @@ export const start = store => {
   }
   page.start();
 };
+
+export const go = path => page(path);

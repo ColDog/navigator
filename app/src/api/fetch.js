@@ -1,9 +1,24 @@
+export class HTTPError extends Error {
+  status = 0;
+
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
 export const toMap = (data, param, extra) => {
   const map = {};
   data.forEach(obj => {
     map[obj[param]] = Object.assign(obj, extra);
   });
   return map;
+};
+
+const middleware = [];
+
+export const register = callback => {
+  middleware.push(callback);
 };
 
 export const request = async (method, url, body) => {
@@ -18,8 +33,11 @@ export const request = async (method, url, body) => {
     req.headers["authorization"] = auth;
   }
   const res = await fetch(url, req);
+  middleware.forEach(cb => {
+    cb(res);
+  });
   if (res.status < 200 || res.status >= 300) {
-    throw new Error(`invalid request ${res.status}`);
+    throw new HTTPError(res.status, `invalid request ${res.status}`);
   }
   if (res.status !== 201) {
     const data = await res.json();

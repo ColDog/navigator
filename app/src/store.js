@@ -5,6 +5,7 @@ import * as router from "./router";
 import * as notify from "./notify";
 import * as apps from "./api/apps";
 import * as logs from "./api/logs";
+import "./api/auth";
 
 const devtools =
   typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"

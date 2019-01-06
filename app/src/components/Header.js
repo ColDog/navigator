@@ -9,6 +9,7 @@ const Heading = ({ apps }) => (
         Navigator
       </Menu.Item>
 
+      {apps.length &&
       <Dropdown item simple text="Apps">
         <Dropdown.Menu>
           {apps.map(app => (
@@ -18,6 +19,7 @@ const Heading = ({ apps }) => (
           ))}
         </Dropdown.Menu>
       </Dropdown>
+      }
     </Container>
   </Menu>
 );

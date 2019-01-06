@@ -3,7 +3,8 @@ import { route } from "../router";
 import { connect } from "react-redux";
 import Header from "../components/Header";
 import Main from "../components/Main";
-import { Container, Button, Form, Segment } from "semantic-ui-react";
+import { Container, Button, Form } from "semantic-ui-react";
+import * as router from "../router";
 
 class LoginForm extends React.Component {
   state = { email: "", password: "" };
@@ -17,27 +18,25 @@ class LoginForm extends React.Component {
   render() {
     return (
       <Form size="large" onSubmit={this.handleSubmit}>
-        <Segment stacked>
-          <Form.Input
-            fluid
-            onChange={this.handleFieldChange.bind(this, "email")}
-            icon="user"
-            iconPosition="left"
-            placeholder="E-mail address"
-          />
-          <Form.Input
-            fluid
-            onChange={this.handleFieldChange.bind(this, "password")}
-            icon="lock"
-            iconPosition="left"
-            placeholder="Password"
-            type="password"
-          />
+        <Form.Input
+          fluid
+          onChange={this.handleFieldChange.bind(this, "email")}
+          icon="user"
+          iconPosition="left"
+          placeholder="E-mail address"
+        />
+        <Form.Input
+          fluid
+          onChange={this.handleFieldChange.bind(this, "password")}
+          icon="lock"
+          iconPosition="left"
+          placeholder="Password"
+          type="password"
+        />
 
-          <Button color="teal" fluid size="large">
-            Login
-          </Button>
-        </Segment>
+        <Button color="blue" fluid size="large">
+          Login
+        </Button>
       </Form>
     );
   }
@@ -55,6 +54,7 @@ class LoginPage extends React.Component {
       "authorization",
       `Basic ${btoa(`${user.email}:${user.password}`)}`,
     );
+    router.go("/");
   };
 
   render() {
