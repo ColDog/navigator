@@ -68,3 +68,12 @@ authorization header: `authorization: bearer <key>`.
 
 - `JWT_AUTH`: Enable json web token authentication. (default: `false`).
 - `JWT_SECRET`: JWT secret to validate keys against (default: null).
+
+#### Basic Authentication
+
+HTTP basic authentication uses the basic auth protocol. The email can be
+anything and will uniquely identify the user. The token should be passed in the
+authorization header: `authorization: basic base64(<email>:<pass>)`.
+
+- `BASIC_AUTH`: Enable json web token authentication. (default: `false`).
+- `BASIC_PASSWORD`: JWT secret to validate keys against (default: null).
