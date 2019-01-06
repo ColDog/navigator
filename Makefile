@@ -36,6 +36,7 @@ package/build:
 
 	cp api/package.json api/yarn.lock .build/
 	cp -r api/bin/* .build/bin/
+	cp -r api/scripts/* .build/bin/
 	cp -r api/migrations .build/
 	cp -r api/dist/* .build/
 

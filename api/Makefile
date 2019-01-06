@@ -51,15 +51,11 @@ install/go-getter:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/go-getter github.com/hashicorp/go-getter/cmd/go-getter
 .PHONY: install/go-getter
 
-install/scripts:
-	cp -r scripts/* bin/
-.PHONY: install/scripts
-
 install/yarn:
 	yarn install
 .PHONY: install/yarn
 
-install: install/istio install/kubectl install/helm install/go-getter install/scripts install/yarn
+install: install/istio install/kubectl install/helm install/go-getter install/yarn
 .PHONY: install
 
 build:

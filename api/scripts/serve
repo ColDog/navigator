@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Copy over from the read-only filesystem.
+mkdir /etc/kubeconfig
 cp -r /etc/ro/kubeconfig /etc/kubeconfig
 
 # Setup the default service account as a 'default' cluster if desired.
 if [ "$DEFAULT_SERVICE_ACCOUNT" = "true" ]; then
 
-CA=$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | base64)
+CA=$(cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt | base64 | tr -d '\n')
 TOKEN=$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)
 
 cat > /etc/kubeconfig/config <<EOF

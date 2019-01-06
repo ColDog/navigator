@@ -15,5 +15,8 @@ helm template \
   --set image.repository=localhost:5000/navigator \
   --set image.tag=$tag \
   --set service.type=NodePort \
+  --set auth.basic.password=password \
+  --set auth.api.key=password \
+  --set postgresql.postgresqlPassword=password \
   ./charts/navigator |
   kubectl --context minikube apply -f -

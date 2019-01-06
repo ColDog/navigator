@@ -17,4 +17,4 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 RUN yarn install --production
 
-CMD ["node", "index.js"]
+CMD ["/usr/src/app/bin/serve"]
