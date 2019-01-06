@@ -9,6 +9,20 @@ start:
 	AUTH_DISABLED=true nodemon -w ./src -x 'tsc && node dist/index.js'
 .PHONY: start
 
+start/basic:
+	BASIC_AUTH=true BASIC_PASSWORD=password nodemon -w ./src -x 'tsc && node dist/index.js'
+.PHONY: start/basic
+
+start/pg:
+	DATABASE_DRIVER=postgres \
+	DATABASE_NAME=navigator \
+	DATABASE_USER=postgres \
+	DATABASE_HOST=127.0.0.1 \
+	DATABASE_PASSWORD="" \
+	NODE_ENV=production \
+	AUTH_DISABLED=true nodemon -w ./src -x 'tsc && node dist/index.js'
+.PHONY: start/pg
+
 install/istio:
 	curl -L -o istio-$(ISTIO_VERSION).tgz https://github.com/istio/istio/releases/download/$(ISTIO_VERSION)/istio-$(ISTIO_VERSION)-linux.tar.gz
 	tar -xzvf istio-$(ISTIO_VERSION).tgz
@@ -75,3 +89,7 @@ clean:
 	rm -r public || true
 	rm development.sqlite || true
 .PHONY: clean
+
+postgres:
+	docker run -e POSTGRES_DB=navigator --rm -it -p 5432:5432 postgres
+.PHONY: postgres

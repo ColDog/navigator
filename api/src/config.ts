@@ -37,22 +37,22 @@ export const database: { [env: string]: Knex.Config } = {
 export const environment = process.env.NODE_ENV || "development";
 
 export const auth = {
-  disabled: !!process.env.AUTH_DISABLED,
+  disabled: process.env.AUTH_DISABLED === "true",
   proxy: {
-    enabled: !!process.env.PROXY_AUTH,
+    enabled: process.env.PROXY_AUTH === "true",
     header: process.env.PROXY_AUTH_HEADER || "x-forwarded-email",
   },
   api: {
-    enabled: !!process.env.API_AUTH,
+    enabled: process.env.API_AUTH === "true",
     key: process.env.API_KEY || "",
   },
   jwt: {
-    enabled: !!process.env.JWT_AUTH,
+    enabled: process.env.JWT_AUTH === "true",
     secret: process.env.JWT_SECRET,
   },
   basic: {
-    enabled: !!process.env.ADMIN_AUTH,
-    password: process.env.ADMIN_PASSWORD,
+    enabled: process.env.BASIC_AUTH === "true",
+    password: process.env.BASIC_PASSWORD,
   },
 };
 

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copy over from the read-only filesystem.
+cp -r /etc/ro/kubeconfig /etc/kubeconfig
+
 # Setup the default service account as a 'default' cluster if desired.
 if [ "$DEFAULT_SERVICE_ACCOUNT" = "true" ]; then
 
