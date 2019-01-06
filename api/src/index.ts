@@ -18,6 +18,9 @@ app.use(server("public"));
 
 app.use(api.router.routes()).use(api.router.allowedMethods());
 
+// Ensure that the program will crash on unhandled rejections.
+process.on('unhandledRejection', err => { throw err; });
+
 async function main() {
   log.info("migrating database");
   await db.migrate.latest();
@@ -40,6 +43,11 @@ async function main() {
 
     process.exit(0);
   }
+
+  // Will throw an error and crash the program if the DB connection is not
+  // verified at this point.
+  const res = await db.select(db.raw("1 AS hello"));
+  log.info("db connection verified", res);
 
   process.on("SIGTERM", shutdown);
   process.on("SIGINT", shutdown);
