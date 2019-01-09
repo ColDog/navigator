@@ -1,8 +1,7 @@
 {
   "name": "example",
   "config": {
-    "chart": "github.com/ColDog/navigator//charts/service",
-    "deploy": "deploy",
+    "deploy": "mock-deploy",
     "values": { "image": true }
   },
   "stages": [
