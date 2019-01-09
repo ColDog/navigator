@@ -12,7 +12,7 @@ CI services.
 Once in this account, create a personal access token in this robot user account.
 
 Finally, on the navigator server set the `gitCredentials` helm chart value equal
-to
+to:
 
     https://{bot-username}:{access-token}.github.com
 

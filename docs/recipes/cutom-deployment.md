@@ -1,8 +1,23 @@
 # Recipe - External Deployment
 
 Let's say you have a complex deployment pipeline or job that you want to trigger
-with navigator. Simply build a basic deployment script with the parameters that
-you need, an example which parses the arguments is listed below:
+with navigator. Inside the app configuration, we can add custom deployment
+scripts using the `config.deploy` parameter:
+
+```javascript
+// app.json
+{
+  "name": "example",
+  "config": {
+    "deploy": "my-deploy-script"
+  },
+  ...
+}
+```
+
+Simply build a basic deployment script with the parameters that you need, an
+example which parses the arguments is listed below using bash. You must include
+the file that you build into a custom build navigator container.
 
 ```bash
 #!/bin/bash
