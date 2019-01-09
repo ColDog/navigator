@@ -3,7 +3,7 @@ K8S_VERSION := v1.11.2
 HELM_VERSION := v2.9.1
 
 export APP_ROOT := $(shell dirname $(shell pwd))
-export PATH := $(PATH):node_modules/.bin/:$(APP_ROOT)/api/bin
+export PATH := $(PATH):node_modules/.bin/:$(APP_ROOT)/api/bin:$(APP_ROOT)/api/scripts
 
 start:
 	AUTH_DISABLED=true nodemon -w ./src -x 'tsc && node dist/index.js'

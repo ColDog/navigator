@@ -81,13 +81,13 @@ shell:
 
 prerelease:
 	docker push coldog/navigator:$(VERSION)
-	ghr -prerelease -b "$(shell git log -1 --pretty=%B)" $(VERSION) .dist/
+	ghr -prerelease $(VERSION) .dist/
 .PHONY: release
 
 release:
 	docker push coldog/navigator:$(VERSION)
 	docker push coldog/navigator:latest
-	ghr -b "$(shell git log -1 --pretty=%B)" $(VERSION) .dist/
+	ghr $(VERSION) .dist/
 .PHONY: release
 
 clean:

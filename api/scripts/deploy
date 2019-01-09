@@ -56,4 +56,4 @@ helm upgrade --install \
   --kube-context $cluster \
   -f $values_file \
   --namespace $namespace \
-  $app $chart_file
+  $stage-$app-$namespace $chart_file

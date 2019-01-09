@@ -2,7 +2,10 @@
 
 # Copy over from the read-only filesystem.
 mkdir /etc/kubeconfig
-cp -r /etc/ro/kubeconfig /etc/kubeconfig
+
+if [ -d /etc/ro/kubeconfig ]; then
+  cp -r /etc/ro/kubeconfig /etc/kubeconfig
+fi
 
 # Setup the default service account as a 'default' cluster if desired.
 if [ "$DEFAULT_SERVICE_ACCOUNT" = "true" ]; then
